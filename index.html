@@ -11,129 +11,157 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Lato:wght@300;400;700&display=swap" rel="stylesheet"/>
 <style>
-  :root {
-    --accent: #c8f542;
-    --accent2: #a8e020;
-    --bg: #0a0a0a;
-    --surface: rgba(255,255,255,0.05);
-    --border: rgba(255,255,255,0.08);
-    --text: #f0f0f0;
-    --muted: #666;
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { background: var(--bg); color: var(--text); font-family: 'Lato', sans-serif; min-height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
-  ::-webkit-scrollbar { width: 3px; } ::-webkit-scrollbar-thumb { background: rgba(200,245,66,0.3); border-radius: 2px; }
+  :root { --accent:#c8f542; --accent2:#a8e020; --bg:#0a0a0a; --surface:rgba(255,255,255,0.05); --border:rgba(255,255,255,0.08); --text:#f0f0f0; --muted:#666; }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--text);font-family:'Lato',sans-serif;min-height:100vh;display:flex;flex-direction:column;overflow:hidden}
+  ::-webkit-scrollbar{width:3px}::-webkit-scrollbar-thumb{background:rgba(200,245,66,0.3);border-radius:2px}
+  #starfield{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none}
+  .star{position:absolute;border-radius:50%;background:#fff;animation:twinkle var(--d) infinite ease-in-out;opacity:0}
+  @keyframes twinkle{0%,100%{opacity:0}50%{opacity:var(--o)}}
+  @keyframes bounce{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-5px)}}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes pulseGlow{0%,100%{box-shadow:0 0 20px rgba(200,245,66,0.3)}50%{box-shadow:0 0 50px rgba(200,245,66,0.7)}}
+  @keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+  @keyframes slideDown{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
 
-  #starfield { position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
-  .star { position: absolute; border-radius: 50%; background: #fff; animation: twinkle var(--d) infinite ease-in-out; opacity: 0; }
-  @keyframes twinkle { 0%,100%{opacity:0} 50%{opacity:var(--o)} }
-  @keyframes bounce { 0%,60%,100%{transform:translateY(0)} 30%{transform:translateY(-5px)} }
-  @keyframes fadeUp { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
-  @keyframes pulseGlow { 0%,100%{box-shadow:0 0 20px rgba(200,245,66,0.3)} 50%{box-shadow:0 0 50px rgba(200,245,66,0.7)} }
-  @keyframes spin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
-  @keyframes slideDown { from{opacity:0;transform:translateY(-10px)} to{opacity:1;transform:translateY(0)} }
+  .app-icon{width:54px;height:54px;border-radius:16px;background:linear-gradient(145deg,#0d1f0d,#1a3a1a);border:1.5px solid rgba(200,245,66,0.4);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;box-shadow:0 0 20px rgba(200,245,66,0.25),inset 0 0 20px rgba(0,0,0,0.5);flex-shrink:0;animation:pulseGlow 4s infinite}
+  .app-icon svg{width:38px;height:38px}
+  .app-icon.small{width:36px;height:36px;border-radius:10px}
+  .app-icon.small svg{width:24px;height:24px}
+  .app-icon img{width:100%;height:100%;object-fit:cover;border-radius:inherit}
 
-  .app-icon { width: 54px; height: 54px; border-radius: 16px; background: linear-gradient(145deg, #0d1f0d, #1a3a1a); border: 1.5px solid rgba(200,245,66,0.4); display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; box-shadow: 0 0 20px rgba(200,245,66,0.25), inset 0 0 20px rgba(0,0,0,0.5); flex-shrink: 0; animation: pulseGlow 4s infinite; }
-  .app-icon svg { width: 38px; height: 38px; }
-  .app-icon.small { width: 36px; height: 36px; border-radius: 10px; }
-  .app-icon.small svg { width: 24px; height: 24px; }
-  .app-icon img { width: 100%; height: 100%; object-fit: cover; border-radius: inherit; }
+  #app{position:relative;z-index:1;display:flex;flex-direction:column;height:100vh}
 
-  #app { position: relative; z-index: 1; display: flex; flex-direction: column; height: 100vh; }
+  header{padding:14px 18px;display:flex;align-items:center;justify-content:space-between;background:rgba(10,10,10,0.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);flex-shrink:0;position:relative;z-index:10}
+  .header-left{display:flex;align-items:center;gap:12px}
+  .app-title{font-family:'Playfair Display',serif;font-size:20px;font-weight:800;color:#fff;line-height:1}
+  .app-subtitle{font-size:10px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-top:2px}
+  .header-right{display:flex;align-items:center;gap:8px}
+  .streak-badge{display:flex;align-items:center;gap:5px;background:rgba(200,245,66,0.08);border:1px solid rgba(200,245,66,0.2);border-radius:20px;padding:5px 12px;font-size:12px;color:var(--accent);font-weight:700}
+  .icon-btn{width:34px;height:34px;border-radius:50%;background:var(--surface);border:1px solid var(--border);color:var(--muted);cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;transition:all 0.2s}
+  .icon-btn:hover{background:rgba(200,245,66,0.12);color:var(--accent);border-color:rgba(200,245,66,0.3)}
 
-  header { padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; background: rgba(10,10,10,0.85); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); flex-shrink: 0; position: relative; z-index: 10; }
-  .header-left { display: flex; align-items: center; gap: 12px; }
-  .app-title { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 800; color: #fff; line-height: 1; }
-  .app-subtitle { font-size: 10px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; margin-top: 2px; }
-  .header-right { display: flex; align-items: center; gap: 8px; }
-  .streak-badge { display: flex; align-items: center; gap: 5px; background: rgba(200,245,66,0.08); border: 1px solid rgba(200,245,66,0.2); border-radius: 20px; padding: 5px 12px; font-size: 12px; color: var(--accent); font-weight: 700; }
-  .icon-btn { width: 34px; height: 34px; border-radius: 50%; background: var(--surface); border: 1px solid var(--border); color: var(--muted); cursor: pointer; font-size: 15px; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
-  .icon-btn:hover { background: rgba(200,245,66,0.12); color: var(--accent); border-color: rgba(200,245,66,0.3); }
+  .pills-bar{padding:10px 14px;display:flex;flex-wrap:wrap;gap:6px;border-bottom:1px solid var(--border);background:rgba(0,0,0,0.4);flex-shrink:0}
+  .pill{display:flex;align-items:center;gap:4px;padding:5px 11px;background:var(--surface);border:1px solid var(--border);border-radius:20px;color:#999;font-size:11px;cursor:pointer;transition:all 0.18s;font-family:'Lato',sans-serif}
+  .pill:hover{background:rgba(200,245,66,0.12);border-color:rgba(200,245,66,0.4);color:var(--accent);transform:translateY(-1px)}
 
-  .pills-bar { padding: 10px 14px; display: flex; flex-wrap: wrap; gap: 6px; border-bottom: 1px solid var(--border); background: rgba(0,0,0,0.4); flex-shrink: 0; }
-  .pill { display: flex; align-items: center; gap: 4px; padding: 5px 11px; background: var(--surface); border: 1px solid var(--border); border-radius: 20px; color: #999; font-size: 11px; cursor: pointer; transition: all 0.18s; font-family: 'Lato', sans-serif; }
-  .pill:hover { background: rgba(200,245,66,0.12); border-color: rgba(200,245,66,0.4); color: var(--accent); transform: translateY(-1px); }
+  #messages{flex:1;overflow-y:auto;padding:18px 16px;display:flex;flex-direction:column;min-height:0}
+  .msg{display:flex;margin-bottom:14px;animation:fadeUp 0.3s ease-out}
+  .msg.user{justify-content:flex-end}
+  .msg.buddy{justify-content:flex-start;align-items:flex-end;gap:8px}
+  .bubble{max-width:75%;padding:13px 16px;font-size:14px;line-height:1.65;white-space:pre-wrap;word-break:break-word}
+  .bubble.user{background:linear-gradient(135deg,var(--accent),#a8e020);color:#0a0a0a;border-radius:18px 18px 4px 18px;box-shadow:0 4px 20px rgba(200,245,66,0.2);font-weight:500}
+  .bubble.buddy{background:rgba(255,255,255,0.06);color:var(--text);border-radius:18px 18px 18px 4px;border:1px solid var(--border)}
+  .typing{display:flex;gap:5px;padding:14px 18px;background:var(--surface);border-radius:18px 18px 18px 4px;border:1px solid var(--border);width:fit-content;margin-bottom:14px}
+  .dot{width:7px;height:7px;border-radius:50%;background:var(--accent);animation:bounce 1.2s infinite}
 
-  #messages { flex: 1; overflow-y: auto; padding: 18px 16px; display: flex; flex-direction: column; min-height: 0; }
-  .msg { display: flex; margin-bottom: 14px; animation: fadeUp 0.3s ease-out; }
-  .msg.user { justify-content: flex-end; }
-  .msg.buddy { justify-content: flex-start; align-items: flex-end; gap: 8px; }
-  .bubble { max-width: 75%; padding: 13px 16px; font-size: 14px; line-height: 1.65; white-space: pre-wrap; word-break: break-word; }
-  .bubble.user { background: linear-gradient(135deg, var(--accent), #a8e020); color: #0a0a0a; border-radius: 18px 18px 4px 18px; box-shadow: 0 4px 20px rgba(200,245,66,0.2); font-weight: 500; }
-  .bubble.buddy { background: rgba(255,255,255,0.06); color: var(--text); border-radius: 18px 18px 18px 4px; border: 1px solid var(--border); }
-  .typing { display: flex; gap: 5px; padding: 14px 18px; background: var(--surface); border-radius: 18px 18px 18px 4px; border: 1px solid var(--border); width: fit-content; margin-bottom: 14px; }
-  .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); animation: bounce 1.2s infinite; }
+  #input-area{padding:10px 16px 20px;border-top:1px solid var(--border);background:rgba(0,0,0,0.6);backdrop-filter:blur(20px);flex-shrink:0}
+  .input-row{display:flex;gap:10px;align-items:flex-end;background:rgba(255,255,255,0.06);border:1px solid var(--border);border-radius:24px;padding:10px 14px;transition:border-color 0.2s}
+  .input-row:focus-within{border-color:rgba(200,245,66,0.3)}
+  #msg-input{flex:1;background:transparent;border:none;outline:none;color:var(--text);font-size:14px;resize:none;font-family:'Lato',sans-serif;line-height:1.5;max-height:100px;overflow-y:auto}
+  #msg-input::placeholder{color:#444}
+  .send-btn{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--accent),#a8e020);border:none;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;transition:all 0.2s;flex-shrink:0;color:#0a0a0a;font-weight:700}
+  .send-btn:hover:not(:disabled){transform:scale(1.08)}
+  .send-btn:disabled{opacity:0.35;cursor:not-allowed}
+  .input-hint{text-align:center;font-size:10px;color:#2a2a2a;margin-top:6px}
 
-  #input-area { padding: 10px 16px 20px; border-top: 1px solid var(--border); background: rgba(0,0,0,0.6); backdrop-filter: blur(20px); flex-shrink: 0; }
-  .input-row { display: flex; gap: 10px; align-items: flex-end; background: rgba(255,255,255,0.06); border: 1px solid var(--border); border-radius: 24px; padding: 10px 14px; transition: border-color 0.2s; }
-  .input-row:focus-within { border-color: rgba(200,245,66,0.3); }
-  #msg-input { flex: 1; background: transparent; border: none; outline: none; color: var(--text); font-size: 14px; resize: none; font-family: 'Lato', sans-serif; line-height: 1.5; max-height: 100px; overflow-y: auto; }
-  #msg-input::placeholder { color: #444; }
-  .send-btn { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), #a8e020); border: none; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; transition: all 0.2s; flex-shrink: 0; color: #0a0a0a; font-weight: 700; }
-  .send-btn:hover:not(:disabled) { transform: scale(1.08); }
-  .send-btn:disabled { opacity: 0.35; cursor: not-allowed; }
-  .input-hint { text-align: center; font-size: 10px; color: #2a2a2a; margin-top: 6px; }
+  /* LOADING SCREEN */
+  #loading-screen{position:fixed;inset:0;background:#0a0a0a;z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px}
+  .loading-icon{font-size:48px;animation:pulseGlow 1.5s infinite}
+  .loading-text{color:var(--accent);font-family:'Lato',sans-serif;font-size:14px}
+  .loading-sub{color:#444;font-size:12px}
 
-  #welcome { display: flex; flex-direction: column; align-items: center; justify-content: center; flex: 1; padding: 30px 20px; text-align: center; }
-  .welcome-title { font-family: 'Playfair Display', serif; font-size: 32px; font-weight: 800; background: linear-gradient(135deg, #fff 30%, var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 10px; }
-  .welcome-sub { color: var(--muted); font-size: 14px; line-height: 1.7; max-width: 280px; margin-bottom: 8px; }
-  .drive-badge { display: inline-flex; align-items: center; gap: 6px; padding: 7px 16px; background: rgba(200,245,66,0.07); border: 1px solid rgba(200,245,66,0.2); border-radius: 20px; font-size: 12px; color: var(--accent); margin-bottom: 28px; }
-  .welcome-btns { display: flex; flex-direction: column; gap: 10px; width: 100%; max-width: 280px; }
-  .btn-primary { padding: 15px; background: linear-gradient(135deg, var(--accent), #a8e020); border: none; border-radius: 30px; color: #0a0a0a; font-size: 14px; font-weight: 700; cursor: pointer; font-family: 'Lato', sans-serif; box-shadow: 0 8px 30px rgba(200,245,66,0.25); transition: all 0.2s; }
-  .btn-primary:hover { transform: translateY(-2px); }
-  .btn-ghost { padding: 13px; background: transparent; border: 1px solid rgba(200,245,66,0.25); border-radius: 30px; color: var(--accent); font-size: 13px; cursor: pointer; font-family: 'Lato', sans-serif; transition: all 0.2s; }
+  /* GOOGLE AUTH SCREEN */
+  #auth-screen{position:fixed;inset:0;background:#0a0a0a;z-index:998;display:none;flex-direction:column;align-items:center;justify-content:center;padding:30px;text-align:center}
+  .auth-icon{font-size:56px;margin-bottom:20px}
+  .auth-title{font-family:'Playfair Display',serif;font-size:28px;font-weight:800;background:linear-gradient(135deg,#fff 30%,var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:12px}
+  .auth-sub{color:var(--muted);font-size:14px;line-height:1.7;max-width:280px;margin-bottom:28px}
+  .btn-google{display:flex;align-items:center;gap:12px;padding:16px 28px;background:#fff;border:none;border-radius:30px;color:#333;font-size:15px;font-weight:700;cursor:pointer;font-family:'Lato',sans-serif;box-shadow:0 8px 30px rgba(255,255,255,0.15);transition:all 0.2s;margin:0 auto}
+  .btn-google:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(255,255,255,0.2)}
+  .google-icon{width:22px;height:22px}
 
-  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.88); display: flex; align-items: center; justify-content: center; z-index: 200; padding: 20px; }
-  .modal { background: #111; border: 1px solid rgba(200,245,66,0.25); border-radius: 24px; padding: 26px; width: 100%; max-width: 420px; max-height: 90vh; overflow-y: auto; }
-  .modal h2 { font-family: 'Playfair Display', serif; font-size: 20px; color: var(--accent); margin-bottom: 5px; }
-  .modal p { font-size: 13px; color: var(--muted); margin-bottom: 18px; line-height: 1.6; }
-  .field { margin-bottom: 14px; }
-  .field label { display: block; font-size: 11px; color: #777; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px; }
-  .field input, .field textarea, .field select { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 10px; color: var(--text); padding: 10px 12px; font-size: 13px; font-family: 'Lato', sans-serif; outline: none; transition: border-color 0.2s; }
-  .field input:focus, .field textarea:focus { border-color: rgba(200,245,66,0.35); }
-  .field textarea { resize: none; }
-  .modal-btns { display: flex; gap: 10px; margin-top: 6px; }
-  .btn-cancel { flex: 1; padding: 12px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; color: #aaa; cursor: pointer; font-family: 'Lato', sans-serif; font-size: 14px; }
-  .btn-save { flex: 2; padding: 12px; background: linear-gradient(135deg, var(--accent), #a8e020); border: none; border-radius: 12px; color: #0a0a0a; font-weight: 700; cursor: pointer; font-family: 'Lato', sans-serif; font-size: 14px; }
+  #welcome{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;padding:30px 20px;text-align:center}
+  .welcome-title{font-family:'Playfair Display',serif;font-size:32px;font-weight:800;background:linear-gradient(135deg,#fff 30%,var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:10px}
+  .welcome-sub{color:var(--muted);font-size:14px;line-height:1.7;max-width:280px;margin-bottom:8px}
+  .drive-badge{display:inline-flex;align-items:center;gap:6px;padding:7px 16px;background:rgba(200,245,66,0.07);border:1px solid rgba(200,245,66,0.2);border-radius:20px;font-size:12px;color:var(--accent);margin-bottom:28px}
+  .welcome-btns{display:flex;flex-direction:column;gap:10px;width:100%;max-width:280px}
+  .btn-primary{padding:15px;background:linear-gradient(135deg,var(--accent),#a8e020);border:none;border-radius:30px;color:#0a0a0a;font-size:14px;font-weight:700;cursor:pointer;font-family:'Lato',sans-serif;box-shadow:0 8px 30px rgba(200,245,66,0.25);transition:all 0.2s}
+  .btn-primary:hover{transform:translateY(-2px)}
+  .btn-ghost{padding:13px;background:transparent;border:1px solid rgba(200,245,66,0.25);border-radius:30px;color:var(--accent);font-size:13px;cursor:pointer;font-family:'Lato',sans-serif;transition:all 0.2s}
 
-  .settings-section { margin-bottom: 22px; }
-  .settings-section h3 { font-size: 11px; text-transform: uppercase; letter-spacing: 2px; color: #555; margin-bottom: 12px; padding-bottom: 6px; border-bottom: 1px solid var(--border); }
-  .color-swatches { display: flex; gap: 8px; flex-wrap: wrap; }
-  .swatch { width: 32px; height: 32px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; transition: all 0.2s; }
-  .swatch.active, .swatch:hover { border-color: #fff; transform: scale(1.15); }
-  .icon-options { display: flex; gap: 8px; flex-wrap: wrap; }
-  .icon-opt { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; cursor: pointer; background: var(--surface); border: 2px solid var(--border); transition: all 0.2s; }
-  .icon-opt:hover, .icon-opt.active { border-color: var(--accent); background: rgba(200,245,66,0.1); }
-  .install-box { background: rgba(200,245,66,0.06); border: 1px solid rgba(200,245,66,0.2); border-radius: 14px; padding: 14px; font-size: 13px; color: #aaa; line-height: 1.7; }
-  .install-box strong { color: var(--accent); }
+  .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.88);display:flex;align-items:center;justify-content:center;z-index:200;padding:20px}
+  .modal{background:#111;border:1px solid rgba(200,245,66,0.25);border-radius:24px;padding:26px;width:100%;max-width:420px;max-height:90vh;overflow-y:auto}
+  .modal h2{font-family:'Playfair Display',serif;font-size:20px;color:var(--accent);margin-bottom:5px}
+  .modal p{font-size:13px;color:var(--muted);margin-bottom:18px;line-height:1.6}
+  .field{margin-bottom:14px}
+  .field label{display:block;font-size:11px;color:#777;margin-bottom:5px;text-transform:uppercase;letter-spacing:1px}
+  .field input,.field textarea{width:100%;background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:10px;color:var(--text);padding:10px 12px;font-size:13px;font-family:'Lato',sans-serif;outline:none;transition:border-color 0.2s}
+  .field input:focus,.field textarea:focus{border-color:rgba(200,245,66,0.35)}
+  .field textarea{resize:none}
+  .modal-btns{display:flex;gap:10px;margin-top:6px}
+  .btn-cancel{flex:1;padding:12px;background:var(--surface);border:1px solid var(--border);border-radius:12px;color:#aaa;cursor:pointer;font-family:'Lato',sans-serif;font-size:14px}
+  .btn-save{flex:2;padding:12px;background:linear-gradient(135deg,var(--accent),#a8e020);border:none;border-radius:12px;color:#0a0a0a;font-weight:700;cursor:pointer;font-family:'Lato',sans-serif;font-size:14px}
 
-  /* UPDATE BUTTON */
-  .update-section { background: rgba(200,245,66,0.04); border: 1px solid rgba(200,245,66,0.15); border-radius: 16px; padding: 16px; margin-bottom: 22px; }
-  .update-section h3 { font-size: 11px; text-transform: uppercase; letter-spacing: 2px; color: #555; margin-bottom: 12px; padding-bottom: 6px; border-bottom: 1px solid var(--border); }
-  .update-desc { font-size: 12px; color: #666; margin-bottom: 12px; line-height: 1.6; }
-  .token-input-wrap { position: relative; margin-bottom: 10px; }
-  .token-input-wrap input { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 10px; color: var(--text); padding: 10px 40px 10px 12px; font-size: 12px; font-family: monospace; outline: none; transition: border-color 0.2s; }
-  .token-input-wrap input:focus { border-color: rgba(200,245,66,0.35); }
-  .toggle-token { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; color: #666; cursor: pointer; font-size: 16px; }
-  .btn-update { width: 100%; padding: 13px; background: linear-gradient(135deg, var(--accent), #a8e020); border: none; border-radius: 12px; color: #0a0a0a; font-weight: 700; cursor: pointer; font-family: 'Lato', sans-serif; font-size: 14px; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s; }
-  .btn-update:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 8px 25px rgba(200,245,66,0.3); }
-  .btn-update:disabled { opacity: 0.5; cursor: not-allowed; }
-  .update-status { margin-top: 10px; padding: 10px 14px; border-radius: 10px; font-size: 12px; text-align: center; display: none; animation: slideDown 0.3s ease-out; }
-  .update-status.success { background: rgba(200,245,66,0.1); border: 1px solid rgba(200,245,66,0.3); color: var(--accent); }
-  .update-status.error { background: rgba(255,80,80,0.1); border: 1px solid rgba(255,80,80,0.3); color: #ff6b6b; }
-  .update-status.loading { background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: #888; }
+  .settings-section{margin-bottom:22px}
+  .settings-section h3{font-size:11px;text-transform:uppercase;letter-spacing:2px;color:#555;margin-bottom:12px;padding-bottom:6px;border-bottom:1px solid var(--border)}
+  .color-swatches{display:flex;gap:8px;flex-wrap:wrap}
+  .swatch{width:32px;height:32px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:all 0.2s}
+  .swatch.active,.swatch:hover{border-color:#fff;transform:scale(1.15)}
+  .icon-options{display:flex;gap:8px;flex-wrap:wrap}
+  .icon-opt{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;cursor:pointer;background:var(--surface);border:2px solid var(--border);transition:all 0.2s}
+  .icon-opt:hover,.icon-opt.active{border-color:var(--accent);background:rgba(200,245,66,0.1)}
+  .install-box{background:rgba(200,245,66,0.06);border:1px solid rgba(200,245,66,0.2);border-radius:14px;padding:14px;font-size:13px;color:#aaa;line-height:1.7}
+  .install-box strong{color:var(--accent)}
 
-  .sync-pill { font-size: 10px; padding: 2px 8px; border-radius: 10px; display: flex; align-items: center; gap: 3px; }
-  .sync-saving { color: #888; }
-  .sync-saved { color: var(--accent); }
-  .sync-error { color: #ff6b6b; }
-  .return-banner { margin-bottom: 14px; padding: 8px 14px; background: rgba(200,245,66,0.05); border: 1px solid rgba(200,245,66,0.12); border-radius: 12px; font-size: 12px; color: #777; text-align: center; animation: fadeUp 0.4s ease-out; }
+  /* UPDATE SECTION */
+  .update-section{background:rgba(200,245,66,0.04);border:1px solid rgba(200,245,66,0.15);border-radius:16px;padding:16px;margin-bottom:22px}
+  .update-section h3{font-size:11px;text-transform:uppercase;letter-spacing:2px;color:#555;margin-bottom:12px;padding-bottom:6px;border-bottom:1px solid var(--border)}
+  .token-input-wrap{position:relative;margin-bottom:10px}
+  .token-input-wrap input{width:100%;background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:10px;color:var(--text);padding:10px 40px 10px 12px;font-size:12px;font-family:monospace;outline:none;transition:border-color 0.2s}
+  .token-input-wrap input:focus{border-color:rgba(200,245,66,0.35)}
+  .toggle-token{position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;color:#666;cursor:pointer;font-size:16px}
+  .btn-update{width:100%;padding:13px;background:linear-gradient(135deg,var(--accent),#a8e020);border:none;border-radius:12px;color:#0a0a0a;font-weight:700;cursor:pointer;font-family:'Lato',sans-serif;font-size:14px;display:flex;align-items:center;justify-content:center;gap:8px;transition:all 0.2s}
+  .btn-update:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 8px 25px rgba(200,245,66,0.3)}
+  .btn-update:disabled{opacity:0.5;cursor:not-allowed}
+  .update-status{margin-top:10px;padding:10px 14px;border-radius:10px;font-size:12px;text-align:center;display:none;animation:slideDown 0.3s ease-out}
+  .update-status.success{background:rgba(200,245,66,0.1);border:1px solid rgba(200,245,66,0.3);color:var(--accent)}
+  .update-status.error{background:rgba(255,80,80,0.1);border:1px solid rgba(255,80,80,0.3);color:#ff6b6b}
+  .update-status.loading{background:rgba(255,255,255,0.05);border:1px solid var(--border);color:#888}
+
+  .sync-pill{font-size:10px;padding:2px 8px;border-radius:10px;display:flex;align-items:center;gap:3px}
+  .sync-saving{color:#888}
+  .sync-saved{color:var(--accent)}
+  .sync-error{color:#ff6b6b}
+  .return-banner{margin-bottom:14px;padding:8px 14px;background:rgba(200,245,66,0.05);border:1px solid rgba(200,245,66,0.12);border-radius:12px;font-size:12px;color:#777;text-align:center;animation:fadeUp 0.4s ease-out}
+
+  /* USER AVATAR */
+  .user-avatar{width:28px;height:28px;border-radius:50%;object-fit:cover;border:1px solid rgba(200,245,66,0.3)}
 </style>
 </head>
 <body>
-<div id="starfield"></div>
-<div id="app">
 
+<div id="starfield"></div>
+
+<!-- LOADING SCREEN -->
+<div id="loading-screen">
+  <div class="loading-icon">⚡</div>
+  <div class="loading-text">Loading My Buddy...</div>
+  <div class="loading-sub">Connecting to Google Drive</div>
+</div>
+
+<!-- GOOGLE AUTH SCREEN -->
+<div id="auth-screen">
+  <div class="auth-icon">⚡</div>
+  <div class="auth-title">My Buddy</div>
+  <p class="auth-sub">Sign in with Google to sync your journey across all your devices — phone, tablet, laptop.</p>
+  <button class="btn-google" onclick="signInWithGoogle()">
+    <svg class="google-icon" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+    Sign in with Google
+  </button>
+  <p style="margin-top:16px;font-size:11px;color:#444">Your data stays private in your own Google Drive</p>
+</div>
+
+<div id="app">
   <header>
     <div class="header-left">
       <div class="app-icon small" id="header-icon"></div>
@@ -149,6 +177,7 @@
       <div class="streak-badge">🔥 <span id="streak-count">1</span></div>
       <button class="icon-btn" onclick="openProfile()" title="My Profile">👤</button>
       <button class="icon-btn" onclick="openSettings()" title="Settings">⚙️</button>
+      <img id="user-avatar" class="user-avatar" style="display:none" src="" alt=""/>
     </div>
   </header>
 
@@ -213,7 +242,7 @@
 <div class="modal-overlay" id="settings-modal" style="display:none">
   <div class="modal">
     <h2>⚙️ App Settings</h2>
-    <p>Customize My Buddy — everything saves to Google Drive instantly.</p>
+    <p>Customize My Buddy — everything saves instantly.</p>
 
     <div class="settings-section">
       <h3>App Name</h3>
@@ -223,12 +252,12 @@
     <div class="settings-section">
       <h3>App Icon</h3>
       <div class="icon-options">
-        <div class="icon-opt active" data-icon="rooftop" onclick="selectIcon(this,'rooftop')" title="Rooftop Boy">🌃</div>
+        <div class="icon-opt active" data-icon="rooftop" onclick="selectIcon(this,'rooftop')">🌃</div>
         <div class="icon-opt" data-icon="lightning" onclick="selectIcon(this,'lightning')">⚡</div>
         <div class="icon-opt" data-icon="fire" onclick="selectIcon(this,'fire')">🔥</div>
         <div class="icon-opt" data-icon="star" onclick="selectIcon(this,'star')">⭐</div>
         <div class="icon-opt" data-icon="crown" onclick="selectIcon(this,'crown')">👑</div>
-        <div class="icon-opt" data-icon="custom" onclick="triggerImageUpload()" title="Upload Image">📸</div>
+        <div class="icon-opt" data-icon="custom" onclick="triggerImageUpload()">📸</div>
       </div>
       <input type="file" id="icon-upload" accept="image/*" style="display:none" onchange="handleIconUpload(event)"/>
       <div id="icon-preview-label" style="font-size:11px;color:#555;margin-top:8px"></div>
@@ -246,43 +275,38 @@
       </div>
     </div>
 
-    <!-- ONE TAP UPDATE BUTTON -->
+    <!-- ONE TAP UPDATE -->
     <div class="update-section">
       <h3>🚀 One-Tap Update</h3>
-      <p class="update-desc">When Buddy gets upgraded, paste the new code from Claude and tap Update. Your GitHub page updates instantly — no manual steps needed.</p>
-
+      <p style="font-size:12px;color:#666;margin-bottom:12px;line-height:1.6">When Buddy gets upgraded, paste the new code from Claude and tap Update.</p>
       <div class="field">
-        <label>GitHub Personal Access Token</label>
+        <label>GitHub Token</label>
         <div class="token-input-wrap">
           <input type="password" id="github-token" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" autocomplete="off"/>
-          <button class="toggle-token" onclick="toggleToken()" id="toggle-token-btn">👁</button>
+          <button class="toggle-token" onclick="toggleToken()">👁</button>
         </div>
       </div>
-
       <div class="field">
-        <label>New App Code (paste from Claude)</label>
-        <textarea id="new-code" rows="4" placeholder="Paste the full updated HTML code from Claude here..." style="font-family:monospace;font-size:11px"></textarea>
+        <label>New Code (paste from Claude)</label>
+        <textarea id="new-code" rows="3" placeholder="Paste full HTML code here..." style="font-family:monospace;font-size:11px"></textarea>
       </div>
-
-      <button class="btn-update" id="update-btn" onclick="pushToGitHub()">
-        🚀 Update My Buddy on GitHub
-      </button>
+      <button class="btn-update" id="update-btn" onclick="pushToGitHub()">🚀 Update My Buddy</button>
       <div class="update-status" id="update-status"></div>
-      <div style="font-size:11px;color:#444;margin-top:8px;text-align:center">Token is saved privately to your Google Drive</div>
+      <div style="font-size:11px;color:#444;margin-top:8px;text-align:center">Token saved privately to your Google Drive</div>
     </div>
 
     <div class="settings-section">
-      <h3>📱 Add to Home Screen</h3>
+      <h3>📱 Your App URL</h3>
       <div class="install-box">
-        <strong>iPhone/iPad:</strong> Tap Share → "Add to Home Screen" → Done<br/><br/>
-        <strong>Android:</strong> Tap ⋮ menu → "Add to Home Screen" → Install<br/><br/>
-        <strong>GitHub Pages URL:</strong><br/>
-        <span style="color:var(--accent);font-size:12px;word-break:break-all">https://ManideepReddam.github.io/mybuddy</span>
+        <strong>Direct link:</strong><br/>
+        <span style="color:var(--accent);font-size:12px;word-break:break-all">https://manideepreddam.github.io/mybuddy</span><br/><br/>
+        <strong>Add to Home Screen:</strong> Open in Chrome → ⋮ → Add to Home Screen
       </div>
     </div>
 
     <div class="settings-section">
-      <h3>Danger Zone</h3>
+      <h3>Account</h3>
+      <button onclick="signOut()" style="padding:10px 18px;background:rgba(255,80,80,0.1);border:1px solid rgba(255,80,80,0.3);border-radius:10px;color:#ff6b6b;cursor:pointer;font-size:13px;font-family:'Lato',sans-serif;margin-bottom:10px">🚪 Sign Out of Google</button><br/>
       <button onclick="clearHistory()" style="padding:10px 18px;background:rgba(255,80,80,0.1);border:1px solid rgba(255,80,80,0.3);border-radius:10px;color:#ff6b6b;cursor:pointer;font-size:13px;font-family:'Lato',sans-serif">🗑 Clear Chat History</button>
     </div>
 
@@ -293,24 +317,31 @@
   </div>
 </div>
 
+<!-- Google Identity Services -->
+<script src="https://accounts.google.com/gsi/client" async></script>
+
 <script>
-const DRIVE_FILE_ID = "1c9FHuOX0-RCwZnydd0JRpAcn4lSwDyvU";
-const CLAUDE_API = "https://api.anthropic.com/v1/messages";
-const GDRIVE_MCP = "https://drivemcp.googleapis.com/mcp/v1";
-const GITHUB_USER = "ManideepReddam";
-const GITHUB_REPO = "mybuddy";
-const GITHUB_FILE = "index.html";
+const CLIENT_ID = '71574875200-1uoknkiu28kgduf3rra7vhnq0pv3edg5.apps.googleusercontent.com';
+const SCOPES = 'https://www.googleapis.com/auth/drive.file';
+const CLAUDE_API = 'https://api.anthropic.com/v1/messages';
+const GITHUB_USER = 'ManideepReddam';
+const GITHUB_REPO = 'mybuddy';
+const GITHUB_FILE = 'index.html';
+const DATA_FILENAME = 'mybuddy-data.json';
 
 const SYSTEM_PROMPT = `You are Buddy — a personal development AI companion and genuine best friend. Help the user become their best self across ALL life areas: Communication, Fashion, Health, Finances, Learning, Goals, Career, Cleanliness, Grooming, Mindset, Relationships, Time Management.
 
 Personality: warm, direct, honest like a best friend who genuinely wants you to win. Give ACTIONABLE specific advice. Reference their profile and past conversations naturally. Challenge them to grow, celebrate their wins. Give a "Daily Challenge" occasionally — one small thing they can do TODAY. Keep responses under 200 words unless asked for deep dive. Be conversational and energetic.`;
 
 let state = {
-  messages: [], profile: {}, streak: 1, lastVisit: "",
-  appName: "My Buddy", accentColor: "#c8f542", accentColor2: "#a8e020",
-  iconType: "rooftop", customIconData: null, initialized: false,
-  githubToken: "",
+  messages:[], profile:{}, streak:1, lastVisit:'',
+  appName:'My Buddy', accentColor:'#c8f542', accentColor2:'#a8e020',
+  iconType:'rooftop', customIconData:null, githubToken:'',
+  initialized:false, driveFileId:null,
 };
+
+let accessToken = null;
+let tokenClient = null;
 let syncing = false;
 
 // ── STARS ──────────────────────────────────────────
@@ -325,28 +356,150 @@ function initStars() {
   }
 }
 
+// ── GOOGLE AUTH ────────────────────────────────────
+function initGoogleAuth() {
+  // Check for stored token
+  const stored = localStorage.getItem('mb_access_token');
+  const expiry = localStorage.getItem('mb_token_expiry');
+  if (stored && expiry && Date.now() < parseInt(expiry)) {
+    accessToken = stored;
+    onSignedIn();
+    return;
+  }
+  // Initialize token client
+  window.google?.accounts?.oauth2 && setupTokenClient();
+  // Show auth screen
+  document.getElementById('loading-screen').style.display = 'none';
+  document.getElementById('auth-screen').style.display = 'flex';
+}
+
+function setupTokenClient() {
+  tokenClient = google.accounts.oauth2.initTokenClient({
+    client_id: CLIENT_ID,
+    scope: SCOPES,
+    callback: (response) => {
+      if (response.error) { console.error(response); return; }
+      accessToken = response.access_token;
+      // Store token (expires in ~1 hour)
+      localStorage.setItem('mb_access_token', accessToken);
+      localStorage.setItem('mb_token_expiry', Date.now() + 3500000);
+      onSignedIn();
+    },
+  });
+}
+
+function signInWithGoogle() {
+  if (!tokenClient) {
+    // Google script may still be loading
+    setTimeout(() => {
+      setupTokenClient();
+      tokenClient.requestAccessToken({prompt:'consent'});
+    }, 500);
+    return;
+  }
+  tokenClient.requestAccessToken({prompt:''});
+}
+
+async function onSignedIn() {
+  document.getElementById('auth-screen').style.display = 'none';
+  document.getElementById('loading-screen').style.display = 'flex';
+  document.querySelector('.loading-text').textContent = 'Loading your journey...';
+
+  // Get user info
+  try {
+    const res = await fetch('https://www.googleapis.com/oauth2/v2/userinfo', {
+      headers: { Authorization: `Bearer ${accessToken}` }
+    });
+    const user = await res.json();
+    if (user.picture) {
+      const av = document.getElementById('user-avatar');
+      av.src = user.picture;
+      av.style.display = 'block';
+    }
+  } catch(e) {}
+
+  await loadFromDrive();
+  document.getElementById('loading-screen').style.display = 'none';
+}
+
+function signOut() {
+  localStorage.removeItem('mb_access_token');
+  localStorage.removeItem('mb_token_expiry');
+  accessToken = null;
+  closeModal('settings-modal');
+  document.getElementById('auth-screen').style.display = 'flex';
+  document.getElementById('app').style.display = 'none';
+}
+
 // ── GOOGLE DRIVE ──────────────────────────────────
+async function driveRequest(url, method='GET', body=null) {
+  const opts = {
+    method,
+    headers: { Authorization: `Bearer ${accessToken}` }
+  };
+  if (body) {
+    opts.headers['Content-Type'] = 'application/json';
+    opts.body = JSON.stringify(body);
+  }
+  const res = await fetch(url, opts);
+  if (res.status === 401) {
+    // Token expired — re-auth
+    localStorage.removeItem('mb_access_token');
+    localStorage.removeItem('mb_token_expiry');
+    signInWithGoogle();
+    throw new Error('Token expired');
+  }
+  return res;
+}
+
+async function findOrCreateFile() {
+  // Search for existing file
+  const searchRes = await driveRequest(
+    `https://www.googleapis.com/drive/v3/files?q=name='${DATA_FILENAME}'+and+trashed=false&fields=files(id,name)`
+  );
+  const searchJson = await searchRes.json();
+  if (searchJson.files && searchJson.files.length > 0) {
+    return searchJson.files[0].id;
+  }
+  // Create new file
+  const meta = { name: DATA_FILENAME, mimeType: 'application/json' };
+  const createRes = await driveRequest(
+    'https://www.googleapis.com/drive/v3/files',
+    'POST', meta
+  );
+  const created = await createRes.json();
+  // Upload initial content
+  await uploadFileToDrive(created.id, JSON.stringify({messages:[],profile:{},streak:1,lastVisit:''}));
+  return created.id;
+}
+
+async function uploadFileToDrive(fileId, content) {
+  await fetch(`https://www.googleapis.com/upload/drive/v3/files/${fileId}?uploadType=media`, {
+    method: 'PATCH',
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      'Content-Type': 'application/json'
+    },
+    body: content
+  });
+}
+
 async function loadFromDrive() {
   showSync('loading');
   try {
-    const res = await fetch(CLAUDE_API, {
-      method: 'POST', headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514', max_tokens: 2000,
-        system: 'Read the Google Drive file and return ONLY the raw JSON content with no extra text.',
-        messages: [{role:'user', content:`Read Google Drive file ID: ${DRIVE_FILE_ID} and return its complete JSON content only.`}],
-        mcp_servers: [{type:'url', url: GDRIVE_MCP, name:'gdrive'}]
-      })
-    });
-    const data = await res.json();
-    const text = data.content?.filter(b=>b.type==='text').map(b=>b.text).join('') || '';
-    const match = text.match(/\{[\s\S]*\}/);
-    if (match) {
-      const parsed = JSON.parse(match[0]);
+    const fileId = await findOrCreateFile();
+    state.driveFileId = fileId;
+
+    const res = await driveRequest(
+      `https://www.googleapis.com/drive/v3/files/${fileId}?alt=media`
+    );
+    const text = await res.text();
+    if (text && text.trim().startsWith('{')) {
+      const parsed = JSON.parse(text);
       if (parsed.messages) state.messages = parsed.messages;
       if (parsed.profile) state.profile = parsed.profile;
       if (parsed.appName) state.appName = parsed.appName;
-      if (parsed.accentColor) { state.accentColor = parsed.accentColor; state.accentColor2 = parsed.accentColor2 || '#a8e020'; }
+      if (parsed.accentColor) { state.accentColor = parsed.accentColor; state.accentColor2 = parsed.accentColor2||'#a8e020'; }
       if (parsed.iconType) state.iconType = parsed.iconType;
       if (parsed.customIconData) state.customIconData = parsed.customIconData;
       if (parsed.githubToken) state.githubToken = parsed.githubToken;
@@ -356,39 +509,41 @@ async function loadFromDrive() {
       if (parsed.lastVisit === yesterday) s += 1;
       else if (parsed.lastVisit && parsed.lastVisit !== today) s = 1;
       state.streak = s;
-      state.lastVisit = today;
     }
     showSync('saved');
-  } catch(e) { showSync('error'); }
+  } catch(e) {
+    console.error('Drive load error:', e);
+    showSync('error');
+  }
   applyTheme();
   renderApp();
 }
 
 async function saveToDrive() {
-  if (syncing) return;
+  if (syncing || !state.driveFileId) return;
   syncing = true;
   showSync('saving');
   state.lastVisit = new Date().toDateString();
   const payload = {
-    messages: state.messages.slice(-60), profile: state.profile,
-    streak: state.streak, lastVisit: state.lastVisit,
-    appName: state.appName, accentColor: state.accentColor,
-    accentColor2: state.accentColor2, iconType: state.iconType,
-    customIconData: state.customIconData, githubToken: state.githubToken,
+    messages: state.messages.slice(-60),
+    profile: state.profile,
+    streak: state.streak,
+    lastVisit: state.lastVisit,
+    appName: state.appName,
+    accentColor: state.accentColor,
+    accentColor2: state.accentColor2,
+    iconType: state.iconType,
+    customIconData: state.customIconData,
+    githubToken: state.githubToken,
   };
   try {
-    await fetch(CLAUDE_API, {
-      method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({
-        model:'claude-sonnet-4-20250514', max_tokens:200,
-        system:'Update the specified Google Drive file with the provided JSON. Reply only with "saved".',
-        messages:[{role:'user', content:`Update Google Drive file ID: ${DRIVE_FILE_ID} with this JSON:\n${JSON.stringify(payload)}`}],
-        mcp_servers:[{type:'url', url:GDRIVE_MCP, name:'gdrive'}]
-      })
-    });
+    await uploadFileToDrive(state.driveFileId, JSON.stringify(payload));
     showSync('saved');
     setTimeout(()=>showSync(''), 3000);
-  } catch(e) { showSync('error'); }
+  } catch(e) {
+    console.error('Drive save error:', e);
+    showSync('error');
+  }
   syncing = false;
 }
 
@@ -396,53 +551,31 @@ async function saveToDrive() {
 async function pushToGitHub() {
   const token = document.getElementById('github-token').value.trim() || state.githubToken;
   const newCode = document.getElementById('new-code').value.trim();
-
-  if (!token) { showUpdateStatus('error', '⚠️ Please enter your GitHub token first'); return; }
-  if (!newCode) { showUpdateStatus('error', '⚠️ Please paste the new code from Claude first'); return; }
-
+  if (!token) { showUpdateStatus('error','⚠️ Please enter your GitHub token first'); return; }
+  if (!newCode) { showUpdateStatus('error','⚠️ Please paste the new code from Claude first'); return; }
   const btn = document.getElementById('update-btn');
   btn.disabled = true;
-  showUpdateStatus('loading', '🔄 Pushing update to GitHub...');
-
+  showUpdateStatus('loading','🔄 Pushing update to GitHub...');
   try {
-    // Get current file SHA (needed for update)
     const getRes = await fetch(`https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/${GITHUB_FILE}`, {
-      headers: { 'Authorization': `token ${token}`, 'Accept': 'application/vnd.github.v3+json' }
+      headers: { Authorization:`token ${token}`, Accept:'application/vnd.github.v3+json' }
     });
     const getJson = await getRes.json();
-
-    if (!getRes.ok) throw new Error(getJson.message || 'Could not get file info');
-
-    const sha = getJson.sha;
+    if (!getRes.ok) throw new Error(getJson.message||'Could not get file');
     const encoded = btoa(unescape(encodeURIComponent(newCode)));
-
-    // Push update
     const putRes = await fetch(`https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/${GITHUB_FILE}`, {
-      method: 'PUT',
-      headers: {
-        'Authorization': `token ${token}`,
-        'Accept': 'application/vnd.github.v3+json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        message: '🚀 My Buddy updated via app',
-        content: encoded,
-        sha: sha
-      })
+      method:'PUT',
+      headers: { Authorization:`token ${token}`, Accept:'application/vnd.github.v3+json', 'Content-Type':'application/json' },
+      body: JSON.stringify({ message:'🚀 My Buddy updated via app', content:encoded, sha:getJson.sha })
     });
     const putJson = await putRes.json();
-
-    if (!putRes.ok) throw new Error(putJson.message || 'Update failed');
-
-    // Save token to Drive for next time
+    if (!putRes.ok) throw new Error(putJson.message||'Update failed');
     state.githubToken = token;
     saveToDrive();
-
-    showUpdateStatus('success', '✅ My Buddy updated! Changes live in ~60 seconds at your GitHub Pages URL.');
+    showUpdateStatus('success','✅ Updated! Live in ~60 seconds at your GitHub Pages URL.');
     document.getElementById('new-code').value = '';
-
   } catch(err) {
-    showUpdateStatus('error', `❌ Error: ${err.message}`);
+    showUpdateStatus('error',`❌ Error: ${err.message}`);
   }
   btn.disabled = false;
 }
@@ -456,9 +589,7 @@ function showUpdateStatus(type, msg) {
 
 function toggleToken() {
   const input = document.getElementById('github-token');
-  const btn = document.getElementById('toggle-token-btn');
-  if (input.type === 'password') { input.type = 'text'; btn.textContent = '🙈'; }
-  else { input.type = 'password'; btn.textContent = '👁'; }
+  input.type = input.type === 'password' ? 'text' : 'password';
 }
 
 // ── THEME ──────────────────────────────────────────
@@ -518,19 +649,18 @@ function renderApp() {
   const welcome = document.getElementById('welcome');
   const messagesEl = document.getElementById('messages');
   const inputArea = document.getElementById('input-area');
-
   if (state.messages.length === 0) {
-    welcome.style.display = 'flex'; messagesEl.style.display = 'none'; inputArea.style.display = 'none';
+    welcome.style.display='flex'; messagesEl.style.display='none'; inputArea.style.display='none';
   } else {
-    welcome.style.display = 'none';
-    messagesEl.style.display = 'flex'; messagesEl.style.flexDirection = 'column';
-    inputArea.style.display = 'block';
-    state.initialized = true;
+    welcome.style.display='none';
+    messagesEl.style.display='flex'; messagesEl.style.flexDirection='column';
+    inputArea.style.display='block';
+    state.initialized=true;
     renderMessages();
     if (state.profile?.name && !document.querySelector('.return-banner')) {
       const banner = document.createElement('div');
-      banner.className = 'return-banner';
-      banner.innerHTML = `☁️ Welcome back, <strong style="color:var(--accent)">${state.profile.name}</strong> · Day ${state.streak} 🔥`;
+      banner.className='return-banner';
+      banner.innerHTML=`☁️ Welcome back, <strong style="color:var(--accent)">${state.profile.name}</strong> · Day ${state.streak} 🔥`;
       messagesEl.prepend(banner);
     }
     scrollBottom();
@@ -539,161 +669,154 @@ function renderApp() {
 
 function renderMessages() {
   const el = document.getElementById('messages');
-  el.innerHTML = '';
-  state.messages.forEach(m => appendMessage(m.role, m.content, false));
+  el.innerHTML='';
+  state.messages.forEach(m=>appendMessage(m.role,m.content,false));
 }
 
-function appendMessage(role, content, animate=true) {
+function appendMessage(role,content,animate=true) {
   const el = document.getElementById('messages');
   const div = document.createElement('div');
-  div.className = `msg ${role}`;
-  if (role === 'buddy') {
-    div.innerHTML = `<div style="width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;align-self:flex-end;box-shadow:0 0 10px rgba(200,245,66,0.3)">⚡</div><div class="bubble buddy">${content}</div>`;
+  div.className=`msg ${role}`;
+  if (role==='buddy') {
+    div.innerHTML=`<div style="width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;align-self:flex-end;box-shadow:0 0 10px rgba(200,245,66,0.3)">⚡</div><div class="bubble buddy">${content}</div>`;
   } else {
-    div.innerHTML = `<div class="bubble user">${content}</div>`;
+    div.innerHTML=`<div class="bubble user">${content}</div>`;
   }
-  if (!animate) div.style.animation = 'none';
+  if (!animate) div.style.animation='none';
   el.appendChild(div);
   scrollBottom();
 }
 
 function showTyping() {
-  const el = document.getElementById('messages');
-  const t = document.createElement('div');
-  t.id = 'typing'; t.className = 'typing';
-  t.innerHTML = '<div class="dot" style="animation-delay:0s"></div><div class="dot" style="animation-delay:0.2s"></div><div class="dot" style="animation-delay:0.4s"></div>';
+  const el=document.getElementById('messages');
+  const t=document.createElement('div');
+  t.id='typing'; t.className='typing';
+  t.innerHTML='<div class="dot" style="animation-delay:0s"></div><div class="dot" style="animation-delay:0.2s"></div><div class="dot" style="animation-delay:0.4s"></div>';
   el.appendChild(t); scrollBottom();
 }
-function hideTyping() { const t = document.getElementById('typing'); if (t) t.remove(); }
-function scrollBottom() { const el = document.getElementById('messages'); el.scrollTop = el.scrollHeight; }
+function hideTyping(){const t=document.getElementById('typing');if(t)t.remove();}
+function scrollBottom(){const el=document.getElementById('messages');el.scrollTop=el.scrollHeight;}
 
 function showSync(type) {
-  const el = document.getElementById('sync-status');
-  if (!type) { el.style.display='none'; return; }
+  const el=document.getElementById('sync-status');
+  if (!type){el.style.display='none';return;}
   el.style.display='flex';
-  const configs = {
-    loading: { cls:'sync-saving', text:'⏳ Loading...' },
-    saving:  { cls:'sync-saving', text:'🔄 Saving...' },
-    saved:   { cls:'sync-saved',  text:'☁️ Saved' },
-    error:   { cls:'sync-error',  text:'⚠️ Sync issue' },
-  };
-  const c = configs[type] || {};
-  el.className = `sync-pill ${c.cls}`;
-  el.textContent = c.text;
+  const configs={loading:{cls:'sync-saving',text:'⏳ Loading...'},saving:{cls:'sync-saving',text:'🔄 Saving...'},saved:{cls:'sync-saved',text:'☁️ Saved'},error:{cls:'sync-error',text:'⚠️ Sync issue'}};
+  const c=configs[type]||{};
+  el.className=`sync-pill ${c.cls}`;
+  el.textContent=c.text;
 }
 
 // ── CHAT ───────────────────────────────────────────
 function buildSystem() {
-  let sys = SYSTEM_PROMPT;
-  if (state.profile && Object.keys(state.profile).length > 0) {
-    const p = state.profile;
-    sys += `\n\n---\nUSER PROFILE:\nName: ${p.name||'?'}\nAge: ${p.age||'?'}\nOccupation: ${p.occupation||'?'}\nGoals: ${p.goals||'?'}\nStruggles: ${p.struggles||'?'}\nNotes: ${p.notes||'none'}\n---`;
+  let sys=SYSTEM_PROMPT;
+  if (state.profile&&Object.keys(state.profile).length>0) {
+    const p=state.profile;
+    sys+=`\n\n---\nUSER PROFILE:\nName:${p.name||'?'}\nAge:${p.age||'?'}\nOccupation:${p.occupation||'?'}\nGoals:${p.goals||'?'}\nStruggles:${p.struggles||'?'}\nNotes:${p.notes||'none'}\n---`;
   }
   return sys;
 }
 
 async function callBuddy(msgs) {
-  const res = await fetch(CLAUDE_API, {
-    method:'POST', headers:{'Content-Type':'application/json'},
-    body: JSON.stringify({ model:'claude-sonnet-4-20250514', max_tokens:1000, system:buildSystem(), messages:msgs })
+  const res=await fetch(CLAUDE_API,{
+    method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:buildSystem(),messages:msgs})
   });
-  const data = await res.json();
-  return data.content?.map(b=>b.text||'').join('') || "I'm here. Keep going.";
+  const data=await res.json();
+  return data.content?.map(b=>b.text||'').join('')||"I'm here. Keep going.";
 }
 
 async function startChat(initialMsg) {
-  document.getElementById('welcome').style.display = 'none';
-  document.getElementById('messages').style.display = 'flex';
-  document.getElementById('messages').style.flexDirection = 'column';
-  document.getElementById('input-area').style.display = 'block';
-  state.initialized = true;
-  const p = state.profile;
-  const msg = initialMsg || (p?.name
-    ? `My profile: Name:${p.name}, Age:${p.age}, Job:${p.occupation}, Goals:${p.goals}, Struggles:${p.struggles}. Greet me warmly as Buddy and let's start my journey.`
-    : `Hello! I want to start my personal development journey with you as my buddy.`);
+  document.getElementById('welcome').style.display='none';
+  document.getElementById('messages').style.display='flex';
+  document.getElementById('messages').style.flexDirection='column';
+  document.getElementById('input-area').style.display='block';
+  state.initialized=true;
+  const p=state.profile;
+  const msg=initialMsg||(p?.name
+    ?`My profile: Name:${p.name},Age:${p.age},Job:${p.occupation},Goals:${p.goals},Struggles:${p.struggles}. Greet me warmly as Buddy and let's start my journey.`
+    :`Hello! I want to start my personal development journey with you as my buddy.`);
   showTyping();
   try {
-    const reply = await callBuddy([{role:'user',content:msg}]);
+    const reply=await callBuddy([{role:'user',content:msg}]);
     hideTyping();
-    state.messages.push({role:'buddy', content:reply});
-    appendMessage('buddy', reply);
+    state.messages.push({role:'buddy',content:reply});
+    appendMessage('buddy',reply);
     saveToDrive();
   } catch(e) {
     hideTyping();
-    const fb = `Hey${p?.name?' '+p.name:''}! I'm Buddy — your personal companion. Ready to help you level up every single day. What's on your mind? 👊`;
+    const fb=`Hey${p?.name?' '+p.name:''}! I'm Buddy — your personal companion. Ready to help you level up every day. What's on your mind? 👊`;
     state.messages.push({role:'buddy',content:fb});
-    appendMessage('buddy', fb);
+    appendMessage('buddy',fb);
   }
   document.getElementById('msg-input').focus();
 }
 
 async function sendMessage() {
-  const input = document.getElementById('msg-input');
-  const text = input.value.trim();
+  const input=document.getElementById('msg-input');
+  const text=input.value.trim();
   if (!text) return;
-  input.value = ''; input.style.height = 'auto';
-  document.getElementById('send-btn').disabled = true;
+  input.value=''; input.style.height='auto';
+  document.getElementById('send-btn').disabled=true;
   state.messages.push({role:'user',content:text});
-  appendMessage('user', text);
+  appendMessage('user',text);
   showTyping();
   try {
-    const msgs = state.messages.map(m=>({role: m.role==='buddy'?'assistant':'user', content:m.content}));
-    const reply = await callBuddy(msgs);
+    const msgs=state.messages.map(m=>({role:m.role==='buddy'?'assistant':'user',content:m.content}));
+    const reply=await callBuddy(msgs);
     hideTyping();
     state.messages.push({role:'buddy',content:reply});
-    appendMessage('buddy', reply);
+    appendMessage('buddy',reply);
     saveToDrive();
   } catch(e) {
     hideTyping();
-    const fb = "Something went wrong but I'm still here — what were you saying? 👊";
-    state.messages.push({role:'buddy',content:fb});
-    appendMessage('buddy', fb);
+    appendMessage('buddy',"Something went wrong but I'm still here — what were you saying? 👊");
   }
-  document.getElementById('send-btn').disabled = false;
+  document.getElementById('send-btn').disabled=false;
   input.focus();
 }
 
-function areaClick(area, icon) {
-  const msg = `Let's focus on ${area} ${icon}. Give me specific actionable advice to improve starting today.`;
-  if (!state.initialized) { startChat(msg); return; }
-  document.getElementById('msg-input').value = msg;
+function areaClick(area,icon) {
+  const msg=`Let's focus on ${area} ${icon}. Give me specific actionable advice to improve starting today.`;
+  if (!state.initialized){startChat(msg);return;}
+  document.getElementById('msg-input').value=msg;
   sendMessage();
 }
 
-function handleKey(e) { if (e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMessage();} }
-function autoResize(el) {
-  el.style.height = 'auto';
-  el.style.height = Math.min(el.scrollHeight, 100) + 'px';
-  document.getElementById('send-btn').disabled = !el.value.trim();
+function handleKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMessage();}}
+function autoResize(el){
+  el.style.height='auto';
+  el.style.height=Math.min(el.scrollHeight,100)+'px';
+  document.getElementById('send-btn').disabled=!el.value.trim();
 }
 
 // ── PROFILE ────────────────────────────────────────
 function openProfile() {
-  const p = state.profile;
-  document.getElementById('p-name').value = p.name||'';
-  document.getElementById('p-age').value = p.age||'';
-  document.getElementById('p-occupation').value = p.occupation||'';
-  document.getElementById('p-goals').value = p.goals||'';
-  document.getElementById('p-struggles').value = p.struggles||'';
-  document.getElementById('p-notes').value = p.notes||'';
-  document.getElementById('profile-modal').style.display = 'flex';
+  const p=state.profile;
+  document.getElementById('p-name').value=p.name||'';
+  document.getElementById('p-age').value=p.age||'';
+  document.getElementById('p-occupation').value=p.occupation||'';
+  document.getElementById('p-goals').value=p.goals||'';
+  document.getElementById('p-struggles').value=p.struggles||'';
+  document.getElementById('p-notes').value=p.notes||'';
+  document.getElementById('profile-modal').style.display='flex';
 }
 
 function saveProfile() {
-  state.profile = {
-    name: document.getElementById('p-name').value,
-    age: document.getElementById('p-age').value,
-    occupation: document.getElementById('p-occupation').value,
-    goals: document.getElementById('p-goals').value,
-    struggles: document.getElementById('p-struggles').value,
-    notes: document.getElementById('p-notes').value,
+  state.profile={
+    name:document.getElementById('p-name').value,
+    age:document.getElementById('p-age').value,
+    occupation:document.getElementById('p-occupation').value,
+    goals:document.getElementById('p-goals').value,
+    struggles:document.getElementById('p-struggles').value,
+    notes:document.getElementById('p-notes').value,
   };
   closeModal('profile-modal');
   saveToDrive();
-  if (state.messages.length === 0) { startChat(); }
+  if (state.messages.length===0){startChat();}
   else {
-    const p = state.profile;
-    const update = `I just updated my profile. Name:${p.name}, Age:${p.age}, Job:${p.occupation}, Goals:${p.goals}, Struggles:${p.struggles}. Acknowledge briefly.`;
+    const p=state.profile;
+    const update=`I just updated my profile. Name:${p.name},Age:${p.age},Job:${p.occupation},Goals:${p.goals},Struggles:${p.struggles}. Acknowledge briefly.`;
     state.messages.push({role:'user',content:update});
     callBuddy(state.messages.map(m=>({role:m.role==='buddy'?'assistant':'user',content:m.content}))).then(reply=>{
       state.messages.push({role:'buddy',content:reply});
@@ -705,50 +828,50 @@ function saveProfile() {
 
 // ── SETTINGS ───────────────────────────────────────
 function openSettings() {
-  document.getElementById('s-appname').value = state.appName;
-  document.querySelectorAll('.swatch').forEach(s=>s.classList.toggle('active', s.dataset.color===state.accentColor));
-  document.querySelectorAll('.icon-opt').forEach(o=>o.classList.toggle('active', o.dataset.icon===state.iconType));
-  if (state.githubToken) document.getElementById('github-token').value = state.githubToken;
-  document.getElementById('settings-modal').style.display = 'flex';
+  document.getElementById('s-appname').value=state.appName;
+  document.querySelectorAll('.swatch').forEach(s=>s.classList.toggle('active',s.dataset.color===state.accentColor));
+  document.querySelectorAll('.icon-opt').forEach(o=>o.classList.toggle('active',o.dataset.icon===state.iconType));
+  if (state.githubToken) document.getElementById('github-token').value=state.githubToken;
+  document.getElementById('settings-modal').style.display='flex';
 }
 
 function applySettings() {
-  const name = document.getElementById('s-appname').value.trim();
-  if (name) state.appName = name;
-  const token = document.getElementById('github-token').value.trim();
-  if (token) state.githubToken = token;
+  const name=document.getElementById('s-appname').value.trim();
+  if (name) state.appName=name;
+  const token=document.getElementById('github-token').value.trim();
+  if (token) state.githubToken=token;
   applyTheme();
   closeModal('settings-modal');
   saveToDrive();
 }
 
-function selectColor(el, c1, c2) {
+function selectColor(el,c1,c2) {
   document.querySelectorAll('.swatch').forEach(s=>s.classList.remove('active'));
   el.classList.add('active');
-  state.accentColor = c1; state.accentColor2 = c2;
-  document.documentElement.style.setProperty('--accent', c1);
-  document.documentElement.style.setProperty('--accent2', c2);
+  state.accentColor=c1; state.accentColor2=c2;
+  document.documentElement.style.setProperty('--accent',c1);
+  document.documentElement.style.setProperty('--accent2',c2);
   updateIcons();
 }
 
-function selectIcon(el, type) {
+function selectIcon(el,type) {
   document.querySelectorAll('.icon-opt').forEach(o=>o.classList.remove('active'));
   el.classList.add('active');
-  state.iconType = type; state.customIconData = null;
-  document.getElementById('icon-preview-label').textContent = '';
+  state.iconType=type; state.customIconData=null;
+  document.getElementById('icon-preview-label').textContent='';
   updateIcons();
 }
 
-function triggerImageUpload() { document.getElementById('icon-upload').click(); }
+function triggerImageUpload(){document.getElementById('icon-upload').click();}
 
 function handleIconUpload(e) {
-  const file = e.target.files[0]; if (!file) return;
-  const reader = new FileReader();
-  reader.onload = ev => {
-    state.customIconData = ev.target.result; state.iconType = 'custom';
+  const file=e.target.files[0]; if (!file) return;
+  const reader=new FileReader();
+  reader.onload=ev=>{
+    state.customIconData=ev.target.result; state.iconType='custom';
     document.querySelectorAll('.icon-opt').forEach(o=>o.classList.remove('active'));
     document.querySelector('[data-icon="custom"]').classList.add('active');
-    document.getElementById('icon-preview-label').textContent = '✓ Custom image set — ' + file.name;
+    document.getElementById('icon-preview-label').textContent='✓ Custom image — '+file.name;
     updateIcons();
   };
   reader.readAsDataURL(file);
@@ -756,23 +879,28 @@ function handleIconUpload(e) {
 
 function clearHistory() {
   if (!confirm('Clear all chat history? Your profile and settings stay safe.')) return;
-  state.messages = []; state.initialized = false;
+  state.messages=[]; state.initialized=false;
   closeModal('settings-modal');
-  document.getElementById('messages').innerHTML = '';
-  document.getElementById('messages').style.display = 'none';
-  document.getElementById('input-area').style.display = 'none';
-  document.getElementById('welcome').style.display = 'flex';
+  document.getElementById('messages').innerHTML='';
+  document.getElementById('messages').style.display='none';
+  document.getElementById('input-area').style.display='none';
+  document.getElementById('welcome').style.display='flex';
   saveToDrive();
 }
 
-function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+function closeModal(id){document.getElementById(id).style.display='none';}
 
-document.querySelectorAll('.modal-overlay').forEach(overlay => {
-  overlay.addEventListener('click', e => { if (e.target === overlay) overlay.style.display = 'none'; });
+document.querySelectorAll('.modal-overlay').forEach(overlay=>{
+  overlay.addEventListener('click',e=>{if(e.target===overlay)overlay.style.display='none';});
 });
 
+// ── INIT ───────────────────────────────────────────
 initStars();
-loadFromDrive();
+
+// Wait for Google Identity Services to load
+window.addEventListener('load', () => {
+  setTimeout(initGoogleAuth, 800);
+});
 </script>
 </body>
 </html>
