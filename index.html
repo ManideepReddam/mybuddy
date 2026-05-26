@@ -810,17 +810,7 @@ function initStars() {
 }
 
 // ── AUTH ──────────────────────────────────────────
-function initAuth() {
-  const token = localStorage.getItem('mb_token');
-  const expiry = parseInt(localStorage.getItem('mb_expiry')||'0');
-  if (token && Date.now() < expiry) {
-    accessToken = token;
-    onSignedIn();
-    return;
-  }
-  document.getElementById('loading-screen').style.display='none';
-  document.getElementById('auth-screen').style.display='flex';
-}
+// initAuth defined at bottom of script
 
 function setupTokenClient() {
   if (!window.google?.accounts?.oauth2) return;
@@ -1612,9 +1602,29 @@ function showToast(msg){
 
 // ── INIT ──────────────────────────────────────────
 initStars();
-window.addEventListener('load',()=>{
-  setupTokenClient();
-  setTimeout(initAuth, 600);
+
+function waitForGoogle(cb, tries=0) {
+  if (window.google?.accounts?.oauth2) { setupTokenClient(); cb(); return; }
+  if (tries > 30) { cb(); return; } // timeout after 6s, proceed anyway
+  setTimeout(() => waitForGoogle(cb, tries+1), 200);
+}
+
+function initAuth() {
+  // Check stored token first
+  const token = localStorage.getItem('mb_token');
+  const expiry = parseInt(localStorage.getItem('mb_expiry')||'0');
+  if (token && Date.now() < expiry) {
+    accessToken = token;
+    onSignedIn();
+    return;
+  }
+  // Show auth screen
+  document.getElementById('loading-screen').style.display='none';
+  document.getElementById('auth-screen').style.display='flex';
+}
+
+window.addEventListener('load', () => {
+  waitForGoogle(initAuth);
 });
 </script>
 </body>
