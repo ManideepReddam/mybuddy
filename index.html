@@ -13,54 +13,35 @@
 <style>
   :root {
     --accent: #c8f542;
-    --accent2: #7fff00;
+    --accent2: #a8e020;
     --bg: #0a0a0a;
     --surface: rgba(255,255,255,0.05);
     --border: rgba(255,255,255,0.08);
     --text: #f0f0f0;
     --muted: #666;
-    --app-name: "My Buddy";
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { background: var(--bg); color: var(--text); font-family: 'Lato', sans-serif; min-height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
   ::-webkit-scrollbar { width: 3px; } ::-webkit-scrollbar-thumb { background: rgba(200,245,66,0.3); border-radius: 2px; }
 
-  /* Animated star background */
   #starfield { position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
   .star { position: absolute; border-radius: 50%; background: #fff; animation: twinkle var(--d) infinite ease-in-out; opacity: 0; }
   @keyframes twinkle { 0%,100%{opacity:0} 50%{opacity:var(--o)} }
   @keyframes bounce { 0%,60%,100%{transform:translateY(0)} 30%{transform:translateY(-5px)} }
   @keyframes fadeUp { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
   @keyframes pulseGlow { 0%,100%{box-shadow:0 0 20px rgba(200,245,66,0.3)} 50%{box-shadow:0 0 50px rgba(200,245,66,0.7)} }
-  @keyframes orbitGlow { 0%,100%{transform:scale(1);opacity:0.6} 50%{transform:scale(1.15);opacity:1} }
-  @keyframes rooftopFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-4px)} }
   @keyframes spin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+  @keyframes slideDown { from{opacity:0;transform:translateY(-10px)} to{opacity:1;transform:translateY(0)} }
 
-  /* APP ICON */
-  .app-icon {
-    width: 54px; height: 54px; border-radius: 16px;
-    background: linear-gradient(145deg, #0d1f0d, #1a3a1a);
-    border: 1.5px solid rgba(200,245,66,0.4);
-    display: flex; align-items: center; justify-content: center;
-    position: relative; overflow: hidden;
-    box-shadow: 0 0 20px rgba(200,245,66,0.25), inset 0 0 20px rgba(0,0,0,0.5);
-    flex-shrink: 0;
-    animation: pulseGlow 4s infinite;
-  }
+  .app-icon { width: 54px; height: 54px; border-radius: 16px; background: linear-gradient(145deg, #0d1f0d, #1a3a1a); border: 1.5px solid rgba(200,245,66,0.4); display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; box-shadow: 0 0 20px rgba(200,245,66,0.25), inset 0 0 20px rgba(0,0,0,0.5); flex-shrink: 0; animation: pulseGlow 4s infinite; }
   .app-icon svg { width: 38px; height: 38px; }
   .app-icon.small { width: 36px; height: 36px; border-radius: 10px; }
   .app-icon.small svg { width: 24px; height: 24px; }
   .app-icon img { width: 100%; height: 100%; object-fit: cover; border-radius: inherit; }
 
-  /* LAYOUT */
   #app { position: relative; z-index: 1; display: flex; flex-direction: column; height: 100vh; }
 
-  /* HEADER */
-  header {
-    padding: 14px 18px; display: flex; align-items: center; justify-content: space-between;
-    background: rgba(10,10,10,0.85); backdrop-filter: blur(20px);
-    border-bottom: 1px solid var(--border); flex-shrink: 0; position: relative; z-index: 10;
-  }
+  header { padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; background: rgba(10,10,10,0.85); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); flex-shrink: 0; position: relative; z-index: 10; }
   .header-left { display: flex; align-items: center; gap: 12px; }
   .app-title { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 800; color: #fff; line-height: 1; }
   .app-subtitle { font-size: 10px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; margin-top: 2px; }
@@ -69,13 +50,11 @@
   .icon-btn { width: 34px; height: 34px; border-radius: 50%; background: var(--surface); border: 1px solid var(--border); color: var(--muted); cursor: pointer; font-size: 15px; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
   .icon-btn:hover { background: rgba(200,245,66,0.12); color: var(--accent); border-color: rgba(200,245,66,0.3); }
 
-  /* AREA PILLS */
   .pills-bar { padding: 10px 14px; display: flex; flex-wrap: wrap; gap: 6px; border-bottom: 1px solid var(--border); background: rgba(0,0,0,0.4); flex-shrink: 0; }
   .pill { display: flex; align-items: center; gap: 4px; padding: 5px 11px; background: var(--surface); border: 1px solid var(--border); border-radius: 20px; color: #999; font-size: 11px; cursor: pointer; transition: all 0.18s; font-family: 'Lato', sans-serif; }
   .pill:hover { background: rgba(200,245,66,0.12); border-color: rgba(200,245,66,0.4); color: var(--accent); transform: translateY(-1px); }
 
-  /* MESSAGES */
-  #messages { flex: 1; overflow-y: auto; padding: 18px 16px; display: flex; flex-direction: column; }
+  #messages { flex: 1; overflow-y: auto; padding: 18px 16px; display: flex; flex-direction: column; min-height: 0; }
   .msg { display: flex; margin-bottom: 14px; animation: fadeUp 0.3s ease-out; }
   .msg.user { justify-content: flex-end; }
   .msg.buddy { justify-content: flex-start; align-items: flex-end; gap: 8px; }
@@ -85,45 +64,38 @@
   .typing { display: flex; gap: 5px; padding: 14px 18px; background: var(--surface); border-radius: 18px 18px 18px 4px; border: 1px solid var(--border); width: fit-content; margin-bottom: 14px; }
   .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); animation: bounce 1.2s infinite; }
 
-  /* INPUT */
   #input-area { padding: 10px 16px 20px; border-top: 1px solid var(--border); background: rgba(0,0,0,0.6); backdrop-filter: blur(20px); flex-shrink: 0; }
   .input-row { display: flex; gap: 10px; align-items: flex-end; background: rgba(255,255,255,0.06); border: 1px solid var(--border); border-radius: 24px; padding: 10px 14px; transition: border-color 0.2s; }
   .input-row:focus-within { border-color: rgba(200,245,66,0.3); }
   #msg-input { flex: 1; background: transparent; border: none; outline: none; color: var(--text); font-size: 14px; resize: none; font-family: 'Lato', sans-serif; line-height: 1.5; max-height: 100px; overflow-y: auto; }
   #msg-input::placeholder { color: #444; }
   .send-btn { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), #a8e020); border: none; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; transition: all 0.2s; flex-shrink: 0; color: #0a0a0a; font-weight: 700; }
-  .send-btn:hover:not(:disabled) { transform: scale(1.08); background: linear-gradient(135deg, #d8ff52, #c8f542); }
+  .send-btn:hover:not(:disabled) { transform: scale(1.08); }
   .send-btn:disabled { opacity: 0.35; cursor: not-allowed; }
   .input-hint { text-align: center; font-size: 10px; color: #2a2a2a; margin-top: 6px; }
 
-  /* WELCOME SCREEN */
   #welcome { display: flex; flex-direction: column; align-items: center; justify-content: center; flex: 1; padding: 30px 20px; text-align: center; }
-  .welcome-icon { margin-bottom: 20px; }
   .welcome-title { font-family: 'Playfair Display', serif; font-size: 32px; font-weight: 800; background: linear-gradient(135deg, #fff 30%, var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 10px; }
   .welcome-sub { color: var(--muted); font-size: 14px; line-height: 1.7; max-width: 280px; margin-bottom: 8px; }
   .drive-badge { display: inline-flex; align-items: center; gap: 6px; padding: 7px 16px; background: rgba(200,245,66,0.07); border: 1px solid rgba(200,245,66,0.2); border-radius: 20px; font-size: 12px; color: var(--accent); margin-bottom: 28px; }
   .welcome-btns { display: flex; flex-direction: column; gap: 10px; width: 100%; max-width: 280px; }
   .btn-primary { padding: 15px; background: linear-gradient(135deg, var(--accent), #a8e020); border: none; border-radius: 30px; color: #0a0a0a; font-size: 14px; font-weight: 700; cursor: pointer; font-family: 'Lato', sans-serif; box-shadow: 0 8px 30px rgba(200,245,66,0.25); transition: all 0.2s; }
-  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(200,245,66,0.35); }
+  .btn-primary:hover { transform: translateY(-2px); }
   .btn-ghost { padding: 13px; background: transparent; border: 1px solid rgba(200,245,66,0.25); border-radius: 30px; color: var(--accent); font-size: 13px; cursor: pointer; font-family: 'Lato', sans-serif; transition: all 0.2s; }
-  .btn-ghost:hover { background: rgba(200,245,66,0.06); }
 
-  /* MODAL */
   .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.88); display: flex; align-items: center; justify-content: center; z-index: 200; padding: 20px; }
   .modal { background: #111; border: 1px solid rgba(200,245,66,0.25); border-radius: 24px; padding: 26px; width: 100%; max-width: 420px; max-height: 90vh; overflow-y: auto; }
   .modal h2 { font-family: 'Playfair Display', serif; font-size: 20px; color: var(--accent); margin-bottom: 5px; }
-  .modal p { font-size: 13px; color: var(--muted); margin-bottom: 18px; }
+  .modal p { font-size: 13px; color: var(--muted); margin-bottom: 18px; line-height: 1.6; }
   .field { margin-bottom: 14px; }
   .field label { display: block; font-size: 11px; color: #777; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px; }
   .field input, .field textarea, .field select { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 10px; color: var(--text); padding: 10px 12px; font-size: 13px; font-family: 'Lato', sans-serif; outline: none; transition: border-color 0.2s; }
   .field input:focus, .field textarea:focus { border-color: rgba(200,245,66,0.35); }
   .field textarea { resize: none; }
-  .field select option { background: #111; }
   .modal-btns { display: flex; gap: 10px; margin-top: 6px; }
   .btn-cancel { flex: 1; padding: 12px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; color: #aaa; cursor: pointer; font-family: 'Lato', sans-serif; font-size: 14px; }
   .btn-save { flex: 2; padding: 12px; background: linear-gradient(135deg, var(--accent), #a8e020); border: none; border-radius: 12px; color: #0a0a0a; font-weight: 700; cursor: pointer; font-family: 'Lato', sans-serif; font-size: 14px; }
 
-  /* SETTINGS PANEL */
   .settings-section { margin-bottom: 22px; }
   .settings-section h3 { font-size: 11px; text-transform: uppercase; letter-spacing: 2px; color: #555; margin-bottom: 12px; padding-bottom: 6px; border-bottom: 1px solid var(--border); }
   .color-swatches { display: flex; gap: 8px; flex-wrap: wrap; }
@@ -135,135 +107,87 @@
   .install-box { background: rgba(200,245,66,0.06); border: 1px solid rgba(200,245,66,0.2); border-radius: 14px; padding: 14px; font-size: 13px; color: #aaa; line-height: 1.7; }
   .install-box strong { color: var(--accent); }
 
-  /* SYNC STATUS */
+  /* UPDATE BUTTON */
+  .update-section { background: rgba(200,245,66,0.04); border: 1px solid rgba(200,245,66,0.15); border-radius: 16px; padding: 16px; margin-bottom: 22px; }
+  .update-section h3 { font-size: 11px; text-transform: uppercase; letter-spacing: 2px; color: #555; margin-bottom: 12px; padding-bottom: 6px; border-bottom: 1px solid var(--border); }
+  .update-desc { font-size: 12px; color: #666; margin-bottom: 12px; line-height: 1.6; }
+  .token-input-wrap { position: relative; margin-bottom: 10px; }
+  .token-input-wrap input { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 10px; color: var(--text); padding: 10px 40px 10px 12px; font-size: 12px; font-family: monospace; outline: none; transition: border-color 0.2s; }
+  .token-input-wrap input:focus { border-color: rgba(200,245,66,0.35); }
+  .toggle-token { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; color: #666; cursor: pointer; font-size: 16px; }
+  .btn-update { width: 100%; padding: 13px; background: linear-gradient(135deg, var(--accent), #a8e020); border: none; border-radius: 12px; color: #0a0a0a; font-weight: 700; cursor: pointer; font-family: 'Lato', sans-serif; font-size: 14px; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s; }
+  .btn-update:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 8px 25px rgba(200,245,66,0.3); }
+  .btn-update:disabled { opacity: 0.5; cursor: not-allowed; }
+  .update-status { margin-top: 10px; padding: 10px 14px; border-radius: 10px; font-size: 12px; text-align: center; display: none; animation: slideDown 0.3s ease-out; }
+  .update-status.success { background: rgba(200,245,66,0.1); border: 1px solid rgba(200,245,66,0.3); color: var(--accent); }
+  .update-status.error { background: rgba(255,80,80,0.1); border: 1px solid rgba(255,80,80,0.3); color: #ff6b6b; }
+  .update-status.loading { background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: #888; }
+
   .sync-pill { font-size: 10px; padding: 2px 8px; border-radius: 10px; display: flex; align-items: center; gap: 3px; }
   .sync-saving { color: #888; }
   .sync-saved { color: var(--accent); }
   .sync-error { color: #ff6b6b; }
-
-  /* RETURN BANNER */
   .return-banner { margin-bottom: 14px; padding: 8px 14px; background: rgba(200,245,66,0.05); border: 1px solid rgba(200,245,66,0.12); border-radius: 12px; font-size: 12px; color: #777; text-align: center; animation: fadeUp 0.4s ease-out; }
 </style>
 </head>
 <body>
-
 <div id="starfield"></div>
-
 <div id="app">
-  <!-- HEADER -->
+
   <header>
     <div class="header-left">
-      <div class="app-icon small" id="header-icon">
-        <svg viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <!-- Night sky bg -->
-          <rect width="38" height="38" rx="10" fill="#0a1a0a"/>
-          <!-- Stars -->
-          <circle cx="8" cy="7" r="0.8" fill="white" opacity="0.9"/>
-          <circle cx="15" cy="4" r="0.6" fill="white" opacity="0.7"/>
-          <circle cx="25" cy="6" r="1" fill="white" opacity="0.8"/>
-          <circle cx="32" cy="9" r="0.7" fill="white" opacity="0.6"/>
-          <circle cx="5" cy="13" r="0.5" fill="white" opacity="0.5"/>
-          <circle cx="29" cy="3" r="0.6" fill="#c8f542" opacity="0.9"/>
-          <circle cx="20" cy="10" r="0.5" fill="white" opacity="0.6"/>
-          <!-- Moon -->
-          <circle cx="31" cy="7" r="3" fill="#fffde0" opacity="0.95"/>
-          <circle cx="33" cy="6" r="2.2" fill="#0a1a0a"/>
-          <!-- Rooftop -->
-          <rect x="4" y="26" width="30" height="8" rx="1" fill="#1a2a1a"/>
-          <rect x="7" y="22" width="24" height="6" rx="1" fill="#152015"/>
-          <!-- Boy silhouette sitting -->
-          <ellipse cx="19" cy="25" rx="3.5" ry="1.5" fill="#0d1a0d"/>
-          <rect x="17" y="20" width="4" height="5" rx="1" fill="#0d1a0d"/>
-          <circle cx="19" cy="19" r="2.2" fill="#0d1a0d"/>
-          <!-- AI orb glowing beside boy -->
-          <circle cx="27" cy="20" r="3.5" fill="none" stroke="#c8f542" stroke-width="1" opacity="0.6"/>
-          <circle cx="27" cy="20" r="2" fill="#c8f542" opacity="0.85"/>
-          <circle cx="26.2" cy="19.2" r="0.7" fill="white" opacity="0.9"/>
-          <!-- Glow lines from orb -->
-          <line x1="27" y1="15" x2="27" y2="16.5" stroke="#c8f542" stroke-width="0.6" opacity="0.5"/>
-          <line x1="31" y1="20" x2="29.5" y2="20" stroke="#c8f542" stroke-width="0.6" opacity="0.5"/>
-          <line x1="30" y1="17" x2="29" y2="18" stroke="#c8f542" stroke-width="0.6" opacity="0.4"/>
-        </svg>
-      </div>
+      <div class="app-icon small" id="header-icon"></div>
       <div>
         <div class="app-title" id="header-title">My Buddy</div>
         <div style="display:flex;align-items:center;gap:6px">
           <div class="app-subtitle">Personal AI Companion</div>
-          <div class="sync-pill sync-saved" id="sync-status" style="display:none"></div>
+          <div class="sync-pill" id="sync-status" style="display:none"></div>
         </div>
       </div>
     </div>
     <div class="header-right">
-      <div class="streak-badge">ð¥ <span id="streak-count">1</span></div>
-      <button class="icon-btn" onclick="openProfile()" title="My Profile">ð¤</button>
-      <button class="icon-btn" onclick="openSettings()" title="Settings">â¸</button>
+      <div class="streak-badge">🔥 <span id="streak-count">1</span></div>
+      <button class="icon-btn" onclick="openProfile()" title="My Profile">👤</button>
+      <button class="icon-btn" onclick="openSettings()" title="Settings">⚙️</button>
     </div>
   </header>
 
-  <!-- AREA PILLS -->
-  <div class="pills-bar" id="pills-bar">
-    <button class="pill" onclick="areaClick('Communication','ð¬')">ð¬ Communication</button>
-    <button class="pill" onclick="areaClick('Fashion','ð')">ð Fashion</button>
-    <button class="pill" onclick="areaClick('Health','ðª')">ðª Health</button>
-    <button class="pill" onclick="areaClick('Finances','ð°')">ð° Finances</button>
-    <button class="pill" onclick="areaClick('Learning','ð')">ð Learning</button>
-    <button class="pill" onclick="areaClick('Goals','ð¯')">ð¯ Goals</button>
-    <button class="pill" onclick="areaClick('Career','ð')">ð Career</button>
-    <button class="pill" onclick="areaClick('Cleanliness','ð§¹')">ð§¹ Cleanliness</button>
-    <button class="pill" onclick="areaClick('Grooming','âï¸')">âï¸ Grooming</button>
-    <button class="pill" onclick="areaClick('Mindset','ð§ ')">ð§  Mindset</button>
-    <button class="pill" onclick="areaClick('Relationships','â¤ï¸')">â¤ï¸ Relationships</button>
-    <button class="pill" onclick="areaClick('Time Management','ð')">ð Time Mgmt</button>
+  <div class="pills-bar">
+    <button class="pill" onclick="areaClick('Communication','💬')">💬 Communication</button>
+    <button class="pill" onclick="areaClick('Fashion','👔')">👔 Fashion</button>
+    <button class="pill" onclick="areaClick('Health','💪')">💪 Health</button>
+    <button class="pill" onclick="areaClick('Finances','💰')">💰 Finances</button>
+    <button class="pill" onclick="areaClick('Learning','📚')">📚 Learning</button>
+    <button class="pill" onclick="areaClick('Goals','🎯')">🎯 Goals</button>
+    <button class="pill" onclick="areaClick('Career','🚀')">🚀 Career</button>
+    <button class="pill" onclick="areaClick('Cleanliness','🧹')">🧹 Cleanliness</button>
+    <button class="pill" onclick="areaClick('Grooming','✂️')">✂️ Grooming</button>
+    <button class="pill" onclick="areaClick('Mindset','🧠')">🧠 Mindset</button>
+    <button class="pill" onclick="areaClick('Relationships','❤️')">❤️ Relationships</button>
+    <button class="pill" onclick="areaClick('Time Management','🕐')">🕐 Time Mgmt</button>
   </div>
 
-  <!-- MESSAGES / WELCOME -->
   <div id="messages"></div>
 
-  <!-- WELCOME SCREEN -->
   <div id="welcome">
-    <div class="welcome-icon">
-      <div class="app-icon" style="width:80px;height:80px;border-radius:24px;margin:0 auto">
-        <svg viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:56px;height:56px">
-          <rect width="38" height="38" rx="10" fill="#0a1a0a"/>
-          <circle cx="8" cy="7" r="0.8" fill="white" opacity="0.9"/>
-          <circle cx="15" cy="4" r="0.6" fill="white" opacity="0.7"/>
-          <circle cx="25" cy="6" r="1" fill="white" opacity="0.8"/>
-          <circle cx="32" cy="9" r="0.7" fill="white" opacity="0.6"/>
-          <circle cx="5" cy="13" r="0.5" fill="white" opacity="0.5"/>
-          <circle cx="29" cy="3" r="0.6" fill="#c8f542" opacity="0.9"/>
-          <circle cx="20" cy="10" r="0.5" fill="white" opacity="0.6"/>
-          <circle cx="31" cy="7" r="3" fill="#fffde0" opacity="0.95"/>
-          <circle cx="33" cy="6" r="2.2" fill="#0a1a0a"/>
-          <rect x="4" y="26" width="30" height="8" rx="1" fill="#1a2a1a"/>
-          <rect x="7" y="22" width="24" height="6" rx="1" fill="#152015"/>
-          <ellipse cx="19" cy="25" rx="3.5" ry="1.5" fill="#0d1a0d"/>
-          <rect x="17" y="20" width="4" height="5" rx="1" fill="#0d1a0d"/>
-          <circle cx="19" cy="19" r="2.2" fill="#0d1a0d"/>
-          <circle cx="27" cy="20" r="3.5" fill="none" stroke="#c8f542" stroke-width="1" opacity="0.6"/>
-          <circle cx="27" cy="20" r="2" fill="#c8f542" opacity="0.85"/>
-          <circle cx="26.2" cy="19.2" r="0.7" fill="white" opacity="0.9"/>
-          <line x1="27" y1="15" x2="27" y2="16.5" stroke="#c8f542" stroke-width="0.6" opacity="0.5"/>
-          <line x1="31" y1="20" x2="29.5" y2="20" stroke="#c8f542" stroke-width="0.6" opacity="0.5"/>
-          <line x1="30" y1="17" x2="29" y2="18" stroke="#c8f542" stroke-width="0.6" opacity="0.4"/>
-        </svg>
-      </div>
+    <div style="margin-bottom:20px">
+      <div class="app-icon" style="width:80px;height:80px;border-radius:24px;margin:0 auto" id="welcome-icon"></div>
     </div>
     <div class="welcome-title" id="welcome-title">My Buddy</div>
-    <p class="welcome-sub">Your personal AI companion. I'm here every day to help you grow, heal and become your best self.</p>
-    <div class="drive-badge">âï¸ Synced to your Google Drive</div>
+    <p class="welcome-sub">Your personal AI companion. Here every day to help you grow, heal and become your best self.</p>
+    <div class="drive-badge">☁️ Synced to your Google Drive</div>
     <div class="welcome-btns">
-      <button class="btn-primary" onclick="openProfile()">ð Set Up My Profile</button>
-      <button class="btn-ghost" onclick="startChat()">Skip â Just Start Talking</button>
+      <button class="btn-primary" onclick="openProfile()">📝 Set Up My Profile</button>
+      <button class="btn-ghost" onclick="startChat()">Skip → Just Start Talking</button>
     </div>
   </div>
 
-  <!-- INPUT -->
   <div id="input-area" style="display:none">
     <div class="input-row">
       <textarea id="msg-input" placeholder="Talk to Buddy..." rows="1" onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
-      <button class="send-btn" id="send-btn" onclick="sendMessage()" disabled>â</button>
+      <button class="send-btn" id="send-btn" onclick="sendMessage()" disabled>↑</button>
     </div>
-    <div class="input-hint">âï¸ Saved to Google Drive Â· Works on all devices</div>
+    <div class="input-hint">☁️ Saved to Google Drive · Works on all devices</div>
   </div>
 </div>
 
@@ -271,7 +195,7 @@
 <div class="modal-overlay" id="profile-modal" style="display:none">
   <div class="modal">
     <h2>My Profile</h2>
-    <p>Saved to Google Drive â Buddy always knows you on every device.</p>
+    <p>Saved to Google Drive — Buddy always knows you on every device.</p>
     <div class="field"><label>Your Name</label><input id="p-name" placeholder="What should I call you?"/></div>
     <div class="field"><label>Age</label><input id="p-age" placeholder="How old are you?"/></div>
     <div class="field"><label>Occupation</label><input id="p-occupation" placeholder="What do you do?"/></div>
@@ -280,7 +204,7 @@
     <div class="field"><label>Anything else Buddy should know</label><textarea id="p-notes" rows="2" placeholder="Lifestyle, habits, context..."></textarea></div>
     <div class="modal-btns">
       <button class="btn-cancel" onclick="closeModal('profile-modal')">Cancel</button>
-      <button class="btn-save" onclick="saveProfile()">Save to Drive âï¸</button>
+      <button class="btn-save" onclick="saveProfile()">Save to Drive ☁️</button>
     </div>
   </div>
 </div>
@@ -288,8 +212,8 @@
 <!-- SETTINGS MODAL -->
 <div class="modal-overlay" id="settings-modal" style="display:none">
   <div class="modal">
-    <h2>âï¸ App Settings</h2>
-    <p>Customize My Buddy â change anytime, saves instantly.</p>
+    <h2>⚙️ App Settings</h2>
+    <p>Customize My Buddy — everything saves to Google Drive instantly.</p>
 
     <div class="settings-section">
       <h3>App Name</h3>
@@ -299,12 +223,12 @@
     <div class="settings-section">
       <h3>App Icon</h3>
       <div class="icon-options">
-        <div class="icon-opt active" data-icon="rooftop" onclick="selectIcon(this,'rooftop')" title="Rooftop Boy">ð</div>
-        <div class="icon-opt" data-icon="lightning" onclick="selectIcon(this,'lightning')" title="Lightning">â¡</div>
-        <div class="icon-opt" data-icon="fire" onclick="selectIcon(this,'fire')" title="Fire">ð¥</div>
-        <div class="icon-opt" data-icon="star" onclick="selectIcon(this,'star')" title="Star">â­</div>
-        <div class="icon-opt" data-icon="crown" onclick="selectIcon(this,'crown')" title="Crown">ð</div>
-        <div class="icon-opt" data-icon="custom" onclick="triggerImageUpload()" title="Upload Image">ð¸</div>
+        <div class="icon-opt active" data-icon="rooftop" onclick="selectIcon(this,'rooftop')" title="Rooftop Boy">🌃</div>
+        <div class="icon-opt" data-icon="lightning" onclick="selectIcon(this,'lightning')">⚡</div>
+        <div class="icon-opt" data-icon="fire" onclick="selectIcon(this,'fire')">🔥</div>
+        <div class="icon-opt" data-icon="star" onclick="selectIcon(this,'star')">⭐</div>
+        <div class="icon-opt" data-icon="crown" onclick="selectIcon(this,'crown')">👑</div>
+        <div class="icon-opt" data-icon="custom" onclick="triggerImageUpload()" title="Upload Image">📸</div>
       </div>
       <input type="file" id="icon-upload" accept="image/*" style="display:none" onchange="handleIconUpload(event)"/>
       <div id="icon-preview-label" style="font-size:11px;color:#555;margin-top:8px"></div>
@@ -322,30 +246,49 @@
       </div>
     </div>
 
+    <!-- ONE TAP UPDATE BUTTON -->
+    <div class="update-section">
+      <h3>🚀 One-Tap Update</h3>
+      <p class="update-desc">When Buddy gets upgraded, paste the new code from Claude and tap Update. Your GitHub page updates instantly — no manual steps needed.</p>
+
+      <div class="field">
+        <label>GitHub Personal Access Token</label>
+        <div class="token-input-wrap">
+          <input type="password" id="github-token" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" autocomplete="off"/>
+          <button class="toggle-token" onclick="toggleToken()" id="toggle-token-btn">👁</button>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>New App Code (paste from Claude)</label>
+        <textarea id="new-code" rows="4" placeholder="Paste the full updated HTML code from Claude here..." style="font-family:monospace;font-size:11px"></textarea>
+      </div>
+
+      <button class="btn-update" id="update-btn" onclick="pushToGitHub()">
+        🚀 Update My Buddy on GitHub
+      </button>
+      <div class="update-status" id="update-status"></div>
+      <div style="font-size:11px;color:#444;margin-top:8px;text-align:center">Token is saved privately to your Google Drive</div>
+    </div>
+
     <div class="settings-section">
-      <h3>ð± Add to Home Screen</h3>
+      <h3>📱 Add to Home Screen</h3>
       <div class="install-box">
-        <strong>iPhone/iPad:</strong> Tap the Share button â "Add to Home Screen" â Done<br/><br/>
-        <strong>Android:</strong> Tap the menu (â®) â "Add to Home Screen" â Install<br/><br/>
-        <strong>Desktop:</strong> Click the install icon in your browser address bar
+        <strong>iPhone/iPad:</strong> Tap Share → "Add to Home Screen" → Done<br/><br/>
+        <strong>Android:</strong> Tap ⋮ menu → "Add to Home Screen" → Install<br/><br/>
+        <strong>GitHub Pages URL:</strong><br/>
+        <span style="color:var(--accent);font-size:12px;word-break:break-all">https://ManideepReddam.github.io/mybuddy</span>
       </div>
     </div>
 
     <div class="settings-section">
-      <h3>ð Bookmark This App</h3>
-      <div class="install-box">
-        Bookmark this page in your browser. Every time you open it, your full history loads from Google Drive automatically â works on <strong>phone, tablet, laptop.</strong>
-      </div>
-    </div>
-
-    <div class="settings-section" id="danger-zone">
       <h3>Danger Zone</h3>
-      <button onclick="clearHistory()" style="padding:10px 18px;background:rgba(255,80,80,0.1);border:1px solid rgba(255,80,80,0.3);border-radius:10px;color:#ff6b6b;cursor:pointer;font-size:13px;font-family:'Lato', sans-serif">ð Clear Chat History</button>
+      <button onclick="clearHistory()" style="padding:10px 18px;background:rgba(255,80,80,0.1);border:1px solid rgba(255,80,80,0.3);border-radius:10px;color:#ff6b6b;cursor:pointer;font-size:13px;font-family:'Lato',sans-serif">🗑 Clear Chat History</button>
     </div>
 
     <div class="modal-btns">
       <button class="btn-cancel" onclick="closeModal('settings-modal')">Close</button>
-      <button class="btn-save" onclick="applySettings()">Apply Changes â</button>
+      <button class="btn-save" onclick="applySettings()">Apply Changes ✓</button>
     </div>
   </div>
 </div>
@@ -354,26 +297,23 @@
 const DRIVE_FILE_ID = "1c9FHuOX0-RCwZnydd0JRpAcn4lSwDyvU";
 const CLAUDE_API = "https://api.anthropic.com/v1/messages";
 const GDRIVE_MCP = "https://drivemcp.googleapis.com/mcp/v1";
+const GITHUB_USER = "ManideepReddam";
+const GITHUB_REPO = "mybuddy";
+const GITHUB_FILE = "index.html";
 
-const SYSTEM_PROMPT = `You are Buddy -- a personal development AI companion and genuine best friend. Help the user become their best self across ALL life areas: Communication, Fashion, Health, Finances, Learning, Goals, Career, Cleanliness, Grooming, Mindset, Relationships, Time Management.
+const SYSTEM_PROMPT = `You are Buddy — a personal development AI companion and genuine best friend. Help the user become their best self across ALL life areas: Communication, Fashion, Health, Finances, Learning, Goals, Career, Cleanliness, Grooming, Mindset, Relationships, Time Management.
 
-Personality: warm, direct, honest like a best friend who genuinely wants you to win. Give ACTIONABLE specific advice. Reference their profile and past conversations naturally. Challenge them to grow, celebrate their wins. Give a "Daily Challenge" occasionally -- one small thing they can do TODAY. Keep responses under 200 words unless asked for deep dive. Be conversational and energetic.`;
+Personality: warm, direct, honest like a best friend who genuinely wants you to win. Give ACTIONABLE specific advice. Reference their profile and past conversations naturally. Challenge them to grow, celebrate their wins. Give a "Daily Challenge" occasionally — one small thing they can do TODAY. Keep responses under 200 words unless asked for deep dive. Be conversational and energetic.`;
 
 let state = {
-  messages: [],
-  profile: {},
-  streak: 1,
-  lastVisit: "",
-  appName: "My Buddy",
-  accentColor: "#c8f542",
-  accentColor2: "#a8e020",
-  iconType: "rooftop",
-  customIconData: null,
-  initialized: false,
+  messages: [], profile: {}, streak: 1, lastVisit: "",
+  appName: "My Buddy", accentColor: "#c8f542", accentColor2: "#a8e020",
+  iconType: "rooftop", customIconData: null, initialized: false,
+  githubToken: "",
 };
-
 let syncing = false;
 
+// ── STARS ──────────────────────────────────────────
 function initStars() {
   const sf = document.getElementById('starfield');
   for (let i = 0; i < 80; i++) {
@@ -385,6 +325,7 @@ function initStars() {
   }
 }
 
+// ── GOOGLE DRIVE ──────────────────────────────────
 async function loadFromDrive() {
   showSync('loading');
   try {
@@ -408,6 +349,7 @@ async function loadFromDrive() {
       if (parsed.accentColor) { state.accentColor = parsed.accentColor; state.accentColor2 = parsed.accentColor2 || '#a8e020'; }
       if (parsed.iconType) state.iconType = parsed.iconType;
       if (parsed.customIconData) state.customIconData = parsed.customIconData;
+      if (parsed.githubToken) state.githubToken = parsed.githubToken;
       const today = new Date().toDateString();
       const yesterday = new Date(Date.now()-86400000).toDateString();
       let s = parsed.streak || 1;
@@ -428,23 +370,19 @@ async function saveToDrive() {
   showSync('saving');
   state.lastVisit = new Date().toDateString();
   const payload = {
-    messages: state.messages.slice(-60),
-    profile: state.profile,
-    streak: state.streak,
-    lastVisit: state.lastVisit,
-    appName: state.appName,
-    accentColor: state.accentColor,
-    accentColor2: state.accentColor2,
-    iconType: state.iconType,
-    customIconData: state.customIconData,
+    messages: state.messages.slice(-60), profile: state.profile,
+    streak: state.streak, lastVisit: state.lastVisit,
+    appName: state.appName, accentColor: state.accentColor,
+    accentColor2: state.accentColor2, iconType: state.iconType,
+    customIconData: state.customIconData, githubToken: state.githubToken,
   };
   try {
     await fetch(CLAUDE_API, {
-      method:'POST', headers:{'tontent-Type':'application/json'},
+      method:'POST', headers:{'Content-Type':'application/json'},
       body: JSON.stringify({
         model:'claude-sonnet-4-20250514', max_tokens:200,
         system:'Update the specified Google Drive file with the provided JSON. Reply only with "saved".',
-        messages:[{role:'user', content:`Update Google Drive file ID: ${DRIT¥}FILE_ID} with this JSON:\n${JSON.stringify(payload)}`}],
+        messages:[{role:'user', content:`Update Google Drive file ID: ${DRIVE_FILE_ID} with this JSON:\n${JSON.stringify(payload)}`}],
         mcp_servers:[{type:'url', url:GDRIVE_MCP, name:'gdrive'}]
       })
     });
@@ -454,32 +392,76 @@ async function saveToDrive() {
   syncing = false;
 }
 
-function applyTheme() {
-  document.documentElement.style.setProperty('--accent', state.accentColor);
-  document.documentElement.style.setProperty('--accent2', state.accentColor2);
-  const titleEl = document.getElementById('header-title');
-  const welcomeTitle = document.getElementById('welcome-title');
-  if (titleEl) titleEl.textContent = state.appName;
-  if (welcomeTitle) welcomeTitle.textContent = state.appName;
-  document.title = state.appName;
-  updateHeaderIcon();
-}
+// ── GITHUB UPDATE ─────────────────────────────────
+async function pushToGitHub() {
+  const token = document.getElementById('github-token').value.trim() || state.githubToken;
+  const newCode = document.getElementById('new-code').value.trim();
 
-function updateHeaderIcon() {
-  const el = document.getElementById('header-icon');
-  if (!el) return;
-  if (state.customIconData) {
-    el.innerHTML = `<img src="${state.customIconData}" alt="icon"/>`;
-  } else {
-    const emojis = { lightning:'â¡', fire:'ð¥', star:'â­', crown:'ð' };
-    if (state.iconType !== 'rooftop' && emojis[state.iconType]) {
-      el.innerHTML = `<span style="font-size:20px">${emojis[state.iconType]}</span>`;
-    } else {
-      el.innerHTML = rooftopSVG('24px');
-    }
+  if (!token) { showUpdateStatus('error', '⚠️ Please enter your GitHub token first'); return; }
+  if (!newCode) { showUpdateStatus('error', '⚠️ Please paste the new code from Claude first'); return; }
+
+  const btn = document.getElementById('update-btn');
+  btn.disabled = true;
+  showUpdateStatus('loading', '🔄 Pushing update to GitHub...');
+
+  try {
+    // Get current file SHA (needed for update)
+    const getRes = await fetch(`https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/${GITHUB_FILE}`, {
+      headers: { 'Authorization': `token ${token}`, 'Accept': 'application/vnd.github.v3+json' }
+    });
+    const getJson = await getRes.json();
+
+    if (!getRes.ok) throw new Error(getJson.message || 'Could not get file info');
+
+    const sha = getJson.sha;
+    const encoded = btoa(unescape(encodeURIComponent(newCode)));
+
+    // Push update
+    const putRes = await fetch(`https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/${GITHUB_FILE}`, {
+      method: 'PUT',
+      headers: {
+        'Authorization': `token ${token}`,
+        'Accept': 'application/vnd.github.v3+json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        message: '🚀 My Buddy updated via app',
+        content: encoded,
+        sha: sha
+      })
+    });
+    const putJson = await putRes.json();
+
+    if (!putRes.ok) throw new Error(putJson.message || 'Update failed');
+
+    // Save token to Drive for next time
+    state.githubToken = token;
+    saveToDrive();
+
+    showUpdateStatus('success', '✅ My Buddy updated! Changes live in ~60 seconds at your GitHub Pages URL.');
+    document.getElementById('new-code').value = '';
+
+  } catch(err) {
+    showUpdateStatus('error', `❌ Error: ${err.message}`);
   }
+  btn.disabled = false;
 }
 
+function showUpdateStatus(type, msg) {
+  const el = document.getElementById('update-status');
+  el.style.display = 'block';
+  el.className = `update-status ${type}`;
+  el.textContent = msg;
+}
+
+function toggleToken() {
+  const input = document.getElementById('github-token');
+  const btn = document.getElementById('toggle-token-btn');
+  if (input.type === 'password') { input.type = 'text'; btn.textContent = '🙈'; }
+  else { input.type = 'password'; btn.textContent = '👁'; }
+}
+
+// ── THEME ──────────────────────────────────────────
 function rooftopSVG(size='38px') {
   return `<svg viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:${size};height:${size}">
     <rect width="38" height="38" rx="10" fill="#0a1a0a"/>
@@ -503,27 +485,53 @@ function rooftopSVG(size='38px') {
   </svg>`;
 }
 
+function applyTheme() {
+  document.documentElement.style.setProperty('--accent', state.accentColor);
+  document.documentElement.style.setProperty('--accent2', state.accentColor2);
+  document.getElementById('header-title').textContent = state.appName;
+  const wt = document.getElementById('welcome-title');
+  if (wt) wt.textContent = state.appName;
+  document.title = state.appName;
+  updateIcons();
+}
+
+function updateIcons() {
+  ['header-icon','welcome-icon'].forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    if (state.customIconData) {
+      el.innerHTML = `<img src="${state.customIconData}" alt="icon"/>`;
+    } else {
+      const emojis = { lightning:'⚡', fire:'🔥', star:'⭐', crown:'👑' };
+      if (state.iconType !== 'rooftop' && emojis[state.iconType]) {
+        el.innerHTML = `<span style="font-size:${id==='welcome-icon'?'44px':'20px'}">${emojis[state.iconType]}</span>`;
+      } else {
+        el.innerHTML = rooftopSVG(id==='welcome-icon'?'56px':'24px');
+      }
+    }
+  });
+}
+
+// ── RENDER ─────────────────────────────────────────
 function renderApp() {
   document.getElementById('streak-count').textContent = state.streak;
   const welcome = document.getElementById('welcome');
   const messagesEl = document.getElementById('messages');
   const inputArea = document.getElementById('input-area');
+
   if (state.messages.length === 0) {
-    welcome.style.display = 'flex';
-    messagesEl.style.display = 'none';
-    inputArea.style.display = 'none';
+    welcome.style.display = 'flex'; messagesEl.style.display = 'none'; inputArea.style.display = 'none';
   } else {
     welcome.style.display = 'none';
-    messagesEl.style.display = 'flex';
-    messagesEl.style.flexDirection = 'column';
+    messagesEl.style.display = 'flex'; messagesEl.style.flexDirection = 'column';
     inputArea.style.display = 'block';
     state.initialized = true;
     renderMessages();
-    if (state.profile?.name) {
+    if (state.profile?.name && !document.querySelector('.return-banner')) {
       const banner = document.createElement('div');
       banner.className = 'return-banner';
-      banner.innerHTML = `âï¸ Welcome back, <strong style="color:var(--accent)">${state.profile.name}</strong> â loaded from Google Drive · Day ${state.streak} ð¥`;
-      if (!document.querySelector('.return-banner')) messagesEl.prepend(banner);
+      banner.innerHTML = `☁️ Welcome back, <strong style="color:var(--accent)">${state.profile.name}</strong> · Day ${state.streak} 🔥`;
+      messagesEl.prepend(banner);
     }
     scrollBottom();
   }
@@ -540,7 +548,7 @@ function appendMessage(role, content, animate=true) {
   const div = document.createElement('div');
   div.className = `msg ${role}`;
   if (role === 'buddy') {
-    div.innerHTML = `<div style="width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;align-self:flex-end;box-shadow:0 0 10px rgba(200,245,66,0.3)">â¡</div><div class="bubble buddy">${content}</div>`;
+    div.innerHTML = `<div style="width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;align-self:flex-end;box-shadow:0 0 10px rgba(200,245,66,0.3)">⚡</div><div class="bubble buddy">${content}</div>`;
   } else {
     div.innerHTML = `<div class="bubble user">${content}</div>`;
   }
@@ -552,11 +560,9 @@ function appendMessage(role, content, animate=true) {
 function showTyping() {
   const el = document.getElementById('messages');
   const t = document.createElement('div');
-  t.id = 'typing';
-  t.className = 'typing';
+  t.id = 'typing'; t.className = 'typing';
   t.innerHTML = '<div class="dot" style="animation-delay:0s"></div><div class="dot" style="animation-delay:0.2s"></div><div class="dot" style="animation-delay:0.4s"></div>';
-  el.appendChild(t);
-  scrollBottom();
+  el.appendChild(t); scrollBottom();
 }
 function hideTyping() { const t = document.getElementById('typing'); if (t) t.remove(); }
 function scrollBottom() { const el = document.getElementById('messages'); el.scrollTop = el.scrollHeight; }
@@ -566,16 +572,17 @@ function showSync(type) {
   if (!type) { el.style.display='none'; return; }
   el.style.display='flex';
   const configs = {
-    loading: { cls:'sync-saving', text:'â³ Loading...' },
-    saving:  { cls:'sync-saving', text:'ð Saving...' },
-    saved:   { cls:'sync-saved',  text:'âï¸ Saved' },
-    error:   { clr:'sync-error',  text:'â ï¸ Sync issue' },
+    loading: { cls:'sync-saving', text:'⏳ Loading...' },
+    saving:  { cls:'sync-saving', text:'🔄 Saving...' },
+    saved:   { cls:'sync-saved',  text:'☁️ Saved' },
+    error:   { cls:'sync-error',  text:'⚠️ Sync issue' },
   };
   const c = configs[type] || {};
   el.className = `sync-pill ${c.cls}`;
   el.textContent = c.text;
 }
 
+// ── CHAT ───────────────────────────────────────────
 function buildSystem() {
   let sys = SYSTEM_PROMPT;
   if (state.profile && Object.keys(state.profile).length > 0) {
@@ -587,7 +594,7 @@ function buildSystem() {
 
 async function callBuddy(msgs) {
   const res = await fetch(CLAUDE_API, {
-    method:'POST', headers:{'tontent-Type':'application/json'},
+    method:'POST', headers:{'Content-Type':'application/json'},
     body: JSON.stringify({ model:'claude-sonnet-4-20250514', max_tokens:1000, system:buildSystem(), messages:msgs })
   });
   const data = await res.json();
@@ -602,7 +609,7 @@ async function startChat(initialMsg) {
   state.initialized = true;
   const p = state.profile;
   const msg = initialMsg || (p?.name
-    ? `My profile: Name:${p.name}, Age:${p.age}, Job:${p.occupation}, Goals:${p.goals}, Struggles:${p.struggles}. Greet me warmly as Buddy, acknowledge you know me and let's start my journey.`
+    ? `My profile: Name:${p.name}, Age:${p.age}, Job:${p.occupation}, Goals:${p.goals}, Struggles:${p.struggles}. Greet me warmly as Buddy and let's start my journey.`
     : `Hello! I want to start my personal development journey with you as my buddy.`);
   showTyping();
   try {
@@ -613,7 +620,7 @@ async function startChat(initialMsg) {
     saveToDrive();
   } catch(e) {
     hideTyping();
-    const fb = `Hey${p?.name?' '+p.name:''}! I'm Buddy -- your personal companion. Ready to help you level up every single day. What's on your mind? ð`;
+    const fb = `Hey${p?.name?' '+p.name:''}! I'm Buddy — your personal companion. Ready to help you level up every single day. What's on your mind? 👊`;
     state.messages.push({role:'buddy',content:fb});
     appendMessage('buddy', fb);
   }
@@ -624,8 +631,7 @@ async function sendMessage() {
   const input = document.getElementById('msg-input');
   const text = input.value.trim();
   if (!text) return;
-  input.value = '';
-  input.style.height = 'auto';
+  input.value = ''; input.style.height = 'auto';
   document.getElementById('send-btn').disabled = true;
   state.messages.push({role:'user',content:text});
   appendMessage('user', text);
@@ -639,7 +645,9 @@ async function sendMessage() {
     saveToDrive();
   } catch(e) {
     hideTyping();
-    appendMessage('buddy', "Something went wrong but I'm still here -- what were you saying? ð");
+    const fb = "Something went wrong but I'm still here — what were you saying? 👊";
+    state.messages.push({role:'buddy',content:fb});
+    appendMessage('buddy', fb);
   }
   document.getElementById('send-btn').disabled = false;
   input.focus();
@@ -652,16 +660,14 @@ function areaClick(area, icon) {
   sendMessage();
 }
 
-function handleKey(e) {
-  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
-}
-
+function handleKey(e) { if (e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMessage();} }
 function autoResize(el) {
   el.style.height = 'auto';
   el.style.height = Math.min(el.scrollHeight, 100) + 'px';
   document.getElementById('send-btn').disabled = !el.value.trim();
 }
 
+// ── PROFILE ────────────────────────────────────────
 function openProfile() {
   const p = state.profile;
   document.getElementById('p-name').value = p.name||'';
@@ -697,16 +703,20 @@ function saveProfile() {
   }
 }
 
+// ── SETTINGS ───────────────────────────────────────
 function openSettings() {
   document.getElementById('s-appname').value = state.appName;
   document.querySelectorAll('.swatch').forEach(s=>s.classList.toggle('active', s.dataset.color===state.accentColor));
   document.querySelectorAll('.icon-opt').forEach(o=>o.classList.toggle('active', o.dataset.icon===state.iconType));
+  if (state.githubToken) document.getElementById('github-token').value = state.githubToken;
   document.getElementById('settings-modal').style.display = 'flex';
 }
 
 function applySettings() {
   const name = document.getElementById('s-appname').value.trim();
   if (name) state.appName = name;
+  const token = document.getElementById('github-token').value.trim();
+  if (token) state.githubToken = token;
   applyTheme();
   closeModal('settings-modal');
   saveToDrive();
@@ -718,39 +728,35 @@ function selectColor(el, c1, c2) {
   state.accentColor = c1; state.accentColor2 = c2;
   document.documentElement.style.setProperty('--accent', c1);
   document.documentElement.style.setProperty('--accent2', c2);
-  updateHeaderIcon();
+  updateIcons();
 }
 
 function selectIcon(el, type) {
   document.querySelectorAll('.icon-opt').forEach(o=>o.classList.remove('active'));
   el.classList.add('active');
-  state.iconType = type;
-  state.customIconData = null;
+  state.iconType = type; state.customIconData = null;
   document.getElementById('icon-preview-label').textContent = '';
-  updateHeaderIcon();
+  updateIcons();
 }
 
 function triggerImageUpload() { document.getElementById('icon-upload').click(); }
 
 function handleIconUpload(e) {
-  const file = e.target.files[0];
-  if (!file) return;
+  const file = e.target.files[0]; if (!file) return;
   const reader = new FileReader();
   reader.onload = ev => {
-    state.customIconData = ev.target.result;
-    state.iconType = 'custom';
+    state.customIconData = ev.target.result; state.iconType = 'custom';
     document.querySelectorAll('.icon-opt').forEach(o=>o.classList.remove('active'));
     document.querySelector('[data-icon="custom"]').classList.add('active');
-    document.getElementById('icon-preview-label').textContent = 'â Custom image set -- ' + file.name;
-    updateHeaderIcon();
+    document.getElementById('icon-preview-label').textContent = '✓ Custom image set — ' + file.name;
+    updateIcons();
   };
   reader.readAsDataURL(file);
 }
 
 function clearHistory() {
   if (!confirm('Clear all chat history? Your profile and settings stay safe.')) return;
-  state.messages = [];
-  state.initialized = false;
+  state.messages = []; state.initialized = false;
   closeModal('settings-modal');
   document.getElementById('messages').innerHTML = '';
   document.getElementById('messages').style.display = 'none';
