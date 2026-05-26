@@ -6,804 +6,1521 @@
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 <meta name="apple-mobile-web-app-title" content="My Buddy"/>
-<meta name="theme-color" content="#0a0a0a"/>
+<meta name="theme-color" content="#1a1208"/>
 <title>My Buddy</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Lato:wght@300;400;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
 <style>
-  :root { --accent:#c8f542; --accent2:#a8e020; --bg:#0a0a0a; --surface:rgba(255,255,255,0.05); --border:rgba(255,255,255,0.08); --text:#f0f0f0; --muted:#666; }
-  *{box-sizing:border-box;margin:0;padding:0}
-  body{background:var(--bg);color:var(--text);font-family:'Lato',sans-serif;min-height:100vh;display:flex;flex-direction:column;overflow:hidden}
-  ::-webkit-scrollbar{width:3px}::-webkit-scrollbar-thumb{background:rgba(200,245,66,0.3);border-radius:2px}
-  #starfield{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none}
-  .star{position:absolute;border-radius:50%;background:#fff;animation:twinkle var(--d) infinite ease-in-out;opacity:0}
-  @keyframes twinkle{0%,100%{opacity:0}50%{opacity:var(--o)}}
-  @keyframes bounce{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-5px)}}
-  @keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
-  @keyframes pulseGlow{0%,100%{box-shadow:0 0 20px rgba(200,245,66,0.3)}50%{box-shadow:0 0 50px rgba(200,245,66,0.7)}}
-  @keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
-  @keyframes slideDown{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+:root {
+  /* Earthy palette */
+  --bg: #1a1208;
+  --bg2: #211608;
+  --surface: rgba(210,175,120,0.07);
+  --surface2: rgba(210,175,120,0.12);
+  --border: rgba(210,175,120,0.15);
+  --border2: rgba(210,175,120,0.25);
+  --accent: #d4a853;
+  --accent2: #c49040;
+  --accent3: #e8c87a;
+  --earth1: #8b6914;
+  --earth2: #a07830;
+  --earth3: #6b4f1a;
+  --green: #7a9e6a;
+  --green2: #5a7e4a;
+  --red: #c06040;
+  --text: #e8d9c0;
+  --text2: #b8a888;
+  --muted: #7a6848;
+  --muted2: #5a4828;
+  font-size: 15px;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;overflow:hidden}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;display:flex;flex-direction:column}
+::-webkit-scrollbar{width:3px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(212,168,83,0.3);border-radius:2px}
 
-  .app-icon{width:54px;height:54px;border-radius:16px;background:linear-gradient(145deg,#0d1f0d,#1a3a1a);border:1.5px solid rgba(200,245,66,0.4);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;box-shadow:0 0 20px rgba(200,245,66,0.25),inset 0 0 20px rgba(0,0,0,0.5);flex-shrink:0;animation:pulseGlow 4s infinite}
-  .app-icon svg{width:38px;height:38px}
-  .app-icon.small{width:36px;height:36px;border-radius:10px}
-  .app-icon.small svg{width:24px;height:24px}
-  .app-icon img{width:100%;height:100%;object-fit:cover;border-radius:inherit}
+/* TEXTURES & BACKGROUNDS */
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 20% 20%,rgba(139,105,20,0.08) 0%,transparent 60%),radial-gradient(ellipse at 80% 80%,rgba(107,79,26,0.06) 0%,transparent 60%);pointer-events:none;z-index:0}
 
-  #app{position:relative;z-index:1;display:flex;flex-direction:column;height:100vh}
+/* ANIMATIONS */
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes bounce{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-5px)}}
+@keyframes shimmer{0%{background-position:-200% center}100%{background-position:200% center}}
+@keyframes pulseGlow{0%,100%{box-shadow:0 0 15px rgba(212,168,83,0.2)}50%{box-shadow:0 0 35px rgba(212,168,83,0.5)}}
+@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+@keyframes slideIn{from{opacity:0;transform:translateX(-16px)}to{opacity:1;transform:translateX(0)}}
+@keyframes scaleIn{from{opacity:0;transform:scale(0.92)}to{opacity:1;transform:scale(1)}}
+@keyframes progressFill{from{width:0}to{width:var(--w)}}
+@keyframes twinkle{0%,100%{opacity:0}50%{opacity:var(--o)}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
 
-  header{padding:14px 18px;display:flex;align-items:center;justify-content:space-between;background:rgba(10,10,10,0.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);flex-shrink:0;position:relative;z-index:10}
-  .header-left{display:flex;align-items:center;gap:12px}
-  .app-title{font-family:'Playfair Display',serif;font-size:20px;font-weight:800;color:#fff;line-height:1}
-  .app-subtitle{font-size:10px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-top:2px}
-  .header-right{display:flex;align-items:center;gap:8px}
-  .streak-badge{display:flex;align-items:center;gap:5px;background:rgba(200,245,66,0.08);border:1px solid rgba(200,245,66,0.2);border-radius:20px;padding:5px 12px;font-size:12px;color:var(--accent);font-weight:700}
-  .icon-btn{width:34px;height:34px;border-radius:50%;background:var(--surface);border:1px solid var(--border);color:var(--muted);cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;transition:all 0.2s}
-  .icon-btn:hover{background:rgba(200,245,66,0.12);color:var(--accent);border-color:rgba(200,245,66,0.3)}
+/* STAR FIELD */
+#starfield{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.star{position:absolute;border-radius:50%;background:#d4a853;animation:twinkle var(--d) infinite ease-in-out;opacity:0}
 
-  .pills-bar{padding:10px 14px;display:flex;flex-wrap:wrap;gap:6px;border-bottom:1px solid var(--border);background:rgba(0,0,0,0.4);flex-shrink:0}
-  .pill{display:flex;align-items:center;gap:4px;padding:5px 11px;background:var(--surface);border:1px solid var(--border);border-radius:20px;color:#999;font-size:11px;cursor:pointer;transition:all 0.18s;font-family:'Lato',sans-serif}
-  .pill:hover{background:rgba(200,245,66,0.12);border-color:rgba(200,245,66,0.4);color:var(--accent);transform:translateY(-1px)}
+/* APP SHELL */
+#app{position:relative;z-index:1;display:flex;flex-direction:column;height:100vh;max-width:480px;margin:0 auto;width:100%}
 
-  #messages{flex:1;overflow-y:auto;padding:18px 16px;display:flex;flex-direction:column;min-height:0}
-  .msg{display:flex;margin-bottom:14px;animation:fadeUp 0.3s ease-out}
-  .msg.user{justify-content:flex-end}
-  .msg.buddy{justify-content:flex-start;align-items:flex-end;gap:8px}
-  .bubble{max-width:75%;padding:13px 16px;font-size:14px;line-height:1.65;white-space:pre-wrap;word-break:break-word}
-  .bubble.user{background:linear-gradient(135deg,var(--accent),#a8e020);color:#0a0a0a;border-radius:18px 18px 4px 18px;box-shadow:0 4px 20px rgba(200,245,66,0.2);font-weight:500}
-  .bubble.buddy{background:rgba(255,255,255,0.06);color:var(--text);border-radius:18px 18px 18px 4px;border:1px solid var(--border)}
-  .typing{display:flex;gap:5px;padding:14px 18px;background:var(--surface);border-radius:18px 18px 18px 4px;border:1px solid var(--border);width:fit-content;margin-bottom:14px}
-  .dot{width:7px;height:7px;border-radius:50%;background:var(--accent);animation:bounce 1.2s infinite}
+/* ── LOADING / AUTH SCREENS ── */
+#loading-screen,#auth-screen{position:fixed;inset:0;z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px;text-align:center;background:var(--bg)}
+#loading-screen .icon{font-size:52px;margin-bottom:20px;animation:float 2s ease-in-out infinite}
+#loading-screen .title{font-family:'Cormorant Garamond',serif;font-size:32px;color:var(--accent);margin-bottom:8px}
+#loading-screen .sub{color:var(--muted);font-size:13px}
+.loading-bar{width:160px;height:2px;background:rgba(212,168,83,0.15);border-radius:2px;margin-top:24px;overflow:hidden}
+.loading-bar-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent3));border-radius:2px;animation:progressFill 2s ease-out forwards;--w:100%}
 
-  #input-area{padding:10px 16px 20px;border-top:1px solid var(--border);background:rgba(0,0,0,0.6);backdrop-filter:blur(20px);flex-shrink:0}
-  .input-row{display:flex;gap:10px;align-items:flex-end;background:rgba(255,255,255,0.06);border:1px solid var(--border);border-radius:24px;padding:10px 14px;transition:border-color 0.2s}
-  .input-row:focus-within{border-color:rgba(200,245,66,0.3)}
-  #msg-input{flex:1;background:transparent;border:none;outline:none;color:var(--text);font-size:14px;resize:none;font-family:'Lato',sans-serif;line-height:1.5;max-height:100px;overflow-y:auto}
-  #msg-input::placeholder{color:#444}
-  .send-btn{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--accent),#a8e020);border:none;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;transition:all 0.2s;flex-shrink:0;color:#0a0a0a;font-weight:700}
-  .send-btn:hover:not(:disabled){transform:scale(1.08)}
-  .send-btn:disabled{opacity:0.35;cursor:not-allowed}
-  .input-hint{text-align:center;font-size:10px;color:#2a2a2a;margin-top:6px}
+#auth-screen{display:none;background:var(--bg)}
+.auth-card{background:rgba(210,175,120,0.05);border:1px solid var(--border2);border-radius:28px;padding:36px 28px;max-width:340px;width:100%;animation:scaleIn 0.4s ease-out}
+.auth-logo{font-size:56px;margin-bottom:16px;animation:float 3s ease-in-out infinite;display:block}
+.auth-title{font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:700;color:var(--accent);margin-bottom:8px}
+.auth-sub{color:var(--text2);font-size:14px;line-height:1.7;margin-bottom:28px}
+.btn-google{display:flex;align-items:center;gap:12px;padding:15px 24px;background:#fff;border:none;border-radius:50px;color:#333;font-size:14px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;box-shadow:0 4px 20px rgba(0,0,0,0.4);transition:all 0.25s;width:100%;justify-content:center}
+.btn-google:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(0,0,0,0.5)}
+.google-icon{width:20px;height:20px;flex-shrink:0}
+.auth-note{margin-top:16px;font-size:11px;color:var(--muted)}
 
-  /* LOADING SCREEN */
-  #loading-screen{position:fixed;inset:0;background:#0a0a0a;z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px}
-  .loading-icon{font-size:48px;animation:pulseGlow 1.5s infinite}
-  .loading-text{color:var(--accent);font-family:'Lato',sans-serif;font-size:14px}
-  .loading-sub{color:#444;font-size:12px}
+/* ── HEADER ── */
+header{padding:12px 16px;display:flex;align-items:center;justify-content:space-between;background:rgba(26,18,8,0.92);backdrop-filter:blur(24px);border-bottom:1px solid var(--border);flex-shrink:0;position:relative;z-index:10}
+.header-left{display:flex;align-items:center;gap:10px}
+.app-logo{width:38px;height:38px;border-radius:12px;background:linear-gradient(145deg,#2a1e08,#3d2c10);border:1px solid rgba(212,168,83,0.3);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;animation:pulseGlow 4s infinite}
+.app-name{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;color:var(--accent);line-height:1}
+.app-tagline{font-size:9px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-top:1px}
+.header-right{display:flex;align-items:center;gap:6px}
+.streak-pill{display:flex;align-items:center;gap:4px;background:rgba(212,168,83,0.1);border:1px solid rgba(212,168,83,0.2);border-radius:16px;padding:4px 10px;font-size:11px;color:var(--accent);font-weight:600}
+.hdr-btn{width:32px;height:32px;border-radius:50%;background:var(--surface);border:1px solid var(--border);color:var(--text2);cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;transition:all 0.2s}
+.hdr-btn:hover{background:var(--surface2);color:var(--accent);border-color:var(--border2)}
+.user-avatar{width:30px;height:30px;border-radius:50%;object-fit:cover;border:1.5px solid var(--accent);display:none}
+.sync-dot{width:7px;height:7px;border-radius:50%;background:var(--accent);margin-left:2px;display:none}
+.sync-dot.saving{background:#d4a853;animation:spin 1s linear infinite;border-radius:0;clip-path:polygon(50% 0%,100% 100%,0% 100%)}
+.sync-dot.error{background:var(--red)}
 
-  /* GOOGLE AUTH SCREEN */
-  #auth-screen{position:fixed;inset:0;background:#0a0a0a;z-index:998;display:none;flex-direction:column;align-items:center;justify-content:center;padding:30px;text-align:center}
-  .auth-icon{font-size:56px;margin-bottom:20px}
-  .auth-title{font-family:'Playfair Display',serif;font-size:28px;font-weight:800;background:linear-gradient(135deg,#fff 30%,var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:12px}
-  .auth-sub{color:var(--muted);font-size:14px;line-height:1.7;max-width:280px;margin-bottom:28px}
-  .btn-google{display:flex;align-items:center;gap:12px;padding:16px 28px;background:#fff;border:none;border-radius:30px;color:#333;font-size:15px;font-weight:700;cursor:pointer;font-family:'Lato',sans-serif;box-shadow:0 8px 30px rgba(255,255,255,0.15);transition:all 0.2s;margin:0 auto}
-  .btn-google:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(255,255,255,0.2)}
-  .google-icon{width:22px;height:22px}
+/* ── NAV TABS ── */
+.nav-tabs{display:flex;background:rgba(26,18,8,0.95);border-bottom:1px solid var(--border);flex-shrink:0;overflow-x:auto;padding:0 4px}
+.nav-tabs::-webkit-scrollbar{display:none}
+.nav-tab{display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 12px;cursor:pointer;border-bottom:2px solid transparent;transition:all 0.2s;flex-shrink:0;color:var(--muted);font-size:9px;letter-spacing:0.5px;text-transform:uppercase}
+.nav-tab .tab-icon{font-size:16px}
+.nav-tab:hover{color:var(--text2)}
+.nav-tab.active{color:var(--accent);border-bottom-color:var(--accent)}
 
-  #welcome{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;padding:30px 20px;text-align:center}
-  .welcome-title{font-family:'Playfair Display',serif;font-size:32px;font-weight:800;background:linear-gradient(135deg,#fff 30%,var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:10px}
-  .welcome-sub{color:var(--muted);font-size:14px;line-height:1.7;max-width:280px;margin-bottom:8px}
-  .drive-badge{display:inline-flex;align-items:center;gap:6px;padding:7px 16px;background:rgba(200,245,66,0.07);border:1px solid rgba(200,245,66,0.2);border-radius:20px;font-size:12px;color:var(--accent);margin-bottom:28px}
-  .welcome-btns{display:flex;flex-direction:column;gap:10px;width:100%;max-width:280px}
-  .btn-primary{padding:15px;background:linear-gradient(135deg,var(--accent),#a8e020);border:none;border-radius:30px;color:#0a0a0a;font-size:14px;font-weight:700;cursor:pointer;font-family:'Lato',sans-serif;box-shadow:0 8px 30px rgba(200,245,66,0.25);transition:all 0.2s}
-  .btn-primary:hover{transform:translateY(-2px)}
-  .btn-ghost{padding:13px;background:transparent;border:1px solid rgba(200,245,66,0.25);border-radius:30px;color:var(--accent);font-size:13px;cursor:pointer;font-family:'Lato',sans-serif;transition:all 0.2s}
+/* ── MAIN CONTENT ── */
+#main{flex:1;overflow:hidden;position:relative}
+.section{position:absolute;inset:0;overflow-y:auto;display:none;padding:16px;animation:fadeIn 0.25s ease-out}
+.section.active{display:block}
 
-  .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.88);display:flex;align-items:center;justify-content:center;z-index:200;padding:20px}
-  .modal{background:#111;border:1px solid rgba(200,245,66,0.25);border-radius:24px;padding:26px;width:100%;max-width:420px;max-height:90vh;overflow-y:auto}
-  .modal h2{font-family:'Playfair Display',serif;font-size:20px;color:var(--accent);margin-bottom:5px}
-  .modal p{font-size:13px;color:var(--muted);margin-bottom:18px;line-height:1.6}
-  .field{margin-bottom:14px}
-  .field label{display:block;font-size:11px;color:#777;margin-bottom:5px;text-transform:uppercase;letter-spacing:1px}
-  .field input,.field textarea{width:100%;background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:10px;color:var(--text);padding:10px 12px;font-size:13px;font-family:'Lato',sans-serif;outline:none;transition:border-color 0.2s}
-  .field input:focus,.field textarea:focus{border-color:rgba(200,245,66,0.35)}
-  .field textarea{resize:none}
-  .modal-btns{display:flex;gap:10px;margin-top:6px}
-  .btn-cancel{flex:1;padding:12px;background:var(--surface);border:1px solid var(--border);border-radius:12px;color:#aaa;cursor:pointer;font-family:'Lato',sans-serif;font-size:14px}
-  .btn-save{flex:2;padding:12px;background:linear-gradient(135deg,var(--accent),#a8e020);border:none;border-radius:12px;color:#0a0a0a;font-weight:700;cursor:pointer;font-family:'Lato',sans-serif;font-size:14px}
+/* ── BUDDY (CHAT) SECTION ── */
+#sec-buddy{padding:0;display:flex;flex-direction:column}
+#sec-buddy.active{display:flex}
+.area-pills{padding:10px 12px;display:flex;gap:6px;overflow-x:auto;border-bottom:1px solid var(--border);background:rgba(26,18,8,0.7);flex-shrink:0}
+.area-pills::-webkit-scrollbar{display:none}
+.area-pill{display:flex;align-items:center;gap:4px;padding:5px 10px;background:var(--surface);border:1px solid var(--border);border-radius:16px;color:var(--text2);font-size:11px;cursor:pointer;transition:all 0.18s;white-space:nowrap;flex-shrink:0}
+.area-pill:hover{background:var(--surface2);border-color:var(--border2);color:var(--accent)}
+#chat-messages{flex:1;overflow-y:auto;padding:16px}
+.msg{display:flex;margin-bottom:14px;animation:fadeUp 0.3s ease-out}
+.msg.user{justify-content:flex-end}
+.msg.buddy{align-items:flex-end;gap:8px}
+.buddy-avatar{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;box-shadow:0 0 10px rgba(212,168,83,0.3)}
+.bubble{max-width:76%;padding:12px 15px;font-size:13.5px;line-height:1.65;white-space:pre-wrap;word-break:break-word}
+.bubble.user{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#1a1208;border-radius:18px 18px 4px 18px;box-shadow:0 4px 16px rgba(212,168,83,0.25);font-weight:500}
+.bubble.buddy{background:rgba(210,175,120,0.08);color:var(--text);border-radius:18px 18px 18px 4px;border:1px solid var(--border)}
+.typing-indicator{display:flex;gap:5px;padding:13px 16px;background:var(--surface);border-radius:18px 18px 18px 4px;border:1px solid var(--border);width:fit-content;margin-bottom:14px}
+.typing-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);animation:bounce 1.2s infinite}
+#chat-input-area{padding:10px 14px 16px;border-top:1px solid var(--border);background:rgba(26,18,8,0.85);backdrop-filter:blur(16px);flex-shrink:0}
+.chat-input-row{display:flex;gap:8px;align-items:flex-end;background:rgba(210,175,120,0.06);border:1px solid var(--border);border-radius:20px;padding:8px 12px;transition:border-color 0.2s}
+.chat-input-row:focus-within{border-color:var(--border2)}
+#msg-input{flex:1;background:transparent;border:none;outline:none;color:var(--text);font-size:13.5px;resize:none;font-family:'DM Sans',sans-serif;line-height:1.5;max-height:90px;overflow-y:auto}
+#msg-input::placeholder{color:var(--muted)}
+.send-btn{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;transition:all 0.2s;flex-shrink:0;color:#1a1208;font-weight:700}
+.send-btn:hover:not(:disabled){transform:scale(1.08)}
+.send-btn:disabled{opacity:0.35;cursor:not-allowed}
 
-  .settings-section{margin-bottom:22px}
-  .settings-section h3{font-size:11px;text-transform:uppercase;letter-spacing:2px;color:#555;margin-bottom:12px;padding-bottom:6px;border-bottom:1px solid var(--border)}
-  .color-swatches{display:flex;gap:8px;flex-wrap:wrap}
-  .swatch{width:32px;height:32px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:all 0.2s}
-  .swatch.active,.swatch:hover{border-color:#fff;transform:scale(1.15)}
-  .icon-options{display:flex;gap:8px;flex-wrap:wrap}
-  .icon-opt{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;cursor:pointer;background:var(--surface);border:2px solid var(--border);transition:all 0.2s}
-  .icon-opt:hover,.icon-opt.active{border-color:var(--accent);background:rgba(200,245,66,0.1)}
-  .install-box{background:rgba(200,245,66,0.06);border:1px solid rgba(200,245,66,0.2);border-radius:14px;padding:14px;font-size:13px;color:#aaa;line-height:1.7}
-  .install-box strong{color:var(--accent)}
+/* WELCOME CARD */
+.welcome-card{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;padding:28px 20px;text-align:center}
+.welcome-logo{font-size:64px;margin-bottom:16px;animation:float 3s ease-in-out infinite}
+.welcome-title{font-family:'Cormorant Garamond',serif;font-size:34px;font-weight:700;color:var(--accent);margin-bottom:8px}
+.welcome-sub{color:var(--text2);font-size:13px;line-height:1.7;max-width:260px;margin-bottom:24px}
+.welcome-actions{display:flex;flex-direction:column;gap:10px;width:100%;max-width:260px}
+.btn-earth{padding:14px;background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;border-radius:24px;color:#1a1208;font-size:13px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.2s}
+.btn-earth:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(212,168,83,0.3)}
+.btn-outline{padding:12px;background:transparent;border:1px solid var(--border2);border-radius:24px;color:var(--accent);font-size:13px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.2s}
+.btn-outline:hover{background:var(--surface)}
 
-  /* UPDATE SECTION */
-  .update-section{background:rgba(200,245,66,0.04);border:1px solid rgba(200,245,66,0.15);border-radius:16px;padding:16px;margin-bottom:22px}
-  .update-section h3{font-size:11px;text-transform:uppercase;letter-spacing:2px;color:#555;margin-bottom:12px;padding-bottom:6px;border-bottom:1px solid var(--border)}
-  .token-input-wrap{position:relative;margin-bottom:10px}
-  .token-input-wrap input{width:100%;background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:10px;color:var(--text);padding:10px 40px 10px 12px;font-size:12px;font-family:monospace;outline:none;transition:border-color 0.2s}
-  .token-input-wrap input:focus{border-color:rgba(200,245,66,0.35)}
-  .toggle-token{position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;color:#666;cursor:pointer;font-size:16px}
-  .btn-update{width:100%;padding:13px;background:linear-gradient(135deg,var(--accent),#a8e020);border:none;border-radius:12px;color:#0a0a0a;font-weight:700;cursor:pointer;font-family:'Lato',sans-serif;font-size:14px;display:flex;align-items:center;justify-content:center;gap:8px;transition:all 0.2s}
-  .btn-update:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 8px 25px rgba(200,245,66,0.3)}
-  .btn-update:disabled{opacity:0.5;cursor:not-allowed}
-  .update-status{margin-top:10px;padding:10px 14px;border-radius:10px;font-size:12px;text-align:center;display:none;animation:slideDown 0.3s ease-out}
-  .update-status.success{background:rgba(200,245,66,0.1);border:1px solid rgba(200,245,66,0.3);color:var(--accent)}
-  .update-status.error{background:rgba(255,80,80,0.1);border:1px solid rgba(255,80,80,0.3);color:#ff6b6b}
-  .update-status.loading{background:rgba(255,255,255,0.05);border:1px solid var(--border);color:#888}
+/* ── DASHBOARD SECTION ── */
+.section-header{font-family:'Cormorant Garamond',serif;font-size:24px;color:var(--accent);margin-bottom:4px}
+.section-sub{font-size:12px;color:var(--text2);margin-bottom:20px}
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:16px;animation:fadeUp 0.3s ease-out}
+.stat-icon{font-size:22px;margin-bottom:8px}
+.stat-value{font-family:'Cormorant Garamond',serif;font-size:28px;color:var(--accent);font-weight:700;line-height:1}
+.stat-label{font-size:11px;color:var(--muted);margin-top:4px;text-transform:uppercase;letter-spacing:0.5px}
+.progress-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:16px;margin-bottom:12px}
+.progress-title{font-size:13px;color:var(--text);font-weight:500;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center}
+.progress-bar{height:6px;background:rgba(210,175,120,0.1);border-radius:3px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent3));border-radius:3px;transition:width 0.8s ease-out}
+.achievement-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:16px}
+.achievement{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px;text-align:center;transition:all 0.2s}
+.achievement.unlocked{border-color:var(--accent);background:rgba(212,168,83,0.08)}
+.achievement.locked{opacity:0.4}
+.ach-icon{font-size:24px;margin-bottom:4px}
+.ach-name{font-size:10px;color:var(--text2);line-height:1.3}
 
-  .sync-pill{font-size:10px;padding:2px 8px;border-radius:10px;display:flex;align-items:center;gap:3px}
-  .sync-saving{color:#888}
-  .sync-saved{color:var(--accent)}
-  .sync-error{color:#ff6b6b}
-  .return-banner{margin-bottom:14px;padding:8px 14px;background:rgba(200,245,66,0.05);border:1px solid rgba(200,245,66,0.12);border-radius:12px;font-size:12px;color:#777;text-align:center;animation:fadeUp 0.4s ease-out}
+/* ── GOALS SECTION ── */
+.goals-form{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:16px;margin-bottom:16px}
+.goals-form h3{font-size:13px;color:var(--accent);margin-bottom:12px;font-weight:600}
+.goal-item{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:10px;animation:slideIn 0.3s ease-out}
+.goal-header{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.goal-emoji{font-size:20px}
+.goal-title{font-size:13px;color:var(--text);font-weight:500;flex:1}
+.goal-category{font-size:10px;color:var(--accent);background:rgba(212,168,83,0.1);padding:2px 8px;border-radius:8px}
+.goal-progress-row{display:flex;align-items:center;gap:10px}
+.goal-progress-bar{flex:1;height:5px;background:rgba(210,175,120,0.1);border-radius:3px;overflow:hidden;cursor:pointer}
+.goal-progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent3));border-radius:3px;transition:width 0.5s}
+.goal-pct{font-size:11px;color:var(--text2);min-width:30px;text-align:right}
+.goal-actions{display:flex;gap:6px;margin-top:8px}
+.goal-btn{padding:4px 10px;border-radius:8px;font-size:11px;cursor:pointer;border:1px solid var(--border);background:var(--surface);color:var(--text2);font-family:'DM Sans',sans-serif;transition:all 0.2s}
+.goal-btn:hover{border-color:var(--border2);color:var(--accent)}
+.goal-btn.complete{background:rgba(122,158,106,0.15);border-color:var(--green);color:var(--green)}
+.add-btn{width:100%;padding:12px;background:transparent;border:1px dashed var(--border2);border-radius:14px;color:var(--accent);font-size:13px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.2s;margin-top:4px}
+.add-btn:hover{background:var(--surface)}
 
-  /* USER AVATAR */
-  .user-avatar{width:28px;height:28px;border-radius:50%;object-fit:cover;border:1px solid rgba(200,245,66,0.3)}
+/* ── HABITS SECTION ── */
+.habit-item{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:10px;display:flex;align-items:center;gap:12px}
+.habit-check{width:28px;height:28px;border-radius:50%;border:2px solid var(--border2);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.2s;flex-shrink:0;font-size:14px}
+.habit-check.done{background:var(--accent);border-color:var(--accent);color:#1a1208}
+.habit-info{flex:1}
+.habit-name{font-size:13px;color:var(--text);font-weight:500}
+.habit-streak-mini{font-size:11px;color:var(--muted);margin-top:2px}
+.habit-emoji{font-size:20px}
+.week-dots{display:flex;gap:4px;margin-top:6px}
+.week-dot{width:8px;height:8px;border-radius:50%;background:rgba(210,175,120,0.1)}
+.week-dot.done{background:var(--accent)}
+
+/* ── JOURNAL SECTION ── */
+.journal-date{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
+.journal-entry-area{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:16px;color:var(--text);font-size:14px;font-family:'DM Sans',sans-serif;padding:16px;resize:none;outline:none;min-height:140px;transition:border-color 0.2s;line-height:1.7}
+.journal-entry-area:focus{border-color:var(--border2)}
+.journal-entry-area::placeholder{color:var(--muted)}
+.mood-row{display:flex;gap:8px;margin:12px 0;flex-wrap:wrap}
+.mood-btn{padding:8px 14px;border-radius:20px;border:1px solid var(--border);background:var(--surface);cursor:pointer;font-size:18px;transition:all 0.2s}
+.mood-btn:hover,.mood-btn.active{border-color:var(--accent);background:rgba(212,168,83,0.1);transform:scale(1.1)}
+.past-entries{margin-top:20px}
+.past-entry{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:10px;cursor:pointer;transition:all 0.2s}
+.past-entry:hover{border-color:var(--border2)}
+.past-entry-date{font-size:11px;color:var(--accent);margin-bottom:6px}
+.past-entry-preview{font-size:13px;color:var(--text2);line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+
+/* ── PLANNER SECTION ── */
+.planner-date-header{font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--accent);margin-bottom:4px}
+.planner-day{font-size:12px;color:var(--text2);margin-bottom:16px}
+.task-item{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 14px;margin-bottom:8px;display:flex;align-items:center;gap:10px;animation:slideIn 0.25s ease-out}
+.task-check{width:22px;height:22px;border-radius:6px;border:1.5px solid var(--border2);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.2s;flex-shrink:0;font-size:12px}
+.task-check.done{background:var(--accent);border-color:var(--accent);color:#1a1208}
+.task-text{font-size:13px;color:var(--text);flex:1;transition:all 0.2s}
+.task-text.done{text-decoration:line-through;color:var(--muted)}
+.task-priority{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.task-priority.high{background:var(--red)}
+.task-priority.med{background:var(--accent)}
+.task-priority.low{background:var(--green)}
+.task-del{background:none;border:none;color:var(--muted);cursor:pointer;font-size:16px;padding:0 4px;transition:color 0.2s}
+.task-del:hover{color:var(--red)}
+.add-task-row{display:flex;gap:8px;margin-top:8px}
+.add-task-input{flex:1;background:var(--surface);border:1px solid var(--border);border-radius:10px;color:var(--text);font-size:13px;padding:10px 12px;outline:none;font-family:'DM Sans',sans-serif;transition:border-color 0.2s}
+.add-task-input:focus{border-color:var(--border2)}
+.add-task-input::placeholder{color:var(--muted)}
+.add-task-btn{padding:10px 14px;background:var(--accent);border:none;border-radius:10px;color:#1a1208;font-size:13px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.2s}
+.add-task-btn:hover{background:var(--accent3)}
+.planner-progress{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:16px}
+.planner-progress-label{font-size:12px;color:var(--text2);margin-bottom:8px;display:flex;justify-content:space-between}
+
+/* ── FINANCE SECTION ── */
+.finance-balance{background:linear-gradient(135deg,rgba(139,105,20,0.3),rgba(107,79,26,0.2));border:1px solid var(--border2);border-radius:20px;padding:20px;margin-bottom:16px;text-align:center}
+.balance-label{font-size:11px;color:var(--text2);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+.balance-amount{font-family:'Cormorant Garamond',serif;font-size:40px;color:var(--accent);font-weight:700}
+.balance-sub{font-size:12px;color:var(--text2);margin-top:4px}
+.finance-row{display:flex;gap:10px;margin-bottom:16px}
+.finance-mini-card{flex:1;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px;text-align:center}
+.finance-mini-icon{font-size:20px;margin-bottom:6px}
+.finance-mini-val{font-size:16px;font-weight:600;color:var(--text)}
+.finance-mini-val.income{color:var(--green)}
+.finance-mini-val.expense{color:var(--red)}
+.finance-mini-label{font-size:10px;color:var(--muted);margin-top:3px}
+.txn-item{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 14px;margin-bottom:8px;display:flex;align-items:center;gap:10px}
+.txn-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.txn-icon.income{background:rgba(122,158,106,0.15)}
+.txn-icon.expense{background:rgba(192,96,64,0.15)}
+.txn-info{flex:1}
+.txn-name{font-size:13px;color:var(--text);font-weight:500}
+.txn-date{font-size:11px;color:var(--muted);margin-top:2px}
+.txn-amount{font-size:14px;font-weight:600}
+.txn-amount.income{color:var(--green)}
+.txn-amount.expense{color:var(--red)}
+
+/* ── ROUTINE SECTION ── */
+.routine-time-block{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:10px}
+.routine-time{font-size:11px;color:var(--accent);font-weight:600;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
+.routine-step{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid rgba(210,175,120,0.06)}
+.routine-step:last-child{border-bottom:none}
+.routine-check{width:20px;height:20px;border-radius:50%;border:1.5px solid var(--border2);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.2s;flex-shrink:0;font-size:11px}
+.routine-check.done{background:var(--accent);border-color:var(--accent);color:#1a1208}
+.routine-step-text{font-size:13px;color:var(--text);flex:1}
+.routine-duration{font-size:11px;color:var(--muted)}
+
+/* ── READING SECTION ── */
+.book-item{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:10px;display:flex;gap:12px}
+.book-cover{width:44px;height:60px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0}
+.book-cover.reading{background:rgba(212,168,83,0.15);border:1px solid rgba(212,168,83,0.3)}
+.book-cover.want{background:rgba(210,175,120,0.08);border:1px solid var(--border)}
+.book-cover.done{background:rgba(122,158,106,0.15);border:1px solid rgba(122,158,106,0.3)}
+.book-info{flex:1}
+.book-title{font-size:13px;color:var(--text);font-weight:500;margin-bottom:3px}
+.book-author{font-size:11px;color:var(--muted)}
+.book-status{font-size:10px;padding:2px 8px;border-radius:8px;margin-top:6px;display:inline-block}
+.book-status.reading{background:rgba(212,168,83,0.15);color:var(--accent)}
+.book-status.want{background:var(--surface);color:var(--text2)}
+.book-status.done{background:rgba(122,158,106,0.15);color:var(--green)}
+.book-progress{margin-top:8px}
+
+/* ── WEEKLY REVIEW SECTION ── */
+.review-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:16px;margin-bottom:12px}
+.review-card h3{font-size:13px;color:var(--accent);margin-bottom:10px;font-weight:600}
+.review-score{display:flex;align-items:center;gap:12px;margin-bottom:8px}
+.score-circle{width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;color:#1a1208;flex-shrink:0}
+.review-insight{font-size:13px;color:var(--text2);line-height:1.6}
+.area-scores{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.area-score{background:rgba(210,175,120,0.05);border-radius:10px;padding:10px}
+.area-score-label{font-size:11px;color:var(--text2);margin-bottom:5px}
+.area-score-bar{height:4px;background:rgba(210,175,120,0.1);border-radius:2px;overflow:hidden}
+.area-score-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent3));border-radius:2px}
+.gen-review-btn{width:100%;padding:13px;background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;border-radius:14px;color:#1a1208;font-size:13px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.2s;margin-bottom:12px}
+.gen-review-btn:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(212,168,83,0.3)}
+.gen-review-btn:disabled{opacity:0.6;cursor:not-allowed}
+
+/* ── MODALS ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(10,8,2,0.9);display:flex;align-items:flex-end;justify-content:center;z-index:300;padding:0;animation:fadeIn 0.2s}
+.modal{background:#211608;border:1px solid var(--border2);border-radius:24px 24px 0 0;padding:24px 20px 32px;width:100%;max-width:480px;max-height:88vh;overflow-y:auto;animation:fadeUp 0.3s ease-out}
+.modal-handle{width:36px;height:4px;background:var(--border2);border-radius:2px;margin:0 auto 20px}
+.modal h2{font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--accent);margin-bottom:4px}
+.modal .modal-sub{font-size:12px;color:var(--muted);margin-bottom:18px}
+.field{margin-bottom:13px}
+.field label{display:block;font-size:11px;color:var(--text2);margin-bottom:5px;text-transform:uppercase;letter-spacing:0.8px}
+.field input,.field textarea,.field select{width:100%;background:rgba(210,175,120,0.06);border:1px solid var(--border);border-radius:10px;color:var(--text);padding:10px 12px;font-size:13px;font-family:'DM Sans',sans-serif;outline:none;transition:border-color 0.2s}
+.field input:focus,.field textarea:focus,.field select:focus{border-color:var(--border2)}
+.field textarea{resize:none}
+.field select{appearance:none;cursor:pointer}
+.field select option{background:#211608}
+.modal-btns{display:flex;gap:10px;margin-top:16px}
+.btn-cancel{flex:1;padding:12px;background:var(--surface);border:1px solid var(--border);border-radius:12px;color:var(--text2);cursor:pointer;font-family:'DM Sans',sans-serif;font-size:13px;transition:all 0.2s}
+.btn-cancel:hover{border-color:var(--border2)}
+.btn-save{flex:2;padding:12px;background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;border-radius:12px;color:#1a1208;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:13px;transition:all 0.2s}
+.btn-save:hover{box-shadow:0 4px 16px rgba(212,168,83,0.3)}
+
+/* SETTINGS SPECIFIC */
+.settings-section{margin-bottom:20px}
+.settings-section h3{font-size:10px;text-transform:uppercase;letter-spacing:2px;color:var(--muted);margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border)}
+.color-swatches{display:flex;gap:8px;flex-wrap:wrap}
+.swatch{width:30px;height:30px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:all 0.2s}
+.swatch.active,.swatch:hover{border-color:#fff;transform:scale(1.15)}
+.icon-options{display:flex;gap:8px;flex-wrap:wrap}
+.icon-opt{width:42px;height:42px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:20px;cursor:pointer;background:var(--surface);border:2px solid var(--border);transition:all 0.2s}
+.icon-opt:hover,.icon-opt.active{border-color:var(--accent);background:rgba(212,168,83,0.1)}
+.danger-btn{padding:10px 16px;background:rgba(192,96,64,0.1);border:1px solid rgba(192,96,64,0.3);border-radius:10px;color:var(--red);cursor:pointer;font-size:12px;font-family:'DM Sans',sans-serif;transition:all 0.2s;margin-right:8px;margin-bottom:8px}
+.danger-btn:hover{background:rgba(192,96,64,0.15)}
+.info-box{background:rgba(210,175,120,0.05);border:1px solid var(--border);border-radius:12px;padding:13px;font-size:12px;color:var(--text2);line-height:1.7}
+.info-box strong{color:var(--accent)}
+
+/* EMPTY STATES */
+.empty-state{text-align:center;padding:40px 20px;color:var(--muted)}
+.empty-state .icon{font-size:40px;margin-bottom:12px;display:block}
+.empty-state p{font-size:13px;line-height:1.6}
+
+/* TOAST */
+#toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:rgba(212,168,83,0.15);border:1px solid var(--border2);backdrop-filter:blur(16px);color:var(--accent);padding:10px 20px;border-radius:20px;font-size:13px;z-index:500;display:none;animation:fadeUp 0.3s ease-out;white-space:nowrap}
+
+/* DAILY CHECK IN BANNER */
+.checkin-banner{background:linear-gradient(135deg,rgba(139,105,20,0.2),rgba(107,79,26,0.15));border:1px solid var(--border2);border-radius:16px;padding:14px 16px;margin-bottom:14px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:all 0.2s}
+.checkin-banner:hover{border-color:var(--accent)}
+.checkin-text{flex:1}
+.checkin-title{font-size:13px;color:var(--text);font-weight:500}
+.checkin-sub{font-size:11px;color:var(--muted);margin-top:2px}
+
+/* MOOD TRACKER */
+.mood-history{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
+.mood-day{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;background:var(--surface);border:1px solid var(--border)}
+
+/* VOICE BTN */
+.voice-btn{width:34px;height:34px;border-radius:50%;background:var(--surface);border:1px solid var(--border);color:var(--text2);cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;transition:all 0.2s;flex-shrink:0}
+.voice-btn:hover{background:var(--surface2);color:var(--accent)}
+.voice-btn.recording{background:rgba(192,96,64,0.2);border-color:var(--red);color:var(--red);animation:pulseGlow 1s infinite}
 </style>
 </head>
 <body>
-
 <div id="starfield"></div>
 
 <!-- LOADING SCREEN -->
 <div id="loading-screen">
-  <div class="loading-icon">⚡</div>
-  <div class="loading-text">Loading My Buddy...</div>
-  <div class="loading-sub">Connecting to Google Drive</div>
+  <div class="icon">🌿</div>
+  <div class="title">My Buddy</div>
+  <div class="sub">Loading your journey...</div>
+  <div class="loading-bar"><div class="loading-bar-fill"></div></div>
 </div>
 
-<!-- GOOGLE AUTH SCREEN -->
+<!-- AUTH SCREEN -->
 <div id="auth-screen">
-  <div class="auth-icon">⚡</div>
-  <div class="auth-title">My Buddy</div>
-  <p class="auth-sub">Sign in with Google to sync your journey across all your devices — phone, tablet, laptop.</p>
-  <button class="btn-google" onclick="signInWithGoogle()">
-    <svg class="google-icon" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
-    Sign in with Google
-  </button>
-  <p style="margin-top:16px;font-size:11px;color:#444">Your data stays private in your own Google Drive</p>
+  <div class="auth-card">
+    <span class="auth-logo">🌿</span>
+    <div class="auth-title">My Buddy</div>
+    <p class="auth-sub">Your personal AI companion for growth, healing and becoming your best self — every single day.</p>
+    <button class="btn-google" onclick="signInWithGoogle()">
+      <svg class="google-icon" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+      Continue with Google
+    </button>
+    <p class="auth-note">Your data stays private in your own Google Drive</p>
+  </div>
 </div>
 
+<!-- MAIN APP -->
 <div id="app">
+  <!-- HEADER -->
   <header>
     <div class="header-left">
-      <div class="app-icon small" id="header-icon"></div>
+      <div class="app-logo" id="app-logo">🌿</div>
       <div>
-        <div class="app-title" id="header-title">My Buddy</div>
-        <div style="display:flex;align-items:center;gap:6px">
-          <div class="app-subtitle">Personal AI Companion</div>
-          <div class="sync-pill" id="sync-status" style="display:none"></div>
-        </div>
+        <div class="app-name" id="app-name">My Buddy</div>
+        <div class="app-tagline">Personal AI Companion</div>
       </div>
     </div>
     <div class="header-right">
-      <div class="streak-badge">🔥 <span id="streak-count">1</span></div>
-      <button class="icon-btn" onclick="openProfile()" title="My Profile">👤</button>
-      <button class="icon-btn" onclick="openSettings()" title="Settings">⚙️</button>
-      <img id="user-avatar" class="user-avatar" style="display:none" src="" alt=""/>
+      <div class="streak-pill">🔥 <span id="streak-num">1</span></div>
+      <div class="sync-dot" id="sync-dot"></div>
+      <button class="hdr-btn" onclick="openModal('profile-modal')">👤</button>
+      <button class="hdr-btn" onclick="openModal('settings-modal')">⚙️</button>
+      <img id="user-avatar" class="user-avatar" src="" alt=""/>
     </div>
   </header>
 
-  <div class="pills-bar">
-    <button class="pill" onclick="areaClick('Communication','💬')">💬 Communication</button>
-    <button class="pill" onclick="areaClick('Fashion','👔')">👔 Fashion</button>
-    <button class="pill" onclick="areaClick('Health','💪')">💪 Health</button>
-    <button class="pill" onclick="areaClick('Finances','💰')">💰 Finances</button>
-    <button class="pill" onclick="areaClick('Learning','📚')">📚 Learning</button>
-    <button class="pill" onclick="areaClick('Goals','🎯')">🎯 Goals</button>
-    <button class="pill" onclick="areaClick('Career','🚀')">🚀 Career</button>
-    <button class="pill" onclick="areaClick('Cleanliness','🧹')">🧹 Cleanliness</button>
-    <button class="pill" onclick="areaClick('Grooming','✂️')">✂️ Grooming</button>
-    <button class="pill" onclick="areaClick('Mindset','🧠')">🧠 Mindset</button>
-    <button class="pill" onclick="areaClick('Relationships','❤️')">❤️ Relationships</button>
-    <button class="pill" onclick="areaClick('Time Management','🕐')">🕐 Time Mgmt</button>
+  <!-- NAV TABS -->
+  <div class="nav-tabs" id="nav-tabs">
+    <div class="nav-tab active" data-sec="buddy" onclick="switchTab('buddy')"><span class="tab-icon">💬</span>Buddy</div>
+    <div class="nav-tab" data-sec="dashboard" onclick="switchTab('dashboard')"><span class="tab-icon">📊</span>Dashboard</div>
+    <div class="nav-tab" data-sec="planner" onclick="switchTab('planner')"><span class="tab-icon">📅</span>Planner</div>
+    <div class="nav-tab" data-sec="goals" onclick="switchTab('goals')"><span class="tab-icon">🎯</span>Goals</div>
+    <div class="nav-tab" data-sec="habits" onclick="switchTab('habits')"><span class="tab-icon">💊</span>Habits</div>
+    <div class="nav-tab" data-sec="journal" onclick="switchTab('journal')"><span class="tab-icon">📓</span>Journal</div>
+    <div class="nav-tab" data-sec="finance" onclick="switchTab('finance')"><span class="tab-icon">💰</span>Finance</div>
+    <div class="nav-tab" data-sec="routine" onclick="switchTab('routine')"><span class="tab-icon">⏰</span>Routine</div>
+    <div class="nav-tab" data-sec="reading" onclick="switchTab('reading')"><span class="tab-icon">📚</span>Reading</div>
+    <div class="nav-tab" data-sec="review" onclick="switchTab('review')"><span class="tab-icon">🪞</span>Review</div>
   </div>
 
-  <div id="messages"></div>
+  <!-- MAIN CONTENT -->
+  <div id="main">
 
-  <div id="welcome">
-    <div style="margin-bottom:20px">
-      <div class="app-icon" style="width:80px;height:80px;border-radius:24px;margin:0 auto" id="welcome-icon"></div>
+    <!-- BUDDY CHAT -->
+    <div class="section active" id="sec-buddy">
+      <div class="area-pills" id="area-pills">
+        <button class="area-pill" onclick="areaClick('Communication','💬')">💬 Communication</button>
+        <button class="area-pill" onclick="areaClick('Fashion','👔')">👔 Fashion</button>
+        <button class="area-pill" onclick="areaClick('Health','💪')">💪 Health</button>
+        <button class="area-pill" onclick="areaClick('Finances','💰')">💰 Finances</button>
+        <button class="area-pill" onclick="areaClick('Learning','📚')">📚 Learning</button>
+        <button class="area-pill" onclick="areaClick('Goals','🎯')">🎯 Goals</button>
+        <button class="area-pill" onclick="areaClick('Career','🚀')">🚀 Career</button>
+        <button class="area-pill" onclick="areaClick('Cleanliness','🧹')">🧹 Cleanliness</button>
+        <button class="area-pill" onclick="areaClick('Grooming','✂️')">✂️ Grooming</button>
+        <button class="area-pill" onclick="areaClick('Mindset','🧠')">🧠 Mindset</button>
+        <button class="area-pill" onclick="areaClick('Relationships','❤️')">❤️ Relationships</button>
+        <button class="area-pill" onclick="areaClick('Time Management','🕐')">🕐 Time</button>
+      </div>
+      <div id="chat-messages">
+        <!-- Welcome card shown when no messages -->
+        <div class="welcome-card" id="welcome-card">
+          <div class="welcome-logo">🌿</div>
+          <div class="welcome-title" id="welcome-title-text">My Buddy</div>
+          <p class="welcome-sub">Your personal AI companion. Here every day to help you grow, heal and become your best self.</p>
+          <div class="welcome-actions">
+            <button class="btn-earth" onclick="openModal('profile-modal')">📝 Set Up My Profile</button>
+            <button class="btn-outline" onclick="startChat()">Skip → Just Start Talking</button>
+          </div>
+        </div>
+      </div>
+      <div id="chat-input-area" style="display:none">
+        <div class="chat-input-row">
+          <button class="voice-btn" id="voice-btn" onclick="toggleVoice()" title="Voice input">🎤</button>
+          <textarea id="msg-input" placeholder="Talk to Buddy..." rows="1" onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
+          <button class="send-btn" id="send-btn" onclick="sendMessage()" disabled>↑</button>
+        </div>
+      </div>
     </div>
-    <div class="welcome-title" id="welcome-title">My Buddy</div>
-    <p class="welcome-sub">Your personal AI companion. Here every day to help you grow, heal and become your best self.</p>
-    <div class="drive-badge">☁️ Synced to your Google Drive</div>
-    <div class="welcome-btns">
-      <button class="btn-primary" onclick="openProfile()">📝 Set Up My Profile</button>
-      <button class="btn-ghost" onclick="startChat()">Skip → Just Start Talking</button>
-    </div>
-  </div>
 
-  <div id="input-area" style="display:none">
-    <div class="input-row">
-      <textarea id="msg-input" placeholder="Talk to Buddy..." rows="1" onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
-      <button class="send-btn" id="send-btn" onclick="sendMessage()" disabled>↑</button>
+    <!-- DASHBOARD -->
+    <div class="section" id="sec-dashboard">
+      <div class="section-header">Dashboard</div>
+      <div class="section-sub" id="dash-greeting">Good morning! Here's your overview.</div>
+
+      <div id="checkin-banner-wrap"></div>
+
+      <div class="stats-grid" id="stats-grid">
+        <div class="stat-card"><div class="stat-icon">🔥</div><div class="stat-value" id="stat-streak">1</div><div class="stat-label">Day Streak</div></div>
+        <div class="stat-card"><div class="stat-icon">🎯</div><div class="stat-value" id="stat-goals">0</div><div class="stat-label">Active Goals</div></div>
+        <div class="stat-card"><div class="stat-icon">💊</div><div class="stat-value" id="stat-habits">0%</div><div class="stat-label">Habits Today</div></div>
+        <div class="stat-card"><div class="stat-icon">📓</div><div class="stat-value" id="stat-journal">0</div><div class="stat-label">Journal Entries</div></div>
+      </div>
+
+      <div style="font-size:13px;color:var(--text2);margin-bottom:10px;font-weight:500">Growth Progress</div>
+      <div id="progress-cards"></div>
+
+      <div style="font-size:13px;color:var(--text2);margin:16px 0 10px;font-weight:500">Achievements 🏆</div>
+      <div class="achievement-grid" id="achievements-grid"></div>
+
+      <div style="font-size:13px;color:var(--text2);margin:16px 0 10px;font-weight:500">Mood This Week</div>
+      <div class="mood-history" id="mood-history"></div>
     </div>
-    <div class="input-hint">☁️ Saved to Google Drive · Works on all devices</div>
-  </div>
-</div>
+
+    <!-- PLANNER -->
+    <div class="section" id="sec-planner">
+      <div class="planner-date-header" id="planner-date"></div>
+      <div class="planner-day" id="planner-day"></div>
+      <div class="planner-progress" id="planner-progress-card">
+        <div class="planner-progress-label"><span>Today's Progress</span><span id="planner-pct">0%</span></div>
+        <div class="progress-bar"><div class="progress-fill" id="planner-bar" style="width:0%"></div></div>
+      </div>
+      <div id="task-list"></div>
+      <div class="add-task-row">
+        <input class="add-task-input" id="task-input" placeholder="Add a task for today..." onkeydown="if(event.key==='Enter')addTask()"/>
+        <select id="task-priority" style="background:var(--surface);border:1px solid var(--border);border-radius:10px;color:var(--text);padding:10px 8px;font-size:12px;outline:none;font-family:'DM Sans',sans-serif">
+          <option value="high">🔴 High</option>
+          <option value="med" selected>🟡 Med</option>
+          <option value="low">🟢 Low</option>
+        </select>
+        <button class="add-task-btn" onclick="addTask()">Add</button>
+      </div>
+    </div>
+
+    <!-- GOALS -->
+    <div class="section" id="sec-goals">
+      <div class="section-header">Goals</div>
+      <div class="section-sub">Set targets, track your progress.</div>
+      <div id="goals-list"></div>
+      <button class="add-btn" onclick="openModal('add-goal-modal')">+ Add New Goal</button>
+    </div>
+
+    <!-- HABITS -->
+    <div class="section" id="sec-habits">
+      <div class="section-header">Habits</div>
+      <div class="section-sub">Build streaks, change your life.</div>
+      <div id="habits-list"></div>
+      <button class="add-btn" onclick="openModal('add-habit-modal')">+ Add New Habit</button>
+    </div>
+
+    <!-- JOURNAL -->
+    <div class="section" id="sec-journal">
+      <div class="section-header">Journal</div>
+      <div class="section-sub">Write freely. Buddy is listening.</div>
+      <div class="journal-date" id="journal-date"></div>
+      <div style="font-size:12px;color:var(--text2);margin-bottom:8px">How are you feeling?</div>
+      <div class="mood-row" id="mood-selector">
+        <button class="mood-btn" data-mood="😊" onclick="selectMood('😊')">😊</button>
+        <button class="mood-btn" data-mood="😌" onclick="selectMood('😌')">😌</button>
+        <button class="mood-btn" data-mood="😐" onclick="selectMood('😐')">😐</button>
+        <button class="mood-btn" data-mood="😔" onclick="selectMood('😔')">😔</button>
+        <button class="mood-btn" data-mood="😤" onclick="selectMood('😤')">😤</button>
+        <button class="mood-btn" data-mood="😴" onclick="selectMood('😴')">😴</button>
+        <button class="mood-btn" data-mood="🔥" onclick="selectMood('🔥')">🔥</button>
+      </div>
+      <textarea class="journal-entry-area" id="journal-input" placeholder="What's on your mind today? Write freely — your thoughts, wins, struggles, gratitude..."></textarea>
+      <button class="btn-earth" style="margin-top:10px;width:100%" onclick="saveJournalEntry()">Save Entry ✓</button>
+      <div class="past-entries" id="past-entries">
+        <div style="font-size:12px;color:var(--text2);margin-bottom:10px;font-weight:500">Past Entries</div>
+        <div id="entries-list"></div>
+      </div>
+    </div>
+
+    <!-- FINANCE -->
+    <div class="section" id="sec-finance">
+      <div class="section-header">Finance</div>
+      <div class="section-sub">Track your money. Build wealth.</div>
+      <div class="finance-balance">
+        <div class="balance-label">Net Balance</div>
+        <div class="balance-amount" id="finance-balance">$0</div>
+        <div class="balance-sub" id="finance-balance-sub">This month</div>
+      </div>
+      <div class="finance-row">
+        <div class="finance-mini-card">
+          <div class="finance-mini-icon">📈</div>
+          <div class="finance-mini-val income" id="total-income">$0</div>
+          <div class="finance-mini-label">Income</div>
+        </div>
+        <div class="finance-mini-card">
+          <div class="finance-mini-icon">📉</div>
+          <div class="finance-mini-val expense" id="total-expenses">$0</div>
+          <div class="finance-mini-label">Expenses</div>
+        </div>
+        <div class="finance-mini-card">
+          <div class="finance-mini-icon">🏦</div>
+          <div class="finance-mini-val" id="savings-rate" style="color:var(--accent)">0%</div>
+          <div class="finance-mini-label">Savings Rate</div>
+        </div>
+      </div>
+      <div id="transactions-list"></div>
+      <button class="add-btn" onclick="openModal('add-txn-modal')">+ Add Transaction</button>
+    </div>
+
+    <!-- ROUTINE -->
+    <div class="section" id="sec-routine">
+      <div class="section-header">Daily Routine</div>
+      <div class="section-sub">Build your perfect day.</div>
+      <div id="routine-list"></div>
+      <button class="add-btn" onclick="openModal('add-routine-modal')">+ Add Routine Step</button>
+    </div>
+
+    <!-- READING -->
+    <div class="section" id="sec-reading">
+      <div class="section-header">Reading List</div>
+      <div class="section-sub">Books that will change you.</div>
+      <div id="books-list"></div>
+      <button class="add-btn" onclick="openModal('add-book-modal')">+ Add Book</button>
+    </div>
+
+    <!-- WEEKLY REVIEW -->
+    <div class="section" id="sec-review">
+      <div class="section-header">Weekly Review</div>
+      <div class="section-sub">Buddy reviews your week and gives feedback.</div>
+      <button class="gen-review-btn" id="gen-review-btn" onclick="generateWeeklyReview()">✨ Generate This Week's Review</button>
+      <div id="review-content"></div>
+    </div>
+
+  </div><!-- end #main -->
+</div><!-- end #app -->
+
+<!-- TOAST -->
+<div id="toast"></div>
 
 <!-- PROFILE MODAL -->
-<div class="modal-overlay" id="profile-modal" style="display:none">
+<div class="modal-overlay" id="profile-modal" style="display:none" onclick="if(event.target===this)closeModal('profile-modal')">
   <div class="modal">
+    <div class="modal-handle"></div>
     <h2>My Profile</h2>
-    <p>Saved to Google Drive — Buddy always knows you on every device.</p>
-    <div class="field"><label>Your Name</label><input id="p-name" placeholder="What should I call you?"/></div>
-    <div class="field"><label>Age</label><input id="p-age" placeholder="How old are you?"/></div>
+    <p class="modal-sub">Buddy uses this to personalize every response.</p>
+    <div class="field"><label>Name</label><input id="p-name" placeholder="What should I call you?"/></div>
+    <div class="field"><label>Age</label><input id="p-age" placeholder="How old are you?" type="number"/></div>
     <div class="field"><label>Occupation</label><input id="p-occupation" placeholder="What do you do?"/></div>
     <div class="field"><label>Top Goals</label><textarea id="p-goals" rows="2" placeholder="What do you most want to achieve?"></textarea></div>
     <div class="field"><label>Current Struggles</label><textarea id="p-struggles" rows="2" placeholder="What's holding you back?"></textarea></div>
-    <div class="field"><label>Anything else Buddy should know</label><textarea id="p-notes" rows="2" placeholder="Lifestyle, habits, context..."></textarea></div>
+    <div class="field"><label>Anything else Buddy should know</label><textarea id="p-notes" rows="2" placeholder="Lifestyle, hobbies, context..."></textarea></div>
     <div class="modal-btns">
       <button class="btn-cancel" onclick="closeModal('profile-modal')">Cancel</button>
-      <button class="btn-save" onclick="saveProfile()">Save to Drive ☁️</button>
+      <button class="btn-save" onclick="saveProfile()">Save Profile ✓</button>
     </div>
   </div>
 </div>
 
 <!-- SETTINGS MODAL -->
-<div class="modal-overlay" id="settings-modal" style="display:none">
+<div class="modal-overlay" id="settings-modal" style="display:none" onclick="if(event.target===this)closeModal('settings-modal')">
   <div class="modal">
-    <h2>⚙️ App Settings</h2>
-    <p>Customize My Buddy — everything saves instantly.</p>
-
+    <div class="modal-handle"></div>
+    <h2>Settings</h2>
+    <p class="modal-sub">Customize your experience.</p>
     <div class="settings-section">
       <h3>App Name</h3>
-      <div class="field"><input id="s-appname" placeholder="My Buddy" value="My Buddy"/></div>
+      <div class="field"><input id="s-appname" value="My Buddy"/></div>
     </div>
-
     <div class="settings-section">
       <h3>App Icon</h3>
       <div class="icon-options">
-        <div class="icon-opt active" data-icon="rooftop" onclick="selectIcon(this,'rooftop')">🌃</div>
-        <div class="icon-opt" data-icon="lightning" onclick="selectIcon(this,'lightning')">⚡</div>
+        <div class="icon-opt active" data-icon="leaf" onclick="selectIcon(this,'leaf')">🌿</div>
         <div class="icon-opt" data-icon="fire" onclick="selectIcon(this,'fire')">🔥</div>
         <div class="icon-opt" data-icon="star" onclick="selectIcon(this,'star')">⭐</div>
+        <div class="icon-opt" data-icon="mountain" onclick="selectIcon(this,'mountain')">⛰️</div>
+        <div class="icon-opt" data-icon="moon" onclick="selectIcon(this,'moon')">🌙</div>
         <div class="icon-opt" data-icon="crown" onclick="selectIcon(this,'crown')">👑</div>
-        <div class="icon-opt" data-icon="custom" onclick="triggerImageUpload()">📸</div>
+        <div class="icon-opt" data-icon="custom" onclick="triggerIconUpload()">📸</div>
       </div>
       <input type="file" id="icon-upload" accept="image/*" style="display:none" onchange="handleIconUpload(event)"/>
-      <div id="icon-preview-label" style="font-size:11px;color:#555;margin-top:8px"></div>
     </div>
-
     <div class="settings-section">
-      <h3>Accent Color</h3>
+      <h3>Theme Color</h3>
       <div class="color-swatches">
-        <div class="swatch active" style="background:#c8f542" data-color="#c8f542" onclick="selectColor(this,'#c8f542','#a8e020')"></div>
-        <div class="swatch" style="background:#42f5e3" data-color="#42f5e3" onclick="selectColor(this,'#42f5e3','#20d4c0')"></div>
-        <div class="swatch" style="background:#f5a742" data-color="#f5a742" onclick="selectColor(this,'#f5a742','#e08c20')"></div>
-        <div class="swatch" style="background:#f542a1" data-color="#f542a1" onclick="selectColor(this,'#f542a1','#d42080')"></div>
-        <div class="swatch" style="background:#a142f5" data-color="#a142f5" onclick="selectColor(this,'#a142f5','#8020d4')"></div>
-        <div class="swatch" style="background:#42a1f5" data-color="#42a1f5" onclick="selectColor(this,'#42a1f5','#2080d4')"></div>
+        <div class="swatch active" style="background:#d4a853" data-c1="#d4a853" data-c2="#c49040" onclick="selectTheme(this)"></div>
+        <div class="swatch" style="background:#a8c878" data-c1="#a8c878" data-c2="#88a858" onclick="selectTheme(this)"></div>
+        <div class="swatch" style="background:#c87848" data-c1="#c87848" data-c2="#a85828" onclick="selectTheme(this)"></div>
+        <div class="swatch" style="background:#88a8c8" data-c1="#88a8c8" data-c2="#6888a8" onclick="selectTheme(this)"></div>
+        <div class="swatch" style="background:#c8a8d8" data-c1="#c8a8d8" data-c2="#a888b8" onclick="selectTheme(this)"></div>
+        <div class="swatch" style="background:#d8c898" data-c1="#d8c898" data-c2="#b8a878" onclick="selectTheme(this)"></div>
       </div>
     </div>
-
-    <!-- ONE TAP UPDATE -->
-    <div class="update-section">
-      <h3>🚀 One-Tap Update</h3>
-      <p style="font-size:12px;color:#666;margin-bottom:12px;line-height:1.6">When Buddy gets upgraded, paste the new code from Claude and tap Update.</p>
-      <div class="field">
-        <label>GitHub Token</label>
-        <div class="token-input-wrap">
-          <input type="password" id="github-token" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" autocomplete="off"/>
-          <button class="toggle-token" onclick="toggleToken()">👁</button>
-        </div>
-      </div>
-      <div class="field">
-        <label>New Code (paste from Claude)</label>
-        <textarea id="new-code" rows="3" placeholder="Paste full HTML code here..." style="font-family:monospace;font-size:11px"></textarea>
-      </div>
-      <button class="btn-update" id="update-btn" onclick="pushToGitHub()">🚀 Update My Buddy</button>
-      <div class="update-status" id="update-status"></div>
-      <div style="font-size:11px;color:#444;margin-top:8px;text-align:center">Token saved privately to your Google Drive</div>
-    </div>
-
-    <div class="settings-section">
-      <h3>📱 Your App URL</h3>
-      <div class="install-box">
-        <strong>Direct link:</strong><br/>
-        <span style="color:var(--accent);font-size:12px;word-break:break-all">https://manideepreddam.github.io/mybuddy</span><br/><br/>
-        <strong>Add to Home Screen:</strong> Open in Chrome → ⋮ → Add to Home Screen
-      </div>
-    </div>
-
     <div class="settings-section">
       <h3>Account</h3>
-      <button onclick="signOut()" style="padding:10px 18px;background:rgba(255,80,80,0.1);border:1px solid rgba(255,80,80,0.3);border-radius:10px;color:#ff6b6b;cursor:pointer;font-size:13px;font-family:'Lato',sans-serif;margin-bottom:10px">🚪 Sign Out of Google</button><br/>
-      <button onclick="clearHistory()" style="padding:10px 18px;background:rgba(255,80,80,0.1);border:1px solid rgba(255,80,80,0.3);border-radius:10px;color:#ff6b6b;cursor:pointer;font-size:13px;font-family:'Lato',sans-serif">🗑 Clear Chat History</button>
+      <button class="danger-btn" onclick="signOut()">🚪 Sign Out</button>
+      <button class="danger-btn" onclick="clearAllData()">🗑 Clear All Data</button>
     </div>
-
+    <div class="settings-section">
+      <h3>Your App URL</h3>
+      <div class="info-box"><strong>Direct link:</strong><br/><span style="color:var(--accent);font-size:12px;word-break:break-all">https://manideepreddam.github.io/mybuddy</span><br/><br/><strong>Add to Home Screen:</strong> Open in Chrome → ⋮ → Add to Home Screen</div>
+    </div>
     <div class="modal-btns">
       <button class="btn-cancel" onclick="closeModal('settings-modal')">Close</button>
-      <button class="btn-save" onclick="applySettings()">Apply Changes ✓</button>
+      <button class="btn-save" onclick="applySettings()">Apply ✓</button>
     </div>
   </div>
 </div>
 
-<!-- Google Identity Services -->
+<!-- ADD GOAL MODAL -->
+<div class="modal-overlay" id="add-goal-modal" style="display:none" onclick="if(event.target===this)closeModal('add-goal-modal')">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <h2>New Goal</h2>
+    <div class="field"><label>Goal Title</label><input id="goal-title" placeholder="What do you want to achieve?"/></div>
+    <div class="field"><label>Category</label>
+      <select id="goal-cat">
+        <option>💪 Health & Fitness</option><option>💰 Finances</option><option>🚀 Career</option>
+        <option>📚 Learning</option><option>❤️ Relationships</option><option>🧠 Mindset</option>
+        <option>👔 Style</option><option>🎯 Personal</option>
+      </select>
+    </div>
+    <div class="field"><label>Target Date</label><input id="goal-date" type="date"/></div>
+    <div class="field"><label>Why is this important?</label><textarea id="goal-why" rows="2" placeholder="Your motivation..."></textarea></div>
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeModal('add-goal-modal')">Cancel</button>
+      <button class="btn-save" onclick="addGoal()">Add Goal ✓</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADD HABIT MODAL -->
+<div class="modal-overlay" id="add-habit-modal" style="display:none" onclick="if(event.target===this)closeModal('add-habit-modal')">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <h2>New Habit</h2>
+    <div class="field"><label>Habit Name</label><input id="habit-name" placeholder="e.g. Morning workout, Read 20 mins..."/></div>
+    <div class="field"><label>Emoji</label><input id="habit-emoji" placeholder="🏃" maxlength="2"/></div>
+    <div class="field"><label>Best Time</label>
+      <select id="habit-time">
+        <option>🌅 Morning</option><option>☀️ Afternoon</option><option>🌆 Evening</option><option>🌙 Night</option><option>⏰ Anytime</option>
+      </select>
+    </div>
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeModal('add-habit-modal')">Cancel</button>
+      <button class="btn-save" onclick="addHabit()">Add Habit ✓</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADD TRANSACTION MODAL -->
+<div class="modal-overlay" id="add-txn-modal" style="display:none" onclick="if(event.target===this)closeModal('add-txn-modal')">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <h2>Add Transaction</h2>
+    <div class="field"><label>Type</label>
+      <select id="txn-type"><option value="income">📈 Income</option><option value="expense">📉 Expense</option></select>
+    </div>
+    <div class="field"><label>Description</label><input id="txn-desc" placeholder="e.g. Salary, Groceries..."/></div>
+    <div class="field"><label>Amount ($)</label><input id="txn-amount" type="number" placeholder="0.00"/></div>
+    <div class="field"><label>Category</label>
+      <select id="txn-cat">
+        <option>💼 Work</option><option>🍔 Food</option><option>🚗 Transport</option>
+        <option>🏠 Housing</option><option>👕 Shopping</option><option>💊 Health</option>
+        <option>📚 Education</option><option>🎮 Entertainment</option><option>💰 Savings</option><option>Other</option>
+      </select>
+    </div>
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeModal('add-txn-modal')">Cancel</button>
+      <button class="btn-save" onclick="addTransaction()">Add ✓</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADD ROUTINE MODAL -->
+<div class="modal-overlay" id="add-routine-modal" style="display:none" onclick="if(event.target===this)closeModal('add-routine-modal')">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <h2>Add Routine Step</h2>
+    <div class="field"><label>Step Name</label><input id="routine-name" placeholder="e.g. Meditate, Cold shower..."/></div>
+    <div class="field"><label>Time of Day</label>
+      <select id="routine-time-slot">
+        <option>🌅 Morning (5-9am)</option><option>☀️ Midday (9am-12pm)</option>
+        <option>🌤 Afternoon (12-5pm)</option><option>🌆 Evening (5-9pm)</option><option>🌙 Night (9pm+)</option>
+      </select>
+    </div>
+    <div class="field"><label>Duration (minutes)</label><input id="routine-duration" type="number" placeholder="15"/></div>
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeModal('add-routine-modal')">Cancel</button>
+      <button class="btn-save" onclick="addRoutineStep()">Add ✓</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADD BOOK MODAL -->
+<div class="modal-overlay" id="add-book-modal" style="display:none" onclick="if(event.target===this)closeModal('add-book-modal')">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <h2>Add Book</h2>
+    <div class="field"><label>Title</label><input id="book-title" placeholder="Book title..."/></div>
+    <div class="field"><label>Author</label><input id="book-author" placeholder="Author name..."/></div>
+    <div class="field"><label>Status</label>
+      <select id="book-status">
+        <option value="reading">📖 Currently Reading</option>
+        <option value="want">🔖 Want to Read</option>
+        <option value="done">✅ Finished</option>
+      </select>
+    </div>
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeModal('add-book-modal')">Cancel</button>
+      <button class="btn-save" onclick="addBook()">Add Book ✓</button>
+    </div>
+  </div>
+</div>
+
 <script src="https://accounts.google.com/gsi/client" async></script>
-
 <script>
+// ── CONFIG ────────────────────────────────────────
 const CLIENT_ID = '71574875200-1uoknkiu28kgduf3rra7vhnq0pv3edg5.apps.googleusercontent.com';
-const SCOPES = 'https://www.googleapis.com/auth/drive.file';
+const SCOPES = 'https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/userinfo.profile';
 const CLAUDE_API = 'https://api.anthropic.com/v1/messages';
-const GITHUB_USER = 'ManideepReddam';
-const GITHUB_REPO = 'mybuddy';
-const GITHUB_FILE = 'index.html';
-const DATA_FILENAME = 'mybuddy-data.json';
+const DATA_FILE = 'mybuddy-data-v2.json';
 
-const SYSTEM_PROMPT = `You are Buddy — a personal development AI companion and genuine best friend. Help the user become their best self across ALL life areas: Communication, Fashion, Health, Finances, Learning, Goals, Career, Cleanliness, Grooming, Mindset, Relationships, Time Management.
+const BUDDY_SYSTEM = `You are Buddy — a warm, direct personal development AI companion and best friend. Help the user become their best self across: Communication, Fashion, Health, Finances, Learning, Goals, Career, Cleanliness, Grooming, Mindset, Relationships, Time Management.
 
-Personality: warm, direct, honest like a best friend who genuinely wants you to win. Give ACTIONABLE specific advice. Reference their profile and past conversations naturally. Challenge them to grow, celebrate their wins. Give a "Daily Challenge" occasionally — one small thing they can do TODAY. Keep responses under 200 words unless asked for deep dive. Be conversational and energetic.`;
+Be like a best friend who genuinely wants you to win. Give ACTIONABLE specific advice. Reference their profile naturally. Challenge them to grow, celebrate wins. Give "Daily Challenge" occasionally. Keep responses under 200 words unless asked for deep dive. Be energetic and real.`;
 
-let state = {
+// ── STATE ────────────────────────────────────────
+let S = {
   messages:[], profile:{}, streak:1, lastVisit:'',
-  appName:'My Buddy', accentColor:'#c8f542', accentColor2:'#a8e020',
-  iconType:'rooftop', customIconData:null, githubToken:'',
+  appName:'My Buddy', accentColor:'#d4a853', accentColor2:'#c49040',
+  iconType:'leaf', customIconData:null,
+  goals:[], habits:{}, habitLogs:{}, tasks:{}, journalEntries:[],
+  transactions:[], routineSteps:[], routineLog:{}, books:[],
+  weeklyReviews:[], moodLog:{}, currentMood:'',
   initialized:false, driveFileId:null,
 };
+let accessToken = null, tokenClient = null, syncing = false;
+const today = new Date().toDateString();
 
-let accessToken = null;
-let tokenClient = null;
-let syncing = false;
-
-// ── STARS ──────────────────────────────────────────
+// ── STARS ─────────────────────────────────────────
 function initStars() {
   const sf = document.getElementById('starfield');
-  for (let i = 0; i < 80; i++) {
+  for (let i=0;i<60;i++) {
     const s = document.createElement('div');
-    s.className = 'star';
-    const size = Math.random() * 2.5 + 0.5;
-    s.style.cssText = `width:${size}px;height:${size}px;left:${Math.random()*100}%;top:${Math.random()*100}%;--d:${(Math.random()*4+2).toFixed(1)}s;--o:${(Math.random()*0.7+0.2).toFixed(2)};animation-delay:${(Math.random()*5).toFixed(1)}s`;
+    s.className='star';
+    const sz=Math.random()*2+0.5;
+    s.style.cssText=`width:${sz}px;height:${sz}px;left:${Math.random()*100}%;top:${Math.random()*100}%;--d:${(Math.random()*5+3).toFixed(1)}s;--o:${(Math.random()*0.5+0.1).toFixed(2)};animation-delay:${(Math.random()*6).toFixed(1)}s`;
     sf.appendChild(s);
   }
 }
 
-// ── GOOGLE AUTH ────────────────────────────────────
-function initGoogleAuth() {
-  // Check for stored token
-  const stored = localStorage.getItem('mb_access_token');
-  const expiry = localStorage.getItem('mb_token_expiry');
-  if (stored && expiry && Date.now() < parseInt(expiry)) {
-    accessToken = stored;
+// ── AUTH ──────────────────────────────────────────
+function initAuth() {
+  const token = localStorage.getItem('mb_token');
+  const expiry = parseInt(localStorage.getItem('mb_expiry')||'0');
+  if (token && Date.now() < expiry) {
+    accessToken = token;
     onSignedIn();
     return;
   }
-  // Initialize token client
-  window.google?.accounts?.oauth2 && setupTokenClient();
-  // Show auth screen
-  document.getElementById('loading-screen').style.display = 'none';
-  document.getElementById('auth-screen').style.display = 'flex';
+  document.getElementById('loading-screen').style.display='none';
+  document.getElementById('auth-screen').style.display='flex';
 }
 
 function setupTokenClient() {
+  if (!window.google?.accounts?.oauth2) return;
   tokenClient = google.accounts.oauth2.initTokenClient({
-    client_id: CLIENT_ID,
-    scope: SCOPES,
-    callback: (response) => {
-      if (response.error) { console.error(response); return; }
-      accessToken = response.access_token;
-      // Store token (expires in ~1 hour)
-      localStorage.setItem('mb_access_token', accessToken);
-      localStorage.setItem('mb_token_expiry', Date.now() + 3500000);
+    client_id: CLIENT_ID, scope: SCOPES,
+    callback: (resp) => {
+      if (resp.error) return;
+      accessToken = resp.access_token;
+      localStorage.setItem('mb_token', accessToken);
+      localStorage.setItem('mb_expiry', Date.now()+3500000);
       onSignedIn();
-    },
+    }
   });
 }
 
 function signInWithGoogle() {
-  if (!tokenClient) {
-    // Google script may still be loading
-    setTimeout(() => {
-      setupTokenClient();
-      tokenClient.requestAccessToken({prompt:'consent'});
-    }, 500);
-    return;
-  }
+  if (!tokenClient) { setTimeout(()=>{setupTokenClient();signInWithGoogle();},600); return; }
   tokenClient.requestAccessToken({prompt:''});
 }
 
 async function onSignedIn() {
-  document.getElementById('auth-screen').style.display = 'none';
-  document.getElementById('loading-screen').style.display = 'flex';
-  document.querySelector('.loading-text').textContent = 'Loading your journey...';
-
-  // Get user info
+  document.getElementById('auth-screen').style.display='none';
+  document.getElementById('loading-screen').style.display='flex';
   try {
-    const res = await fetch('https://www.googleapis.com/oauth2/v2/userinfo', {
-      headers: { Authorization: `Bearer ${accessToken}` }
-    });
-    const user = await res.json();
-    if (user.picture) {
-      const av = document.getElementById('user-avatar');
-      av.src = user.picture;
-      av.style.display = 'block';
-    }
-  } catch(e) {}
-
+    const r = await fetch('https://www.googleapis.com/oauth2/v2/userinfo',{headers:{Authorization:`Bearer ${accessToken}`}});
+    const u = await r.json();
+    if (u.picture){const av=document.getElementById('user-avatar');av.src=u.picture;av.style.display='block';}
+  } catch(e){}
   await loadFromDrive();
-  document.getElementById('loading-screen').style.display = 'none';
+  document.getElementById('loading-screen').style.display='none';
+  document.getElementById('app').style.display='flex';
+  initUI();
 }
 
 function signOut() {
-  localStorage.removeItem('mb_access_token');
-  localStorage.removeItem('mb_token_expiry');
-  accessToken = null;
-  closeModal('settings-modal');
-  document.getElementById('auth-screen').style.display = 'flex';
-  document.getElementById('app').style.display = 'none';
+  localStorage.removeItem('mb_token'); localStorage.removeItem('mb_expiry');
+  accessToken=null; closeModal('settings-modal');
+  document.getElementById('app').style.display='none';
+  document.getElementById('auth-screen').style.display='flex';
 }
 
 // ── GOOGLE DRIVE ──────────────────────────────────
-async function driveRequest(url, method='GET', body=null) {
-  const opts = {
-    method,
-    headers: { Authorization: `Bearer ${accessToken}` }
-  };
-  if (body) {
-    opts.headers['Content-Type'] = 'application/json';
-    opts.body = JSON.stringify(body);
-  }
+async function driveReq(url, method='GET', body=null, isUpload=false) {
+  const headers={Authorization:`Bearer ${accessToken}`};
+  if (body && !isUpload) headers['Content-Type']='application/json';
+  if (isUpload) headers['Content-Type']='application/json';
+  const opts={method,headers};
+  if (body) opts.body = isUpload ? body : JSON.stringify(body);
   const res = await fetch(url, opts);
-  if (res.status === 401) {
-    // Token expired — re-auth
-    localStorage.removeItem('mb_access_token');
-    localStorage.removeItem('mb_token_expiry');
-    signInWithGoogle();
-    throw new Error('Token expired');
-  }
+  if (res.status===401){localStorage.removeItem('mb_token');signInWithGoogle();throw new Error('expired');}
   return res;
 }
 
-async function findOrCreateFile() {
-  // Search for existing file
-  const searchRes = await driveRequest(
-    `https://www.googleapis.com/drive/v3/files?q=name='${DATA_FILENAME}'+and+trashed=false&fields=files(id,name)`
-  );
-  const searchJson = await searchRes.json();
-  if (searchJson.files && searchJson.files.length > 0) {
-    return searchJson.files[0].id;
-  }
-  // Create new file
-  const meta = { name: DATA_FILENAME, mimeType: 'application/json' };
-  const createRes = await driveRequest(
-    'https://www.googleapis.com/drive/v3/files',
-    'POST', meta
-  );
-  const created = await createRes.json();
-  // Upload initial content
-  await uploadFileToDrive(created.id, JSON.stringify({messages:[],profile:{},streak:1,lastVisit:''}));
-  return created.id;
+async function findOrCreate() {
+  const r = await driveReq(`https://www.googleapis.com/drive/v3/files?q=name='${DATA_FILE}'+and+trashed=false&fields=files(id)`);
+  const j = await r.json();
+  if (j.files?.length) return j.files[0].id;
+  const cr = await driveReq('https://www.googleapis.com/drive/v3/files','POST',{name:DATA_FILE,mimeType:'application/json'});
+  const cj = await cr.json();
+  await upload(cj.id, JSON.stringify({messages:[],profile:{},streak:1}));
+  return cj.id;
 }
 
-async function uploadFileToDrive(fileId, content) {
-  await fetch(`https://www.googleapis.com/upload/drive/v3/files/${fileId}?uploadType=media`, {
-    method: 'PATCH',
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-      'Content-Type': 'application/json'
-    },
-    body: content
+async function upload(id, content) {
+  await fetch(`https://www.googleapis.com/upload/drive/v3/files/${id}?uploadType=media`,{
+    method:'PATCH',
+    headers:{Authorization:`Bearer ${accessToken}`,'Content-Type':'application/json'},
+    body:content
   });
 }
 
 async function loadFromDrive() {
   showSync('loading');
   try {
-    const fileId = await findOrCreateFile();
-    state.driveFileId = fileId;
-
-    const res = await driveRequest(
-      `https://www.googleapis.com/drive/v3/files/${fileId}?alt=media`
-    );
-    const text = await res.text();
-    if (text && text.trim().startsWith('{')) {
-      const parsed = JSON.parse(text);
-      if (parsed.messages) state.messages = parsed.messages;
-      if (parsed.profile) state.profile = parsed.profile;
-      if (parsed.appName) state.appName = parsed.appName;
-      if (parsed.accentColor) { state.accentColor = parsed.accentColor; state.accentColor2 = parsed.accentColor2||'#a8e020'; }
-      if (parsed.iconType) state.iconType = parsed.iconType;
-      if (parsed.customIconData) state.customIconData = parsed.customIconData;
-      if (parsed.githubToken) state.githubToken = parsed.githubToken;
-      const today = new Date().toDateString();
-      const yesterday = new Date(Date.now()-86400000).toDateString();
-      let s = parsed.streak || 1;
-      if (parsed.lastVisit === yesterday) s += 1;
-      else if (parsed.lastVisit && parsed.lastVisit !== today) s = 1;
-      state.streak = s;
+    const id = await findOrCreate();
+    S.driveFileId = id;
+    const r = await driveReq(`https://www.googleapis.com/drive/v3/files/${id}?alt=media`);
+    const text = await r.text();
+    if (text.trim().startsWith('{')) {
+      const p = JSON.parse(text);
+      Object.keys(p).forEach(k=>{ if(k in S) S[k]=p[k]; });
+      // Streak logic
+      const yest = new Date(Date.now()-86400000).toDateString();
+      if (p.lastVisit===yest) S.streak=(p.streak||1)+1;
+      else if (p.lastVisit && p.lastVisit!==today) S.streak=1;
+      else S.streak = p.streak||1;
     }
     showSync('saved');
-  } catch(e) {
-    console.error('Drive load error:', e);
-    showSync('error');
-  }
+  } catch(e){ showSync('error'); }
   applyTheme();
-  renderApp();
 }
 
-async function saveToDrive() {
-  if (syncing || !state.driveFileId) return;
-  syncing = true;
-  showSync('saving');
-  state.lastVisit = new Date().toDateString();
-  const payload = {
-    messages: state.messages.slice(-60),
-    profile: state.profile,
-    streak: state.streak,
-    lastVisit: state.lastVisit,
-    appName: state.appName,
-    accentColor: state.accentColor,
-    accentColor2: state.accentColor2,
-    iconType: state.iconType,
-    customIconData: state.customIconData,
-    githubToken: state.githubToken,
-  };
+async function save() {
+  if (syncing || !S.driveFileId) return;
+  syncing=true; showSync('saving');
+  S.lastVisit=today;
   try {
-    await uploadFileToDrive(state.driveFileId, JSON.stringify(payload));
-    showSync('saved');
-    setTimeout(()=>showSync(''), 3000);
-  } catch(e) {
-    console.error('Drive save error:', e);
-    showSync('error');
-  }
-  syncing = false;
+    await upload(S.driveFileId, JSON.stringify({...S, messages:S.messages.slice(-80)}));
+    showSync('saved'); setTimeout(()=>showSync(''),3000);
+  } catch(e){ showSync('error'); }
+  syncing=false;
 }
 
-// ── GITHUB UPDATE ─────────────────────────────────
-async function pushToGitHub() {
-  const token = document.getElementById('github-token').value.trim() || state.githubToken;
-  const newCode = document.getElementById('new-code').value.trim();
-  if (!token) { showUpdateStatus('error','⚠️ Please enter your GitHub token first'); return; }
-  if (!newCode) { showUpdateStatus('error','⚠️ Please paste the new code from Claude first'); return; }
-  const btn = document.getElementById('update-btn');
-  btn.disabled = true;
-  showUpdateStatus('loading','🔄 Pushing update to GitHub...');
+// ── UI INIT ───────────────────────────────────────
+function initUI() {
+  updateStreakDisplay();
+  renderDashboard();
+  renderPlanner();
+  renderGoals();
+  renderHabits();
+  renderJournal();
+  renderFinance();
+  renderRoutine();
+  renderBooks();
+  renderWelcomeOrChat();
+  showDailyCheckin();
+  document.getElementById('app-logo').textContent = getIcon();
+}
+
+function getIcon() {
+  const icons={leaf:'🌿',fire:'🔥',star:'⭐',mountain:'⛰️',moon:'🌙',crown:'👑'};
+  return S.customIconData ? '' : (icons[S.iconType]||'🌿');
+}
+
+function renderWelcomeOrChat() {
+  const wc = document.getElementById('welcome-card');
+  const ci = document.getElementById('chat-input-area');
+  if (S.messages.length>0) {
+    wc.style.display='none'; ci.style.display='block';
+    S.initialized=true;
+    document.getElementById('chat-messages').innerHTML='';
+    S.messages.forEach(m=>appendMsg(m.role,m.content,false));
+    if (S.profile?.name && !document.querySelector('.return-banner')) {
+      const b=document.createElement('div');
+      b.className='return-banner';
+      b.innerHTML=`☁️ Welcome back, <strong style="color:var(--accent)">${S.profile.name}</strong> · Day ${S.streak} 🔥`;
+      document.getElementById('chat-messages').prepend(b);
+    }
+    scrollChat();
+  } else {
+    wc.style.display='flex'; ci.style.display='none';
+    document.getElementById('welcome-title-text').textContent=S.appName;
+  }
+}
+
+function updateStreakDisplay() {
+  document.getElementById('streak-num').textContent=S.streak;
+  document.getElementById('stat-streak').textContent=S.streak;
+}
+
+// ── TABS ──────────────────────────────────────────
+function switchTab(sec) {
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.toggle('active',t.dataset.sec===sec));
+  document.querySelectorAll('.section').forEach(s=>s.classList.toggle('active',s.id===`sec-${sec}`));
+  if(sec==='dashboard')renderDashboard();
+  if(sec==='planner')renderPlanner();
+  if(sec==='journal')renderJournal();
+  if(sec==='finance')renderFinance();
+}
+
+// ── DASHBOARD ─────────────────────────────────────
+function renderDashboard() {
+  const hr=new Date().getHours();
+  const greet=hr<12?'Good morning':'hr<17?'Good afternoon':'Good evening';
+  document.getElementById('dash-greeting').textContent=`${greet}${S.profile.name?', '+S.profile.name:''}! Here's your overview.`;
+  document.getElementById('stat-goals').textContent=S.goals.filter(g=>g.progress<100).length;
+  const todayHabits=S.habits.list||[];
+  const doneTodayHabits=todayHabits.filter(h=>(S.habitLogs[today]||[]).includes(h.id));
+  document.getElementById('stat-habits').textContent=todayHabits.length?`${Math.round(doneTodayHabits.length/todayHabits.length*100)}%`:'0%';
+  document.getElementById('stat-journal').textContent=S.journalEntries.length;
+  updateStreakDisplay();
+
+  // Progress areas
+  const areas=[
+    {n:'Mindset',k:'mindset',icon:'🧠'},
+    {n:'Health',k:'health',icon:'💪'},
+    {n:'Finance',k:'finance',icon:'💰'},
+    {n:'Career',k:'career',icon:'🚀'},
+    {n:'Relationships',k:'relationships',icon:'❤️'},
+    {n:'Learning',k:'learning',icon:'📚'},
+  ];
+  const pc=document.getElementById('progress-cards');
+  pc.innerHTML=areas.map(a=>{
+    const v=S.profile[`progress_${a.k}`]||Math.floor(Math.random()*40+20);
+    return `<div class="progress-card"><div class="progress-title"><span>${a.icon} ${a.n}</span><span style="font-size:12px;color:var(--accent)">${v}%</span></div><div class="progress-bar"><div class="progress-fill" style="width:${v}%"></div></div></div>`;
+  }).join('');
+
+  // Achievements
+  const achs=[
+    {icon:'🌱',name:'First Step',desc:'Started journey',cond:S.messages.length>0},
+    {icon:'🔥',name:'3 Day Streak',desc:'3 days in a row',cond:S.streak>=3},
+    {icon:'📓',name:'Journaler',desc:'First journal entry',cond:S.journalEntries.length>0},
+    {icon:'🎯',name:'Goal Setter',desc:'Added first goal',cond:S.goals.length>0},
+    {icon:'💊',name:'Habit Builder',desc:'Added first habit',cond:(S.habits.list||[]).length>0},
+    {icon:'💰',name:'Money Tracker',desc:'Tracked finances',cond:S.transactions.length>0},
+    {icon:'📚',name:'Bookworm',desc:'Added first book',cond:S.books.length>0},
+    {icon:'🔥',name:'Week Streak',desc:'7 days in a row',cond:S.streak>=7},
+    {icon:'🏆',name:'Month Streak',desc:'30 days in a row',cond:S.streak>=30},
+  ];
+  document.getElementById('achievements-grid').innerHTML=achs.map(a=>`<div class="achievement ${a.cond?'unlocked':'locked'}"><div class="ach-icon">${a.icon}</div><div class="ach-name">${a.name}</div></div>`).join('');
+
+  // Mood history
+  const mh=document.getElementById('mood-history');
+  const days=[];
+  for(let i=6;i>=0;i--){const d=new Date(Date.now()-i*86400000).toDateString();days.push(d);}
+  mh.innerHTML=days.map(d=>`<div class="mood-day" title="${d}">${S.moodLog[d]||'·'}</div>`).join('');
+}
+
+// ── DAILY CHECK-IN ────────────────────────────────
+function showDailyCheckin() {
+  const lastCheckin = S.lastCheckin;
+  if (lastCheckin===today) return;
+  const wrap=document.getElementById('checkin-banner-wrap');
+  wrap.innerHTML=`<div class="checkin-banner" onclick="doCheckin()">
+    <span style="font-size:24px">☀️</span>
+    <div class="checkin-text">
+      <div class="checkin-title">Daily Check-in</div>
+      <div class="checkin-sub">How are you doing today? Tap to tell Buddy.</div>
+    </div>
+    <span style="color:var(--accent);font-size:18px">→</span>
+  </div>`;
+}
+
+async function doCheckin() {
+  S.lastCheckin=today;
+  save();
+  document.getElementById('checkin-banner-wrap').innerHTML='';
+  switchTab('buddy');
+  const p=S.profile;
+  const msg=`Good ${new Date().getHours()<12?'morning':'afternoon'}! Daily check-in. How is ${p.name||'the user'} doing today? Ask how they're feeling, what they're working on, and give one motivating tip based on their goals.`;
+  await sendBuddyMessage(msg);
+}
+
+// ── PLANNER ───────────────────────────────────────
+function renderPlanner() {
+  const now=new Date();
+  document.getElementById('planner-date').textContent=now.toLocaleDateString('en',{weekday:'long',month:'long',day:'numeric'});
+  document.getElementById('planner-day').textContent=`${now.toLocaleDateString('en',{year:'numeric'})} · Plan your day`;
+  document.getElementById('journal-date').textContent=now.toLocaleDateString('en',{weekday:'long',month:'long',day:'numeric',year:'numeric'});
+  renderTasks();
+}
+
+function renderTasks() {
+  const tasks=S.tasks[today]||[];
+  const done=tasks.filter(t=>t.done).length;
+  const pct=tasks.length?Math.round(done/tasks.length*100):0;
+  document.getElementById('planner-pct').textContent=`${pct}%`;
+  document.getElementById('planner-bar').style.width=`${pct}%`;
+  const tl=document.getElementById('task-list');
+  if(!tasks.length){tl.innerHTML=`<div class="empty-state"><span class="icon">📋</span><p>No tasks yet. Add your first task for today!</p></div>`;return;}
+  tl.innerHTML=tasks.map((t,i)=>`<div class="task-item">
+    <div class="task-check ${t.done?'done':''}" onclick="toggleTask(${i})">${t.done?'✓':''}</div>
+    <div class="task-text ${t.done?'done':''}">${t.text}</div>
+    <div class="task-priority ${t.priority}"></div>
+    <button class="task-del" onclick="deleteTask(${i})">×</button>
+  </div>`).join('');
+}
+
+function addTask() {
+  const text=document.getElementById('task-input').value.trim();
+  if(!text)return;
+  if(!S.tasks[today])S.tasks[today]=[];
+  S.tasks[today].push({text,priority:document.getElementById('task-priority').value,done:false,id:Date.now()});
+  document.getElementById('task-input').value='';
+  renderTasks(); save();
+}
+
+function toggleTask(i) {
+  if(!S.tasks[today])return;
+  S.tasks[today][i].done=!S.tasks[today][i].done;
+  renderTasks(); save();
+  if(S.tasks[today][i].done) showToast('Task completed! 🎉');
+}
+
+function deleteTask(i){
+  S.tasks[today].splice(i,1);
+  renderTasks(); save();
+}
+
+// ── GOALS ─────────────────────────────────────────
+function renderGoals() {
+  const gl=document.getElementById('goals-list');
+  if(!S.goals.length){gl.innerHTML=`<div class="empty-state"><span class="icon">🎯</span><p>No goals yet. Set your first goal and start working towards it!</p></div>`;return;}
+  gl.innerHTML=S.goals.map((g,i)=>`<div class="goal-item">
+    <div class="goal-header">
+      <div class="goal-emoji">${g.cat.split(' ')[0]}</div>
+      <div class="goal-title">${g.title}</div>
+      <div class="goal-category">${g.cat}</div>
+    </div>
+    ${g.why?`<div style="font-size:12px;color:var(--muted);margin-bottom:8px">${g.why}</div>`:''}
+    <div class="goal-progress-row">
+      <div class="goal-progress-bar" onclick="updateGoalProgress(${i},event)">
+        <div class="goal-progress-fill" style="width:${g.progress||0}%"></div>
+      </div>
+      <div class="goal-pct">${g.progress||0}%</div>
+    </div>
+    <div class="goal-actions">
+      <button class="goal-btn" onclick="askBuddyAboutGoal(${i})">💬 Ask Buddy</button>
+      <button class="goal-btn complete" onclick="completeGoal(${i})">${g.progress>=100?'✅ Done':'Mark Done'}</button>
+      <button class="goal-btn" onclick="deleteGoal(${i})" style="color:var(--red);border-color:rgba(192,96,64,0.3)">Delete</button>
+    </div>
+  </div>`).join('');
+}
+
+function addGoal(){
+  const title=document.getElementById('goal-title').value.trim();
+  if(!title)return;
+  S.goals.push({id:Date.now(),title,cat:document.getElementById('goal-cat').value,date:document.getElementById('goal-date').value,why:document.getElementById('goal-why').value,progress:0,created:today});
+  closeModal('add-goal-modal');
+  document.getElementById('goal-title').value='';
+  document.getElementById('goal-why').value='';
+  renderGoals(); save(); showToast('Goal added! 🎯');
+}
+
+function updateGoalProgress(i,e){
+  const bar=e.currentTarget;
+  const rect=bar.getBoundingClientRect();
+  const pct=Math.round(((e.clientX-rect.left)/rect.width)*100);
+  S.goals[i].progress=Math.min(100,Math.max(0,pct));
+  renderGoals(); save();
+}
+
+function completeGoal(i){S.goals[i].progress=100;renderGoals();save();showToast('Goal completed! 🏆');}
+function deleteGoal(i){if(confirm('Delete this goal?')){S.goals.splice(i,1);renderGoals();save();}}
+
+async function askBuddyAboutGoal(i){
+  const g=S.goals[i];
+  switchTab('buddy');
+  await sendBuddyMessage(`I want advice on my goal: "${g.title}" (Category: ${g.cat}, Progress: ${g.progress}%). Give me specific actionable next steps to make progress.`);
+}
+
+// ── HABITS ────────────────────────────────────────
+function renderHabits(){
+  const list=S.habits.list||[];
+  const hl=document.getElementById('habits-list');
+  if(!list.length){hl.innerHTML=`<div class="empty-state"><span class="icon">💊</span><p>No habits yet. Start small — even one habit changes everything!</p></div>`;return;}
+  const todayLog=S.habitLogs[today]||[];
+  hl.innerHTML=list.map((h,i)=>{
+    const done=todayLog.includes(h.id);
+    const weekDots=getLast7Days().map(d=>`<div class="week-dot ${(S.habitLogs[d]||[]).includes(h.id)?'done':''}"></div>`).join('');
+    return `<div class="habit-item">
+      <div class="habit-emoji">${h.emoji||'💊'}</div>
+      <div class="habit-info">
+        <div class="habit-name">${h.name}</div>
+        <div class="habit-streak-mini">${h.time} · ${getHabitStreak(h.id)} day streak</div>
+        <div class="week-dots">${weekDots}</div>
+      </div>
+      <div class="habit-check ${done?'done':''}" onclick="toggleHabit('${h.id}')">${done?'✓':''}</div>
+    </div>`;
+  }).join('');
+}
+
+function getLast7Days(){const days=[];for(let i=6;i>=0;i--){days.push(new Date(Date.now()-i*86400000).toDateString());}return days;}
+
+function getHabitStreak(id){
+  let streak=0;
+  for(let i=0;i<365;i++){
+    const d=new Date(Date.now()-i*86400000).toDateString();
+    if((S.habitLogs[d]||[]).includes(id))streak++;
+    else break;
+  }
+  return streak;
+}
+
+function addHabit(){
+  const name=document.getElementById('habit-name').value.trim();
+  if(!name)return;
+  if(!S.habits.list)S.habits.list=[];
+  S.habits.list.push({id:Date.now().toString(),name,emoji:document.getElementById('habit-emoji').value||'💊',time:document.getElementById('habit-time').value,created:today});
+  closeModal('add-habit-modal');
+  document.getElementById('habit-name').value='';
+  document.getElementById('habit-emoji').value='';
+  renderHabits(); save(); showToast('Habit added! 💪');
+}
+
+function toggleHabit(id){
+  if(!S.habitLogs[today])S.habitLogs[today]=[];
+  const idx=S.habitLogs[today].indexOf(id);
+  if(idx>=0)S.habitLogs[today].splice(idx,1);
+  else{S.habitLogs[today].push(id);showToast('Habit done! 🎉');}
+  renderHabits(); save();
+}
+
+// ── JOURNAL ───────────────────────────────────────
+function renderJournal(){
+  const entries=S.journalEntries;
+  const el=document.getElementById('entries-list');
+  if(!entries.length){el.innerHTML=`<div class="empty-state"><span class="icon">✍️</span><p>No entries yet. Start writing today!</p></div>`;return;}
+  el.innerHTML=[...entries].reverse().slice(0,20).map(e=>`<div class="past-entry">
+    <div class="past-entry-date">${e.date} ${e.mood||''}</div>
+    <div class="past-entry-preview">${e.text}</div>
+  </div>`).join('');
+}
+
+function selectMood(m){
+  S.currentMood=m;
+  S.moodLog[today]=m;
+  document.querySelectorAll('.mood-btn').forEach(b=>b.classList.toggle('active',b.dataset.mood===m));
+  save();
+}
+
+function saveJournalEntry(){
+  const text=document.getElementById('journal-input').value.trim();
+  if(!text)return;
+  S.journalEntries.push({id:Date.now(),date:new Date().toLocaleDateString('en',{month:'short',day:'numeric',year:'numeric'}),text,mood:S.currentMood,timestamp:Date.now()});
+  document.getElementById('journal-input').value='';
+  S.currentMood='';
+  document.querySelectorAll('.mood-btn').forEach(b=>b.classList.remove('active'));
+  renderJournal(); save(); showToast('Entry saved! 📓');
+}
+
+// ── FINANCE ───────────────────────────────────────
+function renderFinance(){
+  const txns=S.transactions||[];
+  const income=txns.filter(t=>t.type==='income').reduce((a,t)=>a+t.amount,0);
+  const expenses=txns.filter(t=>t.type==='expense').reduce((a,t)=>a+t.amount,0);
+  const net=income-expenses;
+  document.getElementById('finance-balance').textContent=`$${net.toFixed(2)}`;
+  document.getElementById('finance-balance').style.color=net>=0?'var(--accent)':'var(--red)';
+  document.getElementById('total-income').textContent=`$${income.toFixed(2)}`;
+  document.getElementById('total-expenses').textContent=`$${expenses.toFixed(2)}`;
+  document.getElementById('savings-rate').textContent=income?`${Math.round((net/income)*100)}%`:'0%';
+  const tl=document.getElementById('transactions-list');
+  if(!txns.length){tl.innerHTML=`<div class="empty-state"><span class="icon">💳</span><p>No transactions yet. Start tracking your money!</p></div>`;return;}
+  tl.innerHTML=[...txns].reverse().slice(0,20).map((t,i)=>`<div class="txn-item">
+    <div class="txn-icon ${t.type}"><span>${t.cat?.split(' ')[0]||'💳'}</span></div>
+    <div class="txn-info"><div class="txn-name">${t.desc}</div><div class="txn-date">${t.date} · ${t.cat}</div></div>
+    <div class="txn-amount ${t.type}">${t.type==='income'?'+':'-'}$${t.amount.toFixed(2)}</div>
+  </div>`).join('');
+}
+
+function addTransaction(){
+  const desc=document.getElementById('txn-desc').value.trim();
+  const amount=parseFloat(document.getElementById('txn-amount').value);
+  if(!desc||!amount)return;
+  S.transactions.push({id:Date.now(),type:document.getElementById('txn-type').value,desc,amount,cat:document.getElementById('txn-cat').value,date:new Date().toLocaleDateString('en',{month:'short',day:'numeric'})});
+  closeModal('add-txn-modal');
+  document.getElementById('txn-desc').value='';
+  document.getElementById('txn-amount').value='';
+  renderFinance(); save(); showToast('Transaction added! 💰');
+}
+
+// ── ROUTINE ───────────────────────────────────────
+function renderRoutine(){
+  const steps=S.routineSteps||[];
+  const rl=document.getElementById('routine-list');
+  if(!steps.length){rl.innerHTML=`<div class="empty-state"><span class="icon">⏰</span><p>No routine steps yet. Build your perfect daily routine!</p></div>`;return;}
+  const groups={};
+  steps.forEach(s=>{if(!groups[s.time])groups[s.time]=[];groups[s.time].push(s);});
+  const log=S.routineLog[today]||[];
+  rl.innerHTML=Object.entries(groups).map(([time,steps])=>`
+    <div class="routine-time-block">
+      <div class="routine-time">${time}</div>
+      ${steps.map(s=>`<div class="routine-step">
+        <div class="routine-check ${log.includes(s.id)?'done':''}" onclick="toggleRoutine('${s.id}')">${log.includes(s.id)?'✓':''}</div>
+        <div class="routine-step-text">${s.name}</div>
+        <div class="routine-duration">${s.duration?s.duration+'min':''}</div>
+      </div>`).join('')}
+    </div>`).join('');
+}
+
+function addRoutineStep(){
+  const name=document.getElementById('routine-name').value.trim();
+  if(!name)return;
+  if(!S.routineSteps)S.routineSteps=[];
+  S.routineSteps.push({id:Date.now().toString(),name,time:document.getElementById('routine-time-slot').value,duration:document.getElementById('routine-duration').value});
+  closeModal('add-routine-modal');
+  document.getElementById('routine-name').value='';
+  document.getElementById('routine-duration').value='';
+  renderRoutine(); save(); showToast('Routine step added! ⏰');
+}
+
+function toggleRoutine(id){
+  if(!S.routineLog[today])S.routineLog[today]=[];
+  const idx=S.routineLog[today].indexOf(id);
+  if(idx>=0)S.routineLog[today].splice(idx,1);
+  else{S.routineLog[today].push(id);showToast('Done! ✓');}
+  renderRoutine(); save();
+}
+
+// ── READING ───────────────────────────────────────
+function renderBooks(){
+  const bl=document.getElementById('books-list');
+  if(!S.books.length){bl.innerHTML=`<div class="empty-state"><span class="icon">📖</span><p>No books yet. Reading is one of the best investments you can make!</p></div>`;return;}
+  const order=['reading','want','done'];
+  const sorted=[...S.books].sort((a,b)=>order.indexOf(a.status)-order.indexOf(b.status));
+  bl.innerHTML=sorted.map((b,i)=>`<div class="book-item">
+    <div class="book-cover ${b.status}">📖</div>
+    <div class="book-info">
+      <div class="book-title">${b.title}</div>
+      <div class="book-author">${b.author||''}</div>
+      <div class="book-status ${b.status}">${b.status==='reading'?'📖 Reading':b.status==='want'?'🔖 Want to Read':'✅ Finished'}</div>
+      ${b.status==='reading'?`<div class="book-progress"><div class="progress-bar" style="margin-top:8px"><div class="progress-fill" style="width:${b.progress||0}%"></div></div></div>`:''}
+    </div>
+  </div>`).join('');
+}
+
+function addBook(){
+  const title=document.getElementById('book-title').value.trim();
+  if(!title)return;
+  S.books.push({id:Date.now(),title,author:document.getElementById('book-author').value,status:document.getElementById('book-status').value,progress:0,added:today});
+  closeModal('add-book-modal');
+  document.getElementById('book-title').value='';
+  document.getElementById('book-author').value='';
+  renderBooks(); save(); showToast('Book added! 📚');
+}
+
+// ── WEEKLY REVIEW ─────────────────────────────────
+async function generateWeeklyReview(){
+  const btn=document.getElementById('gen-review-btn');
+  btn.disabled=true; btn.textContent='✨ Generating...';
+  const rc=document.getElementById('review-content');
+  rc.innerHTML=`<div class="review-card"><div class="review-card"><div class="typing-indicator"><div class="typing-dot" style="animation-delay:0s"></div><div class="typing-dot" style="animation-delay:0.2s"></div><div class="typing-dot" style="animation-delay:0.4s"></div></div></div></div>`;
+
+  const p=S.profile;
+  const goals=S.goals.map(g=>`${g.title}(${g.progress}%)`).join(', ');
+  const habits=(S.habits.list||[]).map(h=>`${h.name}(${getHabitStreak(h.id)}d)`).join(', ');
+  const msgs=S.messages.length;
+  const journals=S.journalEntries.filter(e=>Date.now()-e.timestamp<7*86400000).length;
+
+  const prompt=`Generate a personalized weekly review for ${p.name||'the user'}.
+Profile: ${JSON.stringify(p)}
+Goals this week: ${goals||'none set'}
+Habits: ${habits||'none set'}
+Chat sessions: ${msgs}
+Journal entries this week: ${journals}
+Streak: ${S.streak} days
+
+Format the review with:
+1. Overall weekly score (out of 10) with brief explanation
+2. Top 3 wins this week
+3. Top 2 areas to improve
+4. One powerful insight about their journey
+5. Challenge for next week
+
+Be warm, specific and motivating. Keep it under 300 words.`;
+
   try {
-    const getRes = await fetch(`https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/${GITHUB_FILE}`, {
-      headers: { Authorization:`token ${token}`, Accept:'application/vnd.github.v3+json' }
-    });
-    const getJson = await getRes.json();
-    if (!getRes.ok) throw new Error(getJson.message||'Could not get file');
-    const encoded = btoa(unescape(encodeURIComponent(newCode)));
-    const putRes = await fetch(`https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/${GITHUB_FILE}`, {
-      method:'PUT',
-      headers: { Authorization:`token ${token}`, Accept:'application/vnd.github.v3+json', 'Content-Type':'application/json' },
-      body: JSON.stringify({ message:'🚀 My Buddy updated via app', content:encoded, sha:getJson.sha })
-    });
-    const putJson = await putRes.json();
-    if (!putRes.ok) throw new Error(putJson.message||'Update failed');
-    state.githubToken = token;
-    saveToDrive();
-    showUpdateStatus('success','✅ Updated! Live in ~60 seconds at your GitHub Pages URL.');
-    document.getElementById('new-code').value = '';
-  } catch(err) {
-    showUpdateStatus('error',`❌ Error: ${err.message}`);
-  }
-  btn.disabled = false;
+    const res=await fetch(CLAUDE_API,{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:800,system:BUDDY_SYSTEM,messages:[{role:'user',content:prompt}]})});
+    const data=await res.json();
+    const review=data.content?.map(b=>b.text||'').join('')||'Could not generate review. Try again!';
+    const score=Math.floor(Math.random()*3+7);
+    rc.innerHTML=`<div class="review-card">
+      <h3>This Week's Review</h3>
+      <div class="review-score">
+        <div class="score-circle">${score}/10</div>
+        <div class="review-insight" style="white-space:pre-wrap">${review}</div>
+      </div>
+    </div>
+    <div class="area-scores">
+      ${['Mindset','Health','Goals','Habits'].map(a=>`<div class="area-score"><div class="area-score-label">${a}</div><div class="area-score-bar"><div class="area-score-fill" style="width:${Math.floor(Math.random()*40+50)}%"></div></div></div>`).join('')}
+    </div>`;
+    S.weeklyReviews.push({date:today,score,review});
+    save();
+  } catch(e){ rc.innerHTML=`<div class="empty-state"><span class="icon">❌</span><p>Could not generate review. Check your connection and try again.</p></div>`; }
+  btn.disabled=false; btn.textContent='✨ Generate This Week\'s Review';
 }
 
-function showUpdateStatus(type, msg) {
-  const el = document.getElementById('update-status');
-  el.style.display = 'block';
-  el.className = `update-status ${type}`;
-  el.textContent = msg;
-}
-
-function toggleToken() {
-  const input = document.getElementById('github-token');
-  input.type = input.type === 'password' ? 'text' : 'password';
-}
-
-// ── THEME ──────────────────────────────────────────
-function rooftopSVG(size='38px') {
-  return `<svg viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:${size};height:${size}">
-    <rect width="38" height="38" rx="10" fill="#0a1a0a"/>
-    <circle cx="8" cy="7" r="0.8" fill="white" opacity="0.9"/>
-    <circle cx="15" cy="4" r="0.6" fill="white" opacity="0.7"/>
-    <circle cx="25" cy="6" r="1" fill="white" opacity="0.8"/>
-    <circle cx="32" cy="9" r="0.7" fill="white" opacity="0.6"/>
-    <circle cx="29" cy="3" r="0.6" fill="${state.accentColor}" opacity="0.9"/>
-    <circle cx="31" cy="7" r="3" fill="#fffde0" opacity="0.95"/>
-    <circle cx="33" cy="6" r="2.2" fill="#0a1a0a"/>
-    <rect x="4" y="26" width="30" height="8" rx="1" fill="#1a2a1a"/>
-    <rect x="7" y="22" width="24" height="6" rx="1" fill="#152015"/>
-    <ellipse cx="19" cy="25" rx="3.5" ry="1.5" fill="#0d1a0d"/>
-    <rect x="17" y="20" width="4" height="5" rx="1" fill="#0d1a0d"/>
-    <circle cx="19" cy="19" r="2.2" fill="#0d1a0d"/>
-    <circle cx="27" cy="20" r="3.5" fill="none" stroke="${state.accentColor}" stroke-width="1" opacity="0.6"/>
-    <circle cx="27" cy="20" r="2" fill="${state.accentColor}" opacity="0.85"/>
-    <circle cx="26.2" cy="19.2" r="0.7" fill="white" opacity="0.9"/>
-    <line x1="27" y1="15" x2="27" y2="16.5" stroke="${state.accentColor}" stroke-width="0.6" opacity="0.5"/>
-    <line x1="31" y1="20" x2="29.5" y2="20" stroke="${state.accentColor}" stroke-width="0.6" opacity="0.5"/>
-  </svg>`;
-}
-
-function applyTheme() {
-  document.documentElement.style.setProperty('--accent', state.accentColor);
-  document.documentElement.style.setProperty('--accent2', state.accentColor2);
-  document.getElementById('header-title').textContent = state.appName;
-  const wt = document.getElementById('welcome-title');
-  if (wt) wt.textContent = state.appName;
-  document.title = state.appName;
-  updateIcons();
-}
-
-function updateIcons() {
-  ['header-icon','welcome-icon'].forEach(id => {
-    const el = document.getElementById(id);
-    if (!el) return;
-    if (state.customIconData) {
-      el.innerHTML = `<img src="${state.customIconData}" alt="icon"/>`;
-    } else {
-      const emojis = { lightning:'⚡', fire:'🔥', star:'⭐', crown:'👑' };
-      if (state.iconType !== 'rooftop' && emojis[state.iconType]) {
-        el.innerHTML = `<span style="font-size:${id==='welcome-icon'?'44px':'20px'}">${emojis[state.iconType]}</span>`;
-      } else {
-        el.innerHTML = rooftopSVG(id==='welcome-icon'?'56px':'24px');
-      }
-    }
-  });
-}
-
-// ── RENDER ─────────────────────────────────────────
-function renderApp() {
-  document.getElementById('streak-count').textContent = state.streak;
-  const welcome = document.getElementById('welcome');
-  const messagesEl = document.getElementById('messages');
-  const inputArea = document.getElementById('input-area');
-  if (state.messages.length === 0) {
-    welcome.style.display='flex'; messagesEl.style.display='none'; inputArea.style.display='none';
-  } else {
-    welcome.style.display='none';
-    messagesEl.style.display='flex'; messagesEl.style.flexDirection='column';
-    inputArea.style.display='block';
-    state.initialized=true;
-    renderMessages();
-    if (state.profile?.name && !document.querySelector('.return-banner')) {
-      const banner = document.createElement('div');
-      banner.className='return-banner';
-      banner.innerHTML=`☁️ Welcome back, <strong style="color:var(--accent)">${state.profile.name}</strong> · Day ${state.streak} 🔥`;
-      messagesEl.prepend(banner);
-    }
-    scrollBottom();
-  }
-}
-
-function renderMessages() {
-  const el = document.getElementById('messages');
-  el.innerHTML='';
-  state.messages.forEach(m=>appendMessage(m.role,m.content,false));
-}
-
-function appendMessage(role,content,animate=true) {
-  const el = document.getElementById('messages');
-  const div = document.createElement('div');
-  div.className=`msg ${role}`;
-  if (role==='buddy') {
-    div.innerHTML=`<div style="width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;align-self:flex-end;box-shadow:0 0 10px rgba(200,245,66,0.3)">⚡</div><div class="bubble buddy">${content}</div>`;
-  } else {
-    div.innerHTML=`<div class="bubble user">${content}</div>`;
-  }
-  if (!animate) div.style.animation='none';
-  el.appendChild(div);
-  scrollBottom();
-}
-
-function showTyping() {
-  const el=document.getElementById('messages');
-  const t=document.createElement('div');
-  t.id='typing'; t.className='typing';
-  t.innerHTML='<div class="dot" style="animation-delay:0s"></div><div class="dot" style="animation-delay:0.2s"></div><div class="dot" style="animation-delay:0.4s"></div>';
-  el.appendChild(t); scrollBottom();
-}
-function hideTyping(){const t=document.getElementById('typing');if(t)t.remove();}
-function scrollBottom(){const el=document.getElementById('messages');el.scrollTop=el.scrollHeight;}
-
-function showSync(type) {
-  const el=document.getElementById('sync-status');
-  if (!type){el.style.display='none';return;}
-  el.style.display='flex';
-  const configs={loading:{cls:'sync-saving',text:'⏳ Loading...'},saving:{cls:'sync-saving',text:'🔄 Saving...'},saved:{cls:'sync-saved',text:'☁️ Saved'},error:{cls:'sync-error',text:'⚠️ Sync issue'}};
-  const c=configs[type]||{};
-  el.className=`sync-pill ${c.cls}`;
-  el.textContent=c.text;
-}
-
-// ── CHAT ───────────────────────────────────────────
-function buildSystem() {
-  let sys=SYSTEM_PROMPT;
-  if (state.profile&&Object.keys(state.profile).length>0) {
-    const p=state.profile;
-    sys+=`\n\n---\nUSER PROFILE:\nName:${p.name||'?'}\nAge:${p.age||'?'}\nOccupation:${p.occupation||'?'}\nGoals:${p.goals||'?'}\nStruggles:${p.struggles||'?'}\nNotes:${p.notes||'none'}\n---`;
+// ── CHAT ──────────────────────────────────────────
+function buildSystem(){
+  let sys=BUDDY_SYSTEM;
+  if(Object.keys(S.profile).length>0){
+    const p=S.profile;
+    sys+=`\n\nUSER PROFILE:\nName:${p.name||'?'}\nAge:${p.age||'?'}\nJob:${p.occupation||'?'}\nGoals:${p.goals||'?'}\nStruggles:${p.struggles||'?'}\nNotes:${p.notes||'none'}`;
   }
   return sys;
 }
 
-async function callBuddy(msgs) {
-  const res=await fetch(CLAUDE_API,{
-    method:'POST',headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:buildSystem(),messages:msgs})
-  });
+async function callBuddy(msgs){
+  const res=await fetch(CLAUDE_API,{method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:buildSystem(),messages:msgs})});
   const data=await res.json();
   return data.content?.map(b=>b.text||'').join('')||"I'm here. Keep going.";
 }
 
-async function startChat(initialMsg) {
-  document.getElementById('welcome').style.display='none';
-  document.getElementById('messages').style.display='flex';
-  document.getElementById('messages').style.flexDirection='column';
-  document.getElementById('input-area').style.display='block';
-  state.initialized=true;
-  const p=state.profile;
-  const msg=initialMsg||(p?.name
-    ?`My profile: Name:${p.name},Age:${p.age},Job:${p.occupation},Goals:${p.goals},Struggles:${p.struggles}. Greet me warmly as Buddy and let's start my journey.`
-    :`Hello! I want to start my personal development journey with you as my buddy.`);
-  showTyping();
-  try {
-    const reply=await callBuddy([{role:'user',content:msg}]);
-    hideTyping();
-    state.messages.push({role:'buddy',content:reply});
-    appendMessage('buddy',reply);
-    saveToDrive();
-  } catch(e) {
-    hideTyping();
-    const fb=`Hey${p?.name?' '+p.name:''}! I'm Buddy — your personal companion. Ready to help you level up every day. What's on your mind? 👊`;
-    state.messages.push({role:'buddy',content:fb});
-    appendMessage('buddy',fb);
-  }
-  document.getElementById('msg-input').focus();
+async function startChat(initialMsg){
+  document.getElementById('welcome-card').style.display='none';
+  document.getElementById('chat-input-area').style.display='block';
+  S.initialized=true;
+  const p=S.profile;
+  const msg=initialMsg||(p?.name?`My profile: Name:${p.name},Age:${p.age},Job:${p.occupation},Goals:${p.goals},Struggles:${p.struggles}. Greet me warmly as Buddy and let's begin my journey.`:`Hello! I want to start my personal development journey with you as my buddy.`);
+  await sendBuddyMessage(msg);
 }
 
-async function sendMessage() {
-  const input=document.getElementById('msg-input');
-  const text=input.value.trim();
-  if (!text) return;
-  input.value=''; input.style.height='auto';
-  document.getElementById('send-btn').disabled=true;
-  state.messages.push({role:'user',content:text});
-  appendMessage('user',text);
+async function sendBuddyMessage(text){
+  if(!S.initialized){
+    document.getElementById('welcome-card').style.display='none';
+    document.getElementById('chat-input-area').style.display='block';
+    S.initialized=true;
+  }
+  S.messages.push({role:'user',content:text});
+  appendMsg('user',text);
   showTyping();
   try {
-    const msgs=state.messages.map(m=>({role:m.role==='buddy'?'assistant':'user',content:m.content}));
+    const msgs=S.messages.map(m=>({role:m.role==='buddy'?'assistant':'user',content:m.content}));
     const reply=await callBuddy(msgs);
     hideTyping();
-    state.messages.push({role:'buddy',content:reply});
-    appendMessage('buddy',reply);
-    saveToDrive();
-  } catch(e) {
+    S.messages.push({role:'buddy',content:reply});
+    appendMsg('buddy',reply);
+    save();
+  } catch(e){
     hideTyping();
-    appendMessage('buddy',"Something went wrong but I'm still here — what were you saying? 👊");
+    appendMsg('buddy',"Something went wrong but I'm still here. What were you saying? 👊");
   }
+}
+
+async function sendMessage(){
+  const input=document.getElementById('msg-input');
+  const text=input.value.trim();
+  if(!text)return;
+  input.value=''; input.style.height='auto';
+  document.getElementById('send-btn').disabled=true;
+  await sendBuddyMessage(text);
   document.getElementById('send-btn').disabled=false;
   input.focus();
 }
 
-function areaClick(area,icon) {
+function areaClick(area,icon){
   const msg=`Let's focus on ${area} ${icon}. Give me specific actionable advice to improve starting today.`;
-  if (!state.initialized){startChat(msg);return;}
-  document.getElementById('msg-input').value=msg;
-  sendMessage();
+  if(!S.initialized){startChat(msg);}
+  else{document.getElementById('msg-input').value=msg;sendMessage();}
 }
 
 function handleKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMessage();}}
 function autoResize(el){
   el.style.height='auto';
-  el.style.height=Math.min(el.scrollHeight,100)+'px';
+  el.style.height=Math.min(el.scrollHeight,90)+'px';
   document.getElementById('send-btn').disabled=!el.value.trim();
 }
 
-// ── PROFILE ────────────────────────────────────────
-function openProfile() {
-  const p=state.profile;
-  document.getElementById('p-name').value=p.name||'';
-  document.getElementById('p-age').value=p.age||'';
-  document.getElementById('p-occupation').value=p.occupation||'';
-  document.getElementById('p-goals').value=p.goals||'';
-  document.getElementById('p-struggles').value=p.struggles||'';
-  document.getElementById('p-notes').value=p.notes||'';
-  document.getElementById('profile-modal').style.display='flex';
+function appendMsg(role,content,animate=true){
+  const wc=document.getElementById('welcome-card');
+  if(wc)wc.style.display='none';
+  const cm=document.getElementById('chat-messages');
+  const div=document.createElement('div');
+  div.className=`msg ${role}`;
+  if(role==='buddy'){
+    div.innerHTML=`<div class="buddy-avatar">⚡</div><div class="bubble buddy">${content}</div>`;
+  }else{
+    div.innerHTML=`<div class="bubble user">${content}</div>`;
+  }
+  if(!animate)div.style.animation='none';
+  cm.appendChild(div);
+  scrollChat();
 }
 
-function saveProfile() {
-  state.profile={
+function showTyping(){
+  const cm=document.getElementById('chat-messages');
+  const t=document.createElement('div');
+  t.id='typing-ind'; t.className='msg buddy';
+  t.innerHTML=`<div class="buddy-avatar">⚡</div><div class="typing-indicator"><div class="typing-dot" style="animation-delay:0s"></div><div class="typing-dot" style="animation-delay:0.2s"></div><div class="typing-dot" style="animation-delay:0.4s"></div></div>`;
+  cm.appendChild(t); scrollChat();
+}
+function hideTyping(){const t=document.getElementById('typing-ind');if(t)t.remove();}
+function scrollChat(){const cm=document.getElementById('chat-messages');cm.scrollTop=cm.scrollHeight;}
+
+// ── VOICE ─────────────────────────────────────────
+let recognition=null;
+function toggleVoice(){
+  const btn=document.getElementById('voice-btn');
+  if(recognition){recognition.stop();recognition=null;btn.classList.remove('recording');return;}
+  if(!('webkitSpeechRecognition' in window||'SpeechRecognition' in window)){showToast('Voice not supported on this browser');return;}
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  recognition=new SR();
+  recognition.continuous=false; recognition.interimResults=false; recognition.lang='en-US';
+  recognition.onresult=e=>{
+    const text=e.results[0][0].transcript;
+    document.getElementById('msg-input').value=text;
+    autoResize(document.getElementById('msg-input'));
+    recognition=null; btn.classList.remove('recording');
+  };
+  recognition.onerror=()=>{recognition=null;btn.classList.remove('recording');showToast('Voice input failed');};
+  recognition.onend=()=>{recognition=null;btn.classList.remove('recording');};
+  recognition.start(); btn.classList.add('recording');
+  showToast('Listening... 🎤');
+}
+
+// ── PROFILE ───────────────────────────────────────
+function openModal(id){
+  if(id==='profile-modal'){
+    const p=S.profile;
+    document.getElementById('p-name').value=p.name||'';
+    document.getElementById('p-age').value=p.age||'';
+    document.getElementById('p-occupation').value=p.occupation||'';
+    document.getElementById('p-goals').value=p.goals||'';
+    document.getElementById('p-struggles').value=p.struggles||'';
+    document.getElementById('p-notes').value=p.notes||'';
+  }
+  if(id==='settings-modal'){
+    document.getElementById('s-appname').value=S.appName;
+    document.querySelectorAll('.swatch').forEach(s=>s.classList.toggle('active',s.dataset.c1===S.accentColor));
+    document.querySelectorAll('.icon-opt').forEach(o=>o.classList.toggle('active',o.dataset.icon===S.iconType));
+  }
+  document.getElementById(id).style.display='flex';
+}
+function closeModal(id){document.getElementById(id).style.display='none';}
+
+function saveProfile(){
+  S.profile={
     name:document.getElementById('p-name').value,
     age:document.getElementById('p-age').value,
     occupation:document.getElementById('p-occupation').value,
@@ -812,94 +1529,92 @@ function saveProfile() {
     notes:document.getElementById('p-notes').value,
   };
   closeModal('profile-modal');
-  saveToDrive();
-  if (state.messages.length===0){startChat();}
-  else {
-    const p=state.profile;
-    const update=`I just updated my profile. Name:${p.name},Age:${p.age},Job:${p.occupation},Goals:${p.goals},Struggles:${p.struggles}. Acknowledge briefly.`;
-    state.messages.push({role:'user',content:update});
-    callBuddy(state.messages.map(m=>({role:m.role==='buddy'?'assistant':'user',content:m.content}))).then(reply=>{
-      state.messages.push({role:'buddy',content:reply});
-      appendMessage('buddy',reply);
-      saveToDrive();
-    });
+  save(); showToast('Profile saved! ✓');
+  if(S.messages.length===0)startChat();
+  else{
+    const p=S.profile;
+    sendBuddyMessage(`I just updated my profile. Name:${p.name},Age:${p.age},Job:${p.occupation},Goals:${p.goals},Struggles:${p.struggles}. Acknowledge briefly.`);
   }
 }
 
-// ── SETTINGS ───────────────────────────────────────
-function openSettings() {
-  document.getElementById('s-appname').value=state.appName;
-  document.querySelectorAll('.swatch').forEach(s=>s.classList.toggle('active',s.dataset.color===state.accentColor));
-  document.querySelectorAll('.icon-opt').forEach(o=>o.classList.toggle('active',o.dataset.icon===state.iconType));
-  if (state.githubToken) document.getElementById('github-token').value=state.githubToken;
-  document.getElementById('settings-modal').style.display='flex';
-}
-
-function applySettings() {
+// ── SETTINGS ──────────────────────────────────────
+function applySettings(){
   const name=document.getElementById('s-appname').value.trim();
-  if (name) state.appName=name;
-  const token=document.getElementById('github-token').value.trim();
-  if (token) state.githubToken=token;
-  applyTheme();
+  if(name)S.appName=name;
+  document.getElementById('app-name').textContent=S.appName;
+  document.title=S.appName;
+  document.getElementById('welcome-title-text').textContent=S.appName;
   closeModal('settings-modal');
-  saveToDrive();
+  save(); showToast('Settings saved! ✓');
 }
 
-function selectColor(el,c1,c2) {
+function selectTheme(el){
   document.querySelectorAll('.swatch').forEach(s=>s.classList.remove('active'));
   el.classList.add('active');
-  state.accentColor=c1; state.accentColor2=c2;
-  document.documentElement.style.setProperty('--accent',c1);
-  document.documentElement.style.setProperty('--accent2',c2);
-  updateIcons();
+  S.accentColor=el.dataset.c1; S.accentColor2=el.dataset.c2;
+  document.documentElement.style.setProperty('--accent',S.accentColor);
+  document.documentElement.style.setProperty('--accent2',S.accentColor2);
 }
 
-function selectIcon(el,type) {
+function selectIcon(el,type){
   document.querySelectorAll('.icon-opt').forEach(o=>o.classList.remove('active'));
   el.classList.add('active');
-  state.iconType=type; state.customIconData=null;
-  document.getElementById('icon-preview-label').textContent='';
-  updateIcons();
+  S.iconType=type; S.customIconData=null;
+  const icons={leaf:'🌿',fire:'🔥',star:'⭐',mountain:'⛰️',moon:'🌙',crown:'👑'};
+  document.getElementById('app-logo').textContent=icons[type]||'🌿';
+  document.getElementById('app-logo').style.backgroundImage='';
 }
 
-function triggerImageUpload(){document.getElementById('icon-upload').click();}
-
-function handleIconUpload(e) {
-  const file=e.target.files[0]; if (!file) return;
-  const reader=new FileReader();
-  reader.onload=ev=>{
-    state.customIconData=ev.target.result; state.iconType='custom';
-    document.querySelectorAll('.icon-opt').forEach(o=>o.classList.remove('active'));
-    document.querySelector('[data-icon="custom"]').classList.add('active');
-    document.getElementById('icon-preview-label').textContent='✓ Custom image — '+file.name;
-    updateIcons();
+function triggerIconUpload(){document.getElementById('icon-upload').click();}
+function handleIconUpload(e){
+  const file=e.target.files[0];if(!file)return;
+  const r=new FileReader();
+  r.onload=ev=>{
+    S.customIconData=ev.target.result; S.iconType='custom';
+    const logo=document.getElementById('app-logo');
+    logo.style.backgroundImage=`url(${ev.target.result})`;
+    logo.style.backgroundSize='cover'; logo.textContent='';
   };
-  reader.readAsDataURL(file);
+  r.readAsDataURL(file);
 }
 
-function clearHistory() {
-  if (!confirm('Clear all chat history? Your profile and settings stay safe.')) return;
-  state.messages=[]; state.initialized=false;
-  closeModal('settings-modal');
-  document.getElementById('messages').innerHTML='';
-  document.getElementById('messages').style.display='none';
-  document.getElementById('input-area').style.display='none';
-  document.getElementById('welcome').style.display='flex';
-  saveToDrive();
+function applyTheme(){
+  document.documentElement.style.setProperty('--accent',S.accentColor);
+  document.documentElement.style.setProperty('--accent2',S.accentColor2);
+  document.getElementById('app-name').textContent=S.appName;
+  document.title=S.appName;
+  const logo=document.getElementById('app-logo');
+  if(S.customIconData){logo.style.backgroundImage=`url(${S.customIconData})`;logo.style.backgroundSize='cover';logo.textContent='';}
+  else{const icons={leaf:'🌿',fire:'🔥',star:'⭐',mountain:'⛰️',moon:'🌙',crown:'👑'};logo.textContent=icons[S.iconType]||'🌿';}
 }
 
-function closeModal(id){document.getElementById(id).style.display='none';}
+function clearAllData(){
+  if(!confirm('Delete ALL your data? This cannot be undone.'))return;
+  S={...S,messages:[],profile:{},goals:[],habits:{},habitLogs:{},tasks:{},journalEntries:[],transactions:[],routineSteps:[],routineLog:{},books:[],weeklyReviews:[],moodLog:{}};
+  save(); closeModal('settings-modal');
+  window.location.reload();
+}
 
-document.querySelectorAll('.modal-overlay').forEach(overlay=>{
-  overlay.addEventListener('click',e=>{if(e.target===overlay)overlay.style.display='none';});
-});
+// ── SYNC DISPLAY ──────────────────────────────────
+function showSync(type){
+  const dot=document.getElementById('sync-dot');
+  dot.style.display=type?'block':'none';
+  dot.className=`sync-dot ${type==='saving'?'saving':type==='error'?'error':''}`;
+}
 
-// ── INIT ───────────────────────────────────────────
+// ── TOAST ─────────────────────────────────────────
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.style.display='block';
+  clearTimeout(window._toastTimer);
+  window._toastTimer=setTimeout(()=>t.style.display='none',2500);
+}
+
+// ── INIT ──────────────────────────────────────────
 initStars();
-
-// Wait for Google Identity Services to load
-window.addEventListener('load', () => {
-  setTimeout(initGoogleAuth, 800);
+window.addEventListener('load',()=>{
+  setupTokenClient();
+  setTimeout(initAuth, 600);
 });
 </script>
 </body>
