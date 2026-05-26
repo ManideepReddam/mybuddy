@@ -194,26 +194,26 @@
       </div>
     </div>
     <div class="header-right">
-      <div class="streak-badge">🔥 <span id="streak-count">1</span></div>
-      <button class="icon-btn" onclick="openProfile()" title="My Profile">👤</button>
-      <button class="icon-btn" onclick="openSettings()" title="Settings">⚙��</button>
+      <div class="streak-badge">ð¥ <span id="streak-count">1</span></div>
+      <button class="icon-btn" onclick="openProfile()" title="My Profile">ð¤</button>
+      <button class="icon-btn" onclick="openSettings()" title="Settings">â¸</button>
     </div>
   </header>
 
   <!-- AREA PILLS -->
   <div class="pills-bar" id="pills-bar">
-    <button class="pill" onclick="areaClick('Communication','💬')">💬 Communication</button>
-    <button class="pill" onclick="areaClick('Fashion','👔')">👔 Fashion</button>
-    <button class="pill" onclick="areaClick('Health','💪')">💪 Health</button>
-    <button class="pill" onclick="areaClick('Finances','💰')">💰 Finances</button>
-    <button class="pill" onclick="areaClick('Learning','📚')">📚 Learning</button>
-    <button class="pill" onclick="areaClick('Goals','🎯')">🎯 Goals</button>
-    <button class="pill" onclick="areaClick('Career','🚀')">🚀 Career</button>
-    <button class="pill" onclick="areaClick('Cleanliness','🧹')">🧹 Cleanliness</button>
-    <button class="pill" onclick="areaClick('Grooming','✂️')">✂️ Grooming</button>
-    <button class="pill" onclick="areaClick('Mindset','🧠')">🧠 Mindset</button>
-    <button class="pill" onclick="areaClick('Relationships','❤️')">❤️ Relationships</button>
-    <button class="pill" onclick="areaClick('Time Management','🕐')">🕐 Time Mgmt</button>
+    <button class="pill" onclick="areaClick('Communication','ð¬')">ð¬ Communication</button>
+    <button class="pill" onclick="areaClick('Fashion','ð')">ð Fashion</button>
+    <button class="pill" onclick="areaClick('Health','ðª')">ðª Health</button>
+    <button class="pill" onclick="areaClick('Finances','ð°')">ð° Finances</button>
+    <button class="pill" onclick="areaClick('Learning','ð')">ð Learning</button>
+    <button class="pill" onclick="areaClick('Goals','ð¯')">ð¯ Goals</button>
+    <button class="pill" onclick="areaClick('Career','ð')">ð Career</button>
+    <button class="pill" onclick="areaClick('Cleanliness','ð§¹')">ð§¹ Cleanliness</button>
+    <button class="pill" onclick="areaClick('Grooming','âï¸')">âï¸ Grooming</button>
+    <button class="pill" onclick="areaClick('Mindset','ð§ ')">ð§  Mindset</button>
+    <button class="pill" onclick="areaClick('Relationships','â¤ï¸')">â¤ï¸ Relationships</button>
+    <button class="pill" onclick="areaClick('Time Management','ð')">ð Time Mgmt</button>
   </div>
 
   <!-- MESSAGES / WELCOME -->
@@ -250,10 +250,10 @@
     </div>
     <div class="welcome-title" id="welcome-title">My Buddy</div>
     <p class="welcome-sub">Your personal AI companion. I'm here every day to help you grow, heal and become your best self.</p>
-    <div class="drive-badge">☁️ Synced to your Google Drive</div>
+    <div class="drive-badge">âï¸ Synced to your Google Drive</div>
     <div class="welcome-btns">
-      <button class="btn-primary" onclick="openProfile()">📝 Set Up My Profile</button>
-      <button class="btn-ghost" onclick="startChat()">Skip → Just Start Talking</button>
+      <button class="btn-primary" onclick="openProfile()">ð Set Up My Profile</button>
+      <button class="btn-ghost" onclick="startChat()">Skip â Just Start Talking</button>
     </div>
   </div>
 
@@ -261,9 +261,9 @@
   <div id="input-area" style="display:none">
     <div class="input-row">
       <textarea id="msg-input" placeholder="Talk to Buddy..." rows="1" onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
-      <button class="send-btn" id="send-btn" onclick="sendMessage()" disabled>↑</button>
+      <button class="send-btn" id="send-btn" onclick="sendMessage()" disabled>â</button>
     </div>
-    <div class="input-hint">☁️ Saved to Google Drive · Works on all devices</div>
+    <div class="input-hint">âï¸ Saved to Google Drive Â· Works on all devices</div>
   </div>
 </div>
 
@@ -271,7 +271,7 @@
 <div class="modal-overlay" id="profile-modal" style="display:none">
   <div class="modal">
     <h2>My Profile</h2>
-    <p>Saved to Google Drive — Buddy always knows you on every device.</p>
+    <p>Saved to Google Drive â Buddy always knows you on every device.</p>
     <div class="field"><label>Your Name</label><input id="p-name" placeholder="What should I call you?"/></div>
     <div class="field"><label>Age</label><input id="p-age" placeholder="How old are you?"/></div>
     <div class="field"><label>Occupation</label><input id="p-occupation" placeholder="What do you do?"/></div>
@@ -280,7 +280,7 @@
     <div class="field"><label>Anything else Buddy should know</label><textarea id="p-notes" rows="2" placeholder="Lifestyle, habits, context..."></textarea></div>
     <div class="modal-btns">
       <button class="btn-cancel" onclick="closeModal('profile-modal')">Cancel</button>
-      <button class="btn-save" onclick="saveProfile()">Save to Drive ☁️</button>
+      <button class="btn-save" onclick="saveProfile()">Save to Drive âï¸</button>
     </div>
   </div>
 </div>
@@ -288,8 +288,8 @@
 <!-- SETTINGS MODAL -->
 <div class="modal-overlay" id="settings-modal" style="display:none">
   <div class="modal">
-    <h2>⚙️ App Settings</h2>
-    <p>Customize My Buddy — change anytime, saves instantly.</p>
+    <h2>âï¸ App Settings</h2>
+    <p>Customize My Buddy â change anytime, saves instantly.</p>
 
     <div class="settings-section">
       <h3>App Name</h3>
@@ -299,12 +299,12 @@
     <div class="settings-section">
       <h3>App Icon</h3>
       <div class="icon-options">
-        <div class="icon-opt active" data-icon="rooftop" onclick="selectIcon(this,'rooftop')" title="Rooftop Boy">🌃</div>
-        <div class="icon-opt" data-icon="lightning" onclick="selectIcon(this,'lightning')" title="Lightning">⚡</div>
-        <div class="icon-opt" data-icon="fire" onclick="selectIcon(this,'fire')" title="Fire">🔥</div>
-        <div class="icon-opt" data-icon="star" onclick="selectIcon(this,'star')" title="Star">⭐</div>
-        <div class="icon-opt" data-icon="crown" onclick="selectIcon(this,'crown')" title="Crown">👑</div>
-        <div class="icon-opt" data-icon="custom" onclick="triggerImageUpload()" title="Upload Image">📸</div>
+        <div class="icon-opt active" data-icon="rooftop" onclick="selectIcon(this,'rooftop')" title="Rooftop Boy">ð</div>
+        <div class="icon-opt" data-icon="lightning" onclick="selectIcon(this,'lightning')" title="Lightning">â¡</div>
+        <div class="icon-opt" data-icon="fire" onclick="selectIcon(this,'fire')" title="Fire">ð¥</div>
+        <div class="icon-opt" data-icon="star" onclick="selectIcon(this,'star')" title="Star">â­</div>
+        <div class="icon-opt" data-icon="crown" onclick="selectIcon(this,'crown')" title="Crown">ð</div>
+        <div class="icon-opt" data-icon="custom" onclick="triggerImageUpload()" title="Upload Image">ð¸</div>
       </div>
       <input type="file" id="icon-upload" accept="image/*" style="display:none" onchange="handleIconUpload(event)"/>
       <div id="icon-preview-label" style="font-size:11px;color:#555;margin-top:8px"></div>
@@ -323,29 +323,29 @@
     </div>
 
     <div class="settings-section">
-      <h3>📱 Add to Home Screen</h3>
+      <h3>ð± Add to Home Screen</h3>
       <div class="install-box">
-        <strong>iPhone/iPad:</strong> Tap the Share button → "Add to Home Screen" → Done<br/><br/>
-        <strong>Android:</strong> Tap the menu (⋮) → "Add to Home Screen" → Install<br/><br/>
+        <strong>iPhone/iPad:</strong> Tap the Share button â "Add to Home Screen" â Done<br/><br/>
+        <strong>Android:</strong> Tap the menu (â®) â "Add to Home Screen" â Install<br/><br/>
         <strong>Desktop:</strong> Click the install icon in your browser address bar
       </div>
     </div>
 
     <div class="settings-section">
-      <h3>🔖 Bookmark This App</h3>
+      <h3>ð Bookmark This App</h3>
       <div class="install-box">
-        Bookmark this page in your browser. Every time you open it, your full history loads from Google Drive automatically — works on <strong>phone, tablet, laptop.</strong>
+        Bookmark this page in your browser. Every time you open it, your full history loads from Google Drive automatically â works on <strong>phone, tablet, laptop.</strong>
       </div>
     </div>
 
     <div class="settings-section" id="danger-zone">
       <h3>Danger Zone</h3>
-      <button onclick="clearHistory()" style="padding:10px 18px;background:rgba(255,80,80,0.1);border:1px solid rgba(255,80,80,0.3);border-radius:10px;color:#ff6b6b;cursor:pointer;font-size:13px;font-family:'Lato', sans-serif">😑 Clear Chat History</button>
+      <button onclick="clearHistory()" style="padding:10px 18px;background:rgba(255,80,80,0.1);border:1px solid rgba(255,80,80,0.3);border-radius:10px;color:#ff6b6b;cursor:pointer;font-size:13px;font-family:'Lato', sans-serif">ð Clear Chat History</button>
     </div>
 
     <div class="modal-btns">
       <button class="btn-cancel" onclick="closeModal('settings-modal')">Close</button>
-      <button class="btn-save" onclick="applySettings()">Apply Changes ✓</button>
+      <button class="btn-save" onclick="applySettings()">Apply Changes â</button>
     </div>
   </div>
 </div>
@@ -444,7 +444,7 @@ async function saveToDrive() {
       body: JSON.stringify({
         model:'claude-sonnet-4-20250514', max_tokens:200,
         system:'Update the specified Google Drive file with the provided JSON. Reply only with "saved".',
-        messages:[{role:'user', content:`Update Google Drive file ID: ${DRIT�}FILE_ID} with this JSON:\n${JSON.stringify(payload)}`}],
+        messages:[{role:'user', content:`Update Google Drive file ID: ${DRIT¥}FILE_ID} with this JSON:\n${JSON.stringify(payload)}`}],
         mcp_servers:[{type:'url', url:GDRIVE_MCP, name:'gdrive'}]
       })
     });
@@ -471,7 +471,7 @@ function updateHeaderIcon() {
   if (state.customIconData) {
     el.innerHTML = `<img src="${state.customIconData}" alt="icon"/>`;
   } else {
-    const emojis = { lightning:'⚡', fire:'🔥', star:'⭐', crown:'👑' };
+    const emojis = { lightning:'â¡', fire:'ð¥', star:'â­', crown:'ð' };
     if (state.iconType !== 'rooftop' && emojis[state.iconType]) {
       el.innerHTML = `<span style="font-size:20px">${emojis[state.iconType]}</span>`;
     } else {
@@ -522,7 +522,7 @@ function renderApp() {
     if (state.profile?.name) {
       const banner = document.createElement('div');
       banner.className = 'return-banner';
-      banner.innerHTML = `☁️ Welcome back, <strong style="color:var(--accent)">${state.profile.name}</strong> — loaded from Google Drive �� Day ${state.streak} 🔥`;
+      banner.innerHTML = `âï¸ Welcome back, <strong style="color:var(--accent)">${state.profile.name}</strong> â loaded from Google Drive · Day ${state.streak} ð¥`;
       if (!document.querySelector('.return-banner')) messagesEl.prepend(banner);
     }
     scrollBottom();
@@ -540,7 +540,7 @@ function appendMessage(role, content, animate=true) {
   const div = document.createElement('div');
   div.className = `msg ${role}`;
   if (role === 'buddy') {
-    div.innerHTML = `<div style="width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;align-self:flex-end;box-shadow:0 0 10px rgba(200,245,66,0.3)">⚡</div><div class="bubble buddy">${content}</div>`;
+    div.innerHTML = `<div style="width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;align-self:flex-end;box-shadow:0 0 10px rgba(200,245,66,0.3)">â¡</div><div class="bubble buddy">${content}</div>`;
   } else {
     div.innerHTML = `<div class="bubble user">${content}</div>`;
   }
@@ -566,10 +566,10 @@ function showSync(type) {
   if (!type) { el.style.display='none'; return; }
   el.style.display='flex';
   const configs = {
-    loading: { cls:'sync-saving', text:'⏳ Loading...' },
-    saving:  { cls:'sync-saving', text:'🔄 Saving...' },
-    saved:   { cls:'sync-saved',  text:'☁️ Saved' },
-    error:   { clr:'sync-error',  text:'⚠️ Sync issue' },
+    loading: { cls:'sync-saving', text:'â³ Loading...' },
+    saving:  { cls:'sync-saving', text:'ð Saving...' },
+    saved:   { cls:'sync-saved',  text:'âï¸ Saved' },
+    error:   { clr:'sync-error',  text:'â ï¸ Sync issue' },
   };
   const c = configs[type] || {};
   el.className = `sync-pill ${c.cls}`;
@@ -613,7 +613,7 @@ async function startChat(initialMsg) {
     saveToDrive();
   } catch(e) {
     hideTyping();
-    const fb = `Hey${p?.name?' '+p.name:''}! I'm Buddy -- your personal companion. Ready to help you level up every single day. What's on your mind? 👊`;
+    const fb = `Hey${p?.name?' '+p.name:''}! I'm Buddy -- your personal companion. Ready to help you level up every single day. What's on your mind? ð`;
     state.messages.push({role:'buddy',content:fb});
     appendMessage('buddy', fb);
   }
@@ -639,7 +639,7 @@ async function sendMessage() {
     saveToDrive();
   } catch(e) {
     hideTyping();
-    appendMessage('buddy', "Something went wrong but I'm still here -- what were you saying? 👊");
+    appendMessage('buddy', "Something went wrong but I'm still here -- what were you saying? ð");
   }
   document.getElementById('send-btn').disabled = false;
   input.focus();
@@ -741,7 +741,7 @@ function handleIconUpload(e) {
     state.iconType = 'custom';
     document.querySelectorAll('.icon-opt').forEach(o=>o.classList.remove('active'));
     document.querySelector('[data-icon="custom"]').classList.add('active');
-    document.getElementById('icon-preview-label').textContent = '✓ Custom image set -- ' + file.name;
+    document.getElementById('icon-preview-label').textContent = 'â Custom image set -- ' + file.name;
     updateHeaderIcon();
   };
   reader.readAsDataURL(file);
